@@ -7,11 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Testing Vue.JS</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    
+    <!--Stylesheets-->
+    <link rel="stylesheet" href="home.css">
+    <!--Custom Fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div id="app">
+<body class="main-bg-color">
+    <div id="app" class="text-color">
         {{ message }}
+    </div>
+    <div>
+        <h1 class="text-color header-font">GameChangers and DreamHack</h1>
+        <div class="spacing"></div>
+        <p class="text-color">Presenting a hackathon tool to create a community.</p>
+        <div class="spacing-2"></div>
+        <p class="text-color">Coming soon...</p>
     </div>
     <script src="home.js"></script>
 </body>

@@ -1,0 +1,28 @@
+.main-bg-color {
+    background-color: #303030;
+}
+
+.text-color {
+    color:  #fff;
+    text-align: center;
+}
+
+.header-font {
+    font-size: 3em;
+    font-family: 'Kanit', sans-serif;
+}
+
+p {
+    font-size: 1.25em;
+    font-family: 'Kanit', sans-serif;
+}
+
+.spacing
+{
+    margin: 2.5em;
+}
+
+.spacing-2
+{
+    margin: 15em;
+}
