@@ -12,8 +12,7 @@
                     <h1 class="text-left">{{title}}</h1>
                     <hr>
                     <!--Displaying the tags for the project-->
-                    <v-btn class="tag" outlined x-small disabled>Winner</v-btn>
-                    <v-btn class="tag" outlined x-small disabled>Other Tags</v-btn>
+                    <v-btn v-bind:key="tag.id" v-for="tag in tags" class="tag" outlined x-small disabled>{{tag.name}}</v-btn>
                     <!--Displaying the description for the winning project-->
                     <p class="text-left">{{description}}</p>
                     <!--Displaying the play button that will link to another page-->
@@ -79,6 +78,15 @@ export default {
             //Put in the Winner Project Title here
             title: "Proxy Title",
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+            //Tags for Winner Project here
+            tags: [ {
+                id: 1,
+                name: "Winner"
+            },
+            {
+                id: 2,
+                name: "Action"
+            }]
 
         }
     }
