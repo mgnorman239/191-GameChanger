@@ -10,8 +10,8 @@
                 <span class="ml-7 mr-7">About</span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon class="mr-7 grey lighten-2">
-                <v-icon>mdi-magnify</v-icon>
+            <v-btn icon class="mr-7">
+                <v-icon color="white">mdi-magnify</v-icon>
             </v-btn>
         </v-toolbar>
     </nav>

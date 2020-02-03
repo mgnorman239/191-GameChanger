@@ -12,7 +12,8 @@
                     <h1 class="text-left">{{title}}</h1>
                     <hr>
                     <!--Displaying the tags for the project-->
-                
+                    <v-btn class="tag" outlined x-small disabled>Winner</v-btn>
+                    <v-btn class="tag" outlined x-small disabled>Other Tags</v-btn>
                     <!--Displaying the description for the winning project-->
                     <p class="text-left">{{description}}</p>
                     <!--Displaying the play button that will link to another page-->
@@ -90,5 +91,10 @@ export default {
         size: 6px;
         margin-top: 1em;
         margin-bottom: 1em;
+    }
+
+    .tag {
+        margin: 0em 1em 1em 0em;
+
     }
 </style>
