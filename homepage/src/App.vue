@@ -64,3 +64,9 @@ export default {
   }),
 };
 </script>
+
+<style>
+.theme--light.v-btn.v-btn--disabled {
+  color:#4F4F4F !important;
+}
+</style>

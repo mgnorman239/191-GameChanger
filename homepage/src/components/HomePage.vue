@@ -12,7 +12,7 @@
                     <h1 class="text-left">{{title}}</h1>
                     <hr>
                     <!--Displaying the tags for the project-->
-                    <v-btn v-bind:key="tag.id" v-for="tag in tags" class="tag" outlined x-small disabled>{{tag.name}}</v-btn>
+                    <v-btn v-bind:key="tag.id" v-for="tag in tags" class="tag" outlined rounded x-small disabled>{{tag.name}}</v-btn>
                     <!--Displaying the description for the winning project-->
                     <p class="text-left">{{description}}</p>
                     <!--Displaying the play button that will link to another page-->

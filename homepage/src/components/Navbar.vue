@@ -10,9 +10,8 @@
                 <span class="ml-7 mr-7">About</span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon class="mr-7">
-                <v-icon color="white">mdi-magnify</v-icon>
-            </v-btn>
+            <v-btn small rounded outlined color="#F6F6F6" width="90" class="mr-7">Login</v-btn>
+            <v-btn small rounded color="#F6F6F6" width="90" class="mr-7">Sign Up</v-btn>
         </v-toolbar>
     </nav>
 </template>
