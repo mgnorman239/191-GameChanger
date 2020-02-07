@@ -15,7 +15,6 @@
           transition="scale-transition"
           width="40"
         />
-
         <v-img
           alt="Vuetify Name"
           class="shrink mt-1 hidden-sm-and-down"
@@ -25,9 +24,7 @@
           width="100"
         />
       </div>
-
       <v-spacer></v-spacer>
-
       <v-btn
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
         target="_blank"
@@ -49,16 +46,13 @@
 //import HelloWorld from './components/HelloWorld';
 import HomePage from './components/HomePage';
 import Navbar from './components/Navbar';
-
 export default {
   name: 'App',
-
   components: {
     //HelloWorld,
     Navbar,
     HomePage,
   },
-
   data: () => ({
     //
   }),
