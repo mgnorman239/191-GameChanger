@@ -23,7 +23,25 @@
         <!--Display the carousel component-->
         <v-container>
             <h1>Other Projects</h1>
-            <v-slide-group
+            <swiper :options="swiperOption">
+                <swiper-slide>
+                    <v-img
+                    :src="require('../assets/logo.svg')"
+                    class="my-3"
+                    contain
+                    height="200"
+                    ></v-img></swiper-slide>
+                <swiper-slide>I'm Slide 2</swiper-slide>
+                <swiper-slide>I'm Slide 3</swiper-slide>
+                <swiper-slide>I'm Slide 4</swiper-slide>
+                <swiper-slide>I'm Slide 5</swiper-slide>
+                <swiper-slide>I'm Slide 6</swiper-slide>
+                <swiper-slide>I'm Slide 7</swiper-slide>
+                <div class="swiper-pagination" slot="pagination"></div>
+                <div class="swiper-button-prev" slot="button-prev"></div>
+                <div class="swiper-button-next" slot="button-next"></div>
+            </swiper>
+            <!-- <v-slide-group
                 v-model="model"
                 class="pa-4"
                 :prev-icon="prevIcon ? 'mdi-minus' : undefined"
@@ -31,19 +49,19 @@
                 :multiple="multiple"
                 :mandatory="mandatory"
                 :show-arrows="showArrows"
-                :center-active="centerActive"
+                :center-active="centerActive" -->
             >   <!--Showing 15 iteams with v-for but change it to however many projects-->
-                <v-slide-item
+                <!-- <v-slide-item
                 v-for="n in 15"
                 :key="n"
                 v-slot:default="{ active, toggle }"
-                >
+                > -->
                 <!--Change this from color to an image-->
-                <v-card
+                <!-- <v-card
                     :color="active ? 'primary' : 'grey lighten-1'"
                     class="ma-4"
-                    height="232"
-                    width="346"
+                    height="190"
+                    width="300"
                     @click="toggle"
                 >
                     <v-row
@@ -62,13 +80,21 @@
                     </v-row>
                 </v-card>
                 </v-slide-item>
-            </v-slide-group>
+            </v-slide-group> -->
         </v-container>     
     </v-app>
 </template>
 
 <script>
+import 'swiper/dist/css/swiper.css'
+
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+
 export default {
+    components: {
+        swiper,
+        swiperSlide
+    },
     data()  {
         return {
             drawer: false,
@@ -86,10 +112,29 @@ export default {
             {
                 id: 2,
                 name: "Action"
-            }]
-
+            }],
+            images: [{
+                id: 1,
+                url: "someurl.com"
+            }
+            ], 
+            swiperOption: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+            slidesPerGroup: 3,
+            loop: true,
+            loopFillGroupWithBlank: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            }
         }
     }
+}
 }
    
 </script>
