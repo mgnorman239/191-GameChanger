@@ -34,24 +34,21 @@
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar> -->
-  <Navbar/>
-    <v-content>
-      
+    <!-- <v-content>
       <HomePage/>
-    </v-content>
+    </v-content> -->
+  <router-view></router-view>
   </v-app>
 </template>
 
 <script>
 //import HelloWorld from './components/HelloWorld';
-import HomePage from './components/HomePage';
-import Navbar from './components/Navbar';
+// import HomePage from './components/HomePage';
 export default {
   name: 'App',
   components: {
     //HelloWorld,
-    Navbar,
-    HomePage,
+    // HomePage,
   },
   data: () => ({
     //

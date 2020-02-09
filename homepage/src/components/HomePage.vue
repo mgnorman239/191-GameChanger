@@ -1,5 +1,6 @@
 <template>
 <v-app class="grey lighten-4">
+    <Navbar/>
     <!--Start of two rows-->
     <v-container class="mt-12">
         <v-layout row>
@@ -80,7 +81,8 @@
 </template>
 
 <script>
-import 'swiper/dist/css/swiper.css'
+import Navbar from "./Navbar";
+import 'swiper/dist/css/swiper.css';
 import {
     swiper,
     swiperSlide
@@ -88,7 +90,8 @@ import {
 export default {
     components: {
         swiper,
-        swiperSlide
+        swiperSlide,
+        Navbar
     },
     data() {
         return {
