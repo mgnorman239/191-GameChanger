@@ -60,4 +60,8 @@ export default {
 .theme--light.v-btn.v-btn--disabled {
   color:#4F4F4F !important;
 }
+
+.v-input__slot {
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25) !important;;
+}
 </style>
