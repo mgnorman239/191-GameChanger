@@ -5,6 +5,7 @@ import VueRouter from 'vue-router';
 
 import HomePage from './components/HomePage';
 import SignUp from './components/SignUp';
+import Login from './components/Login';
 
 Vue.config.productionTip = false
 
@@ -13,7 +14,8 @@ Vue.use(VueRouter)
 const routes = [
   {path: '/', component: HomePage}, //Replace this with a landing page
   {path: '/homepage', component: HomePage},
-  {path: '/signup', component: SignUp}
+  {path: '/signup', component: SignUp},
+  {path: '/login', component: Login}
 ]
 
 const router = new VueRouter({

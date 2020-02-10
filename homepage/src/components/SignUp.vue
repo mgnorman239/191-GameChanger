@@ -23,13 +23,14 @@
                 <!--This is the input box for the user password-->
                 <v-flex xs1>
                     <v-text-field 
-                        :type="show1 ? 'text' : 'password'"
+                        :type="'password'"
                         class="center-block input-width"
                         label="password"
                         placeholder="Password"
                         solo
                     ></v-text-field>
                 </v-flex>
+                <!--This is the input box for the display name-->
                 <v-flex xs1>
                     <v-text-field 
                         class="center-block input-width"
@@ -58,10 +59,6 @@ export default {
         Navbar
     },
     data () {
-        return {
-            show1: false,
-            password: 'Password'
-        }
     }
 }
 </script>
@@ -86,12 +83,8 @@ export default {
     text-transform: uppercase;
     color:white;
     font-weight: normal;
-    margin: 1em 2em;
+    margin: 2em;
     font-size:2.5em;
-}
-
-.logo {
-    margin: 1em 0em 0em 2em;
 }
 
 </style>
