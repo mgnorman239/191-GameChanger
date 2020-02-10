@@ -15,6 +15,7 @@
                 <!--This is the input box for the user email-->
                 <v-flex xs1>
                     <v-text-field text-center class="center-block input-width"
+                        prepend-inner-icon="far fa-envelope"
                         label="email"
                         placeholder="E-mail"
                         solo
@@ -24,6 +25,7 @@
                 <v-flex xs1>
                     <v-text-field 
                         :type="'password'"
+                        prepend-inner-icon="fas fa-lock"
                         class="center-block input-width"
                         label="password"
                         placeholder="Password"
@@ -33,6 +35,7 @@
                 <!--This is the input box for the display name-->
                 <v-flex xs1>
                     <v-text-field 
+                        prepend-inner-icon="far fa-user"
                         class="center-block input-width"
                         label="password"
                         placeholder="Display Name"
@@ -44,7 +47,7 @@
                     <!--This is the submit button that you have to bind an on-click event for-->
                     <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Sign Up</v-btn>
                     <!--Eventually, add a link to take the user to the login page when they click the span-->
-                    <p class="mt-6">Already have an account? <span class="underlined">Log In!</span></p>
+                    <p class="mt-6">Already have an account? <router-link to="/login"><span class="underlined">Log In!</span></router-link></p>
                 </v-flex>
             </v-layout>
         </v-layout>
