@@ -15,7 +15,7 @@
                 <!--This is the input box for the user email-->
                 <v-flex xs1>
                     <v-text-field text-center class="center-block input-width"
-                        prepend-inner-icon="far fa-envelope"
+                        prepend-inner-icon="far fa-envelope fa-xs"
                         label="email"
                         placeholder="E-mail"
                         solo

@@ -64,4 +64,8 @@ export default {
 .v-input__slot {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25) !important;;
 }
+
+.v-application--is-ltr .v-text-field .v-input__prepend-inner {
+    padding-right: 8px !important;
+}
 </style>
