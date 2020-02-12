@@ -49,10 +49,7 @@ export default {
   components: {
     //HelloWorld,
     // HomePage,
-  },
-  data: () => ({
-    //
-  }),
+  }
 };
 </script>
 
