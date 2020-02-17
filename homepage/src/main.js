@@ -6,16 +6,17 @@ import VueRouter from 'vue-router';
 import HomePage from './components/HomePage';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
+import Landing from './components/LandingPage';
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 
 const routes = [
-  {path: '/', component: HomePage}, //Replace this with a landing page
+  {path: '/', component: Landing}, //Replace this with a landing page
   {path: '/homepage', component: HomePage},
   {path: '/signup', component: SignUp},
-  {path: '/login', component: Login}
+  {path: '/login', component: Login},
 ]
 
 const router = new VueRouter({
