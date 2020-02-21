@@ -5,12 +5,14 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "vue-cli-service s3-deploy"
   },
   "dependencies": {
     "core-js": "^3.4.4",
     "vue": "^2.6.10",
     "vue-awesome-swiper": "^3.1.3",
+    "vue-cli-plugin-s3-deploy": "^4.0.0-rc3",
     "vue-router": "^3.1.5",
     "vuejs-countdown": "^0.2.1",
     "vuetify": "^2.1.0"
