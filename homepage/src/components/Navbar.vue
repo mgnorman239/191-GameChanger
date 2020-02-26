@@ -7,7 +7,7 @@
             <v-toolbar-title class="ml-12 white--text subtitle-1">
                 <router-link to="/homepage"><span class="ml-12 mr-7 white--text">Home</span></router-link>
                 <span class="ml-7 mr-7">Showcase</span>
-                <span class="ml-7 mr-7">Events</span>
+                <router-link to="/events"><span class="ml-7 mr-7 white--text">Events</span></router-link>
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <router-link to="/login"><v-btn small rounded outlined color="#F6F6F6" width="90" class="mr-7">Login</v-btn></router-link>
