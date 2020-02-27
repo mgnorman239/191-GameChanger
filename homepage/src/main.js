@@ -3,6 +3,7 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import VueRouter from 'vue-router';
 
+import Showcase from './components/Showcase';
 import HomePage from './components/HomePage';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
@@ -13,7 +14,8 @@ Vue.config.productionTip = false
 Vue.use(VueRouter)
 
 const routes = [
-  {path: '/', component: Landing}, //Replace this with a landing page
+  {path: '/', component: Landing}, 
+  {path: '/showcase', component: Showcase},
   {path: '/homepage', component: HomePage},
   {path: '/signup', component: SignUp},
   {path: '/login', component: Login},
