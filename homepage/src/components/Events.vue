@@ -1,9 +1,8 @@
 <template>
 <v-app class="grey lighten-4">
     <Navbar />
-    <v-container-fluid>
         <!-- Main image for Events -->
-        <v-img src="../assets/events.png" alt="Concert with lights">
+        <v-img class="background" src="../assets/events.png" alt="Concert with lights">
             <v-container fill-height align="center">
                 <v-col>
                     <v-row justify="center">
@@ -18,7 +17,6 @@
                 </v-col>
             </v-container>
         </v-img>
-    </v-container-fluid>
     <!-- Display event cards -->
     <v-container>
         <v-row>
@@ -101,6 +99,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
-</style>
+    .background {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        
+    }
+    
+</style>>

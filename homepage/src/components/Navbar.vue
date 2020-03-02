@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <v-toolbar flat app class="grey darken-4">
+        <v-app-bar flat app class="grey darken-4">
             <v-toolbar-title class="ml-12 mr-12 white--text subtitle-1">
                 Logo
             </v-toolbar-title>
@@ -12,7 +12,7 @@
             <v-spacer></v-spacer>
             <router-link to="/login"><v-btn small rounded outlined color="#F6F6F6" width="90" class="mr-7">Login</v-btn></router-link>
             <router-link to="/signup"><v-btn small rounded color="#F6F6F6" width="90" class="mr-7">Sign Up</v-btn></router-link>
-        </v-toolbar>
+        </v-app-bar>
     </nav>
 </template>
 
