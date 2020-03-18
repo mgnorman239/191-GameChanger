@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-img class="background" src="../assets/landing.png" alt="Picture of a crowd, Photo by Nicholas Green on Unsplash">
-            <v-container-fluid>
+            <v-container fluid>
                 <v-row>
                     <v-flex md2></v-flex>
                     <v-flex md8>
@@ -21,7 +21,7 @@
                     </v-flex>
                     <v-flex md4></v-flex>
                 </v-row>
-            </v-container-fluid>
+            </v-container>
         </v-img>
     </v-app>
 </template>
