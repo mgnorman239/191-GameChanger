@@ -145,7 +145,7 @@ export default {
 
     .paragraph-font {
         font-weight: 500;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .rectangle-bottom {

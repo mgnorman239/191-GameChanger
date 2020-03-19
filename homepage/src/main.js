@@ -9,6 +9,7 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Landing from './components/LandingPage';
 import Events from './components/Events';
+import ProjectLog from './components/ProjectLog';
 
 Vue.config.productionTip = false
 
@@ -20,7 +21,8 @@ const routes = [
   {path: '/homepage', component: HomePage},
   {path: '/signup', component: SignUp},
   {path: '/login', component: Login},
-  {path: '/events', component: Events}
+  {path: '/events', component: Events},
+  {path: '/projectlog', component: ProjectLog}
 ]
 
 const router = new VueRouter({
