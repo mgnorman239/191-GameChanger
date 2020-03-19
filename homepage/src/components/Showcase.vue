@@ -35,47 +35,6 @@
             <div class="swiper-button-prev" slot="button-prev"></div>
             <div class="swiper-button-next" slot="button-next"></div>
         </swiper>
-        <!-- <v-slide-group
-                v-model="model"
-                class="pa-4"
-                :prev-icon="prevIcon ? 'mdi-minus' : undefined"
-                :next-icon="nextIcon ? 'mdi-plus' : undefined"
-                :multiple="multiple"
-                :mandatory="mandatory"
-                :show-arrows="showArrows"
-                :center-active="centerActive" -->
-
-        <!--Showing 15 iteams with v-for but change it to however many projects-->
-        <!-- <v-slide-item
-                v-for="n in 15"
-                :key="n"
-                v-slot:default="{ active, toggle }"
-                > -->
-        <!--Change this from color to an image-->
-        <!-- <v-card
-                    :color="active ? 'primary' : 'grey lighten-1'"
-                    class="ma-4"
-                    height="190"
-                    width="300"
-                    @click="toggle"
-                >
-                    <v-row
-                    class="fill-height"
-                    align="center"
-                    justify="center"
-                    >
-                    <v-scale-transition>
-                        <v-icon
-                        v-if="active"
-                        color="white"
-                        size="48"
-                        v-text="'mdi-close-circle-outline'"
-                        ></v-icon>
-                    </v-scale-transition>
-                    </v-row>
-                </v-card>
-                </v-slide-item>
-            </v-slide-group> -->
     </v-container>
 </v-app>
 </template>

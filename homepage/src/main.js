@@ -3,13 +3,14 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import VueRouter from 'vue-router';
 
-import Showcase from './components/Showcase';
+import Showcase2 from './components/Showcase2';
 import HomePage from './components/HomePage';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Landing from './components/LandingPage';
 import Events from './components/Events';
 import ProjectLog from './components/ProjectLog';
+import Project from './components/ProjectPage';
 
 Vue.config.productionTip = false
 
@@ -17,12 +18,13 @@ Vue.use(VueRouter)
 
 const routes = [
   {path: '/', component: Landing}, 
-  {path: '/showcase', component: Showcase},
+  {path: '/showcase', component: Showcase2},
   {path: '/homepage', component: HomePage},
   {path: '/signup', component: SignUp},
   {path: '/login', component: Login},
   {path: '/events', component: Events},
-  {path: '/projectlog', component: ProjectLog}
+  {path: '/projectlog', component: ProjectLog},
+  {path: '/project', component: Project}
 ]
 
 const router = new VueRouter({

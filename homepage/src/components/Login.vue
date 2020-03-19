@@ -37,7 +37,7 @@
             <v-flex xs1></v-flex>
             <v-flex xs2>
                 <!--This is the submit button that you have to bind an on-click event for-->
-                <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Login</v-btn>
+                <router-link to="/homepage"><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Login</v-btn></router-link>
                 <!--Eventually, add a link to take the user to the login page when they click the span-->
                 <p class="mt-6">Don't have an account yet? <router-link to="/signup"><span class="underlined">Sign up!</span></router-link></p>
             </v-flex>
