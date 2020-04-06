@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app class="grey lighten-4">
         <Navbar />
         <v-img class="background" src="../assets/Rectangle81.png" alt="Backview of man play games">
             <v-container fluid text-center class="white--text center-in-image">

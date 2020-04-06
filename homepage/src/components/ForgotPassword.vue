@@ -10,8 +10,11 @@
         <v-layout column md7 text-center>
             <v-flex xs2></v-flex>
             <v-flex xs1 class="mb-10">
-                <h1>Welcome Back</h1>
+                <h1>Forgot Your Password?</h1>
+                <br>
+                <p>Type in your email, and we'll reset it for you.</p>
             </v-flex>
+            
             <!--This is the input box for the user email-->
             <v-flex xs1>
                 <v-text-field 
@@ -22,29 +25,16 @@
                     solo>
                 </v-text-field>
             </v-flex>
-            <!--This is the input box for the user password-->
-            <v-flex xs1>
-                <v-text-field 
-                    :type="'password'"
-                    prepend-inner-icon="fas fa-lock" 
-                    class="center-block input-width" 
-                    label="password" 
-                    placeholder="Password" 
-                    solo>
-                </v-text-field>
-                <br>
-                <p><span class="underlined">Forgot password?</span></P>
-            </v-flex>
             <v-flex xs1></v-flex>
             <v-flex xs2>
                 <!--This is the submit button that you have to bind an on-click event for-->
-                <router-link to="/homepage"><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Login</v-btn></router-link>
+                <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Reset</v-btn>
                 <!--Eventually, add a link to take the user to the login page when they click the span-->
                 <p class="mt-6">Don't have an account yet? <router-link to="/signup"><span class="underlined">Sign up!</span></router-link></p>
             </v-flex>
         </v-layout>
     </v-layout>
-</v-app>
+</v-app>  
 </template>
 
 <script>

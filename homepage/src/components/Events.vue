@@ -6,13 +6,13 @@
             <v-container fill-height align="center">
                 <v-col>
                     <v-row justify="center">
-                        <h1 class="white--text">DreamHack Anaheim</h1>
+                        <h1 class="white--text event-title">DreamHack Anaheim</h1>
                     </v-row>
                     <v-row justify="center">
-                        <h3 class="white--text">Anaheim Convention Center, CA</h3>
+                        <h3 class="white--text event-subtitles">Anaheim Convention Center, CA</h3>
                     </v-row>
                     <v-row justify="center">
-                        <h3 class="white--text">February 21 - 23</h3>
+                        <h3 class="white--text event-subtitles">February 21 - 23</h3>
                     </v-row>
                 </v-col>
             </v-container>
@@ -60,6 +60,15 @@ export default {
 </script>
 
 <style scoped>
+
+    .event-title {
+        font-size: 3em;
+    }
+
+    .event-subtitles {
+        font-size: 1.5em;
+        font-weight: 400;
+    }
 
     .background {
         background-position: center;

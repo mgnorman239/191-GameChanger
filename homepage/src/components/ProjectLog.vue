@@ -8,28 +8,28 @@
                 <v-flex md2>
                     <h1>Log Archive</h1>
                         <br>
-                        <button class="full-button">April 2020<i class="fas fa-plus right-align"></i></button>
+                        <button class="full-button mt-5 mb-5">April 2020<i class="fas fa-plus right-align"></i></button>
                         <!--Replace these with actual entries for the year-->
                         <div class="dropdown-container">
-                            <ul>
+                            <ul class="mb-5">
                                 <li><a class="text-to-gray" href="#">Link 1</a></li>
                                 <li><a class="text-to-gray" href="#">Link 2</a></li>
                                 <li><a class="text-to-gray" href="#">Link 3</a></li>
                             </ul>
                         </div>
                         <hr>
-                        <button class="full-button">March 2020<i class="fas fa-plus right-align"></i></button>
+                        <button class="full-button mt-5 mb-5">March 2020<i class="fas fa-plus right-align"></i></button>
                         <div class="dropdown-container">
-                            <ul>
+                            <ul class="mb-5">
                                 <li><a class="text-to-gray" href="#">Link 1</a></li>
                                 <li><a class="text-to-gray" href="#">Link 2</a></li>
                                 <li><a class="text-to-gray" href="#">Link 3</a></li>
                             </ul>
                         </div>
                         <hr>
-                        <button class="full-button">February 2020<i class="fas fa-plus right-align"></i></button>
+                        <button class="full-button mt-5 mb-5">February 2020<i class="fas fa-plus right-align"></i></button>
                         <div class="dropdown-container">
-                            <ul>
+                            <ul class="mb-5">
                                 <li><a class="text-to-gray" href="#">Link 1</a></li>
                                 <li><a class="text-to-gray" href="#">Link 2</a></li>
                                 <li><a class="text-to-gray" href="#">Link 3</a></li>
@@ -66,11 +66,15 @@ $(function(){
     for (i = 0; i < dropdown.length; i++) {
     dropdown[i].addEventListener("click", function() {
         this.classList.toggle("active");
+        $(this).find("i").toggleClass("fas fa-plus fas fa-minus");
         var dropdownContent = this.nextElementSibling;
-        if (dropdownContent.style.display === "block") {
-        dropdownContent.style.display = "none";
-        } else {
-        dropdownContent.style.display = "block";
+        if (dropdownContent.style.display === "block") 
+        {
+            dropdownContent.style.display = "none";
+        } 
+        else 
+        {
+            dropdownContent.style.display = "block";
         }
     });
     }
