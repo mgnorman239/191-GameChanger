@@ -7,10 +7,10 @@
               <v-col class="px-4" cols="12" sm="6">
                   <carousel :perPage="1" :navigationEnabled="true" :paginationPosition="'bottom-overlay'" :loop="true" :navigationNextLabel='`<i class="fas fa-chevron-right"></i>`' :navigationPrevLabel='`<i class="fas fa-chevron-left"></i>`'>
                       <slide>
-                          <img width="100%" src="https://via.placeholder.com/450x280.png" />
+                          <img width="100%" src="../assets/placeholder3.png" />
                       </slide>
                       <slide>
-                          <img width="100%" src="https://via.placeholder.com/450x280.png" />
+                          <img width="100%" src="../assets/placeholder3.png" />
                       </slide>
                   </carousel>
               </v-col>
@@ -35,9 +35,9 @@
               <h2>Meet the Team</h2>
           </v-row>
           <v-row>
-              <v-col md="1" v-for="i in 4" :key="i.index">
+              <v-col class="ma-3" md="1" v-for="i in 4" :key="i.index">
                   <v-row justify="center">
-                    <v-avatar>
+                    <v-avatar size="60">
                         <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
                     </v-avatar>
                   </v-row>
@@ -62,7 +62,7 @@
                         <i class="far fa-calendar"></i>
                         <span class="ml-2">February 28, 2020</span>
                         <v-spacer></v-spacer>
-                        <v-btn class="body-2" color="#4DB848" outlined>Read More</v-btn>
+                        <router-link to="/projectlog"><v-btn class="body-2" color="#4DB848" outlined>Read More</v-btn></router-link>
                     </v-card-actions>
                 </v-card>
               </v-col>
