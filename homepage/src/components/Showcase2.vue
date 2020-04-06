@@ -1,14 +1,12 @@
 <template>
 <v-app class="grey lighten-4">
     <Navbar />
-    <v-container-fluid>
         <carousel :navigationEnabled="true" :perPage="1" :loop="true" :paginationPosition="'bottom-overlay'" :navigationNextLabel='`<i class="fas fa-chevron-right fa-2x"></i>`' :navigationPrevLabel='`<i class="fas fa-chevron-left fa-2x"></i>`'>
-            <slide><img width="100%" src="https://via.placeholder.com/1200x450.png" /></slide>
-            <slide><img width="100%" src="https://via.placeholder.com/1200x450.png" /></slide>
-            <slide><img width="100%" src="https://via.placeholder.com/1200x450.png" /></slide>
-            <slide><img width="100%" src="https://via.placeholder.com/1200x450.png" /></slide>
+            <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
+            <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
+            <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
+            <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
         </carousel>
-    </v-container-fluid>
     <v-container>
         <v-row>
             <h1 class="pa-3 pt-0">Browse Projects</h1>
