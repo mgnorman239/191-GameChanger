@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app class="grey lighten-4">
         <Navbar />
         <v-img class="background" src="../assets/Rectangle81.png" alt="Backview of man play games">
             <v-container fluid text-center class="white--text center-in-image">
@@ -15,7 +15,7 @@
                 <v-flex md4 xs12>
                     <h1>ABOUT</h1>
                     <br>
-                    <p class="paragraph-font">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent molestie facilisis sapien, ac lacinia nunc rhoncus et. Mauris vehicula vehicula lacus id ultricies. Nulla eu ligula dapibus, laoreet quam luctus, pharetra ligula. Nunc et ornare diam. Ut ut urna et dui varius gravida venenatis eget lacus. Aenean et maximus ipsum, in mattis nisi. Duis nec quam sed ante posuere malesuada. In quam sem, accumsan ut tincidunt quis, eleifend vel elit. Sed urna justo, commodo quis ex nec, placerat bibendum elit. Fusce efficitur aliquet velit ac feugiat. Quisque sapien diam, rhoncus at pellentesque quis, hendrerit eu tortor. Cras dictum sem vitae arcu convallis posuere.
+                    <p class="paragraph-font">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent molestie facilisis sapien, ac lacinia nunc rhoncus et. Mauris vehicula vehicula lacus id ultricies. Nulla eu ligula dapibus, laoreet quam luctus, pharetra ligula. Nunc et ornare diam. Ut ut urna et dui varius gravida venenatis eget lacus. 
                     </p>
                 </v-flex>
                 <v-flex md1></v-flex>
@@ -126,7 +126,7 @@ export default {
     }
 
     .event-title {
-        font-size: 4em;
+        font-size: 3em;
     }
 
     .event-subtitles {
@@ -135,17 +135,17 @@ export default {
     }
 
     .padding-between-text {
-        margin-top: 10em;
+        margin-top: 12em;
     }
 
     .questions-font {
         font-weight: bold;
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .paragraph-font {
         font-weight: 500;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .rectangle-bottom {
