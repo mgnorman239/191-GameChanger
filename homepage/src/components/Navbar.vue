@@ -9,8 +9,8 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <router-link to="/projectsubmissionpage"><v-btn outlined color="#F6F6F6" class="ma-2 mr-7 body-2"><v-icon left>fas fa-upload</v-icon>Upload</v-btn></router-link>
-            <router-link to="#">
-                <v-menu open-on-hover top offset-y>
+            <router-link to="/profile">
+                <v-menu open-on-hover bottom offset-y>
                     <template v-slot:activator="{ on }">
                         <v-btn
                         color="#F6F6F6"
@@ -50,7 +50,7 @@
 export default {
     data() {
         return {
-            loggedIn: false,
+            loggedIn: true,
             dropdown_items: ['Profile', 'Logout']
         }
     }

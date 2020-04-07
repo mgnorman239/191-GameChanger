@@ -13,6 +13,7 @@ import ProjectLog from './components/ProjectLog';
 import Project from './components/ProjectPage';
 import ProjectSubmissionPage from './components/ProjectSubmissionPage';
 import ForgotPassword from './components/ForgotPassword';
+import Profile from './components/Profile';
 
 Vue.config.productionTip = false
 
@@ -28,7 +29,8 @@ const routes = [
   {path: '/projectlog', component: ProjectLog},
   {path: '/project', component: Project},
   {path: '/projectsubmissionpage', component: ProjectSubmissionPage},
-  {path: '/forgotpassword', component: ForgotPassword}
+  {path: '/forgotpassword', component: ForgotPassword},
+  {path: '/profile', component: Profile}
 ]
 
 const router = new VueRouter({
