@@ -14,6 +14,7 @@ import Project from './components/ProjectPage';
 import ProjectSubmissionPage from './components/ProjectSubmissionPage';
 import ForgotPassword from './components/ForgotPassword';
 import Profile from './components/Profile';
+import ThankYou from './components/ThankYou';
 
 Vue.config.productionTip = false
 
@@ -30,7 +31,8 @@ const routes = [
   {path: '/project', component: Project},
   {path: '/projectsubmissionpage', component: ProjectSubmissionPage},
   {path: '/forgotpassword', component: ForgotPassword},
-  {path: '/profile', component: Profile}
+  {path: '/profile', component: Profile},
+  {path: '/success', component: ThankYou}
 ]
 
 const router = new VueRouter({

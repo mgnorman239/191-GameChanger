@@ -55,7 +55,7 @@
           <br>
           <br>
           <!-- Add the submit buttons -->
-          <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Submit</v-btn>
+          <router-link to='/success'><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Submit</v-btn></router-link>
         </v-flex>
         <v-flex md2></v-flex>
       </v-layout>
