@@ -21,6 +21,7 @@
             </v-flex>
         </v-layout>
     </v-container>
+
     <!--Display the carousel component-->
     <v-container>
         <h1>Other Projects</h1>
@@ -36,6 +37,7 @@
             <div class="swiper-button-next" slot="button-next"></div>
         </swiper>
     </v-container>
+
 </v-app>
 </template>
 
@@ -92,6 +94,8 @@ export default {
         }
     }
 }
+
+
 </script>
 
 <style>
