@@ -15,6 +15,7 @@ import ProjectSubmissionPage from './components/ProjectSubmissionPage';
 import ForgotPassword from './components/ForgotPassword';
 import Profile from './components/Profile';
 import ThankYou from './components/ThankYou';
+import UserSettings from './components/UserSettings';
 
 Vue.config.productionTip = false
 
