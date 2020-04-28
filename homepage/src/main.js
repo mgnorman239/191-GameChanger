@@ -14,11 +14,8 @@ import Project from './components/ProjectPage';
 import ProjectSubmissionPage from './components/ProjectSubmissionPage';
 import ForgotPassword from './components/ForgotPassword';
 import Profile from './components/Profile';
-<<<<<<< Updated upstream
 import ThankYou from './components/ThankYou';
-=======
 import UserSettings from './components/UserSettings';
->>>>>>> Stashed changes
 
 Vue.config.productionTip = false
 
@@ -36,11 +33,8 @@ const routes = [
   {path: '/projectsubmissionpage', component: ProjectSubmissionPage},
   {path: '/forgotpassword', component: ForgotPassword},
   {path: '/profile', component: Profile},
-<<<<<<< Updated upstream
-  {path: '/success', component: ThankYou}
-=======
+  {path: '/success', component: ThankYou},
   {path: '/usersettings', component: UserSettings},
->>>>>>> Stashed changes
 ]
 
 const router = new VueRouter({
