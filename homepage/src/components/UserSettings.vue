@@ -1,6 +1,6 @@
 <template>
     <v-app class="background-color">
-        <Navbar2 />
+        <Navbar />
         <!-- Form page -->
         <v-container fluid class="header-spacing">
             <v-layout>
@@ -14,7 +14,7 @@
                     <br>
                     <p class="left-tab"> <i class="fas fa-edit right-tab gamechanger-green"></i> <b class="right-tab">Email:</b> {{ userSubmission.userEmail }} </p>
                     <br>
-                    <v-file-input class="left-tab" accept="image/*" label="User Picture" v-model="userSubmission.userPicture"></v-file-input>
+                    <!--<v-file-input class="left-tab" accept="image/*" label="User Picture" v-model="userSubmission.userPicture"></v-file-input>-->
                 </v-flex>
                 <v-flex md2></v-flex>
             </v-layout>
@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import Navbar2 from "./Navbar-2";
+import Navbar from "./Navbar";
 
 export default {
     components: {
-        Navbar2
+        Navbar
     },
     // This is for the user information. Data right now is hard coded.
     data: () => ({

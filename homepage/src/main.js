@@ -36,7 +36,7 @@ const routes = [
   {path: '/profile', component: Profile},
   {path: '/success', component: ThankYou},
   {path: '/logsubmission', component: LogSubmission},
-  {path: '/usersettings', component: UserSettings},
+  {path: '/usersettings', component: UserSettings}
 ]
 
 const router = new VueRouter({
