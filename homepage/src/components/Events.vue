@@ -18,13 +18,13 @@
             </v-container>
         </v-img>
     <!-- Display event cards -->
-    <v-container>
+    <v-container class="px-12">
         <v-row>
             <h1 class="pa-3 pt-0">Events</h1>
         </v-row>
         <v-row>
-            <v-col cols="12" sm="6" justify="center" v-for="i in 4" :key="i.index">
-                <v-card raised>
+            <v-col class="pa-5" cols="12" sm="6" justify="center" v-for="i in 4" :key="i.index">
+                <v-card outlined>
                     <v-img src="../assets/event-card2.png" alt="Guy wearing headphones in front of a computer.">
                         <v-container fill-height align="center">
                             <v-row>
@@ -39,15 +39,18 @@
             </v-col>
         </v-row>
     </v-container>
+    <Footer />
 </v-app>
 </template>
 
 <script>
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 export default {
     components: {
-        Navbar
+        Navbar,
+        Footer
     },
     data() {
         return {
