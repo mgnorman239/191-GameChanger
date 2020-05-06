@@ -61,4 +61,8 @@ export default {
 .v-application--is-ltr .v-text-field .v-input__prepend-inner {
     padding-right: 8px !important;
 }
+
+.a {
+  text-decoration: none;
+}
 </style>

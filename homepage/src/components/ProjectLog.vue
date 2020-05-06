@@ -51,11 +51,13 @@
                 <v-flex md2></v-flex>
             </v-row>
         </v-container>
+        <Footer />
     </v-app>
 </template>
 
 <script>
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import $ from 'jquery';
 
 //Code to make the dropdown button work
@@ -82,7 +84,8 @@ $(function(){
 
 export default {
     components: {
-        Navbar
+        Navbar,
+        Footer
     }
 }
 

@@ -7,33 +7,39 @@
             <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
             <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
         </carousel>
-    <v-container>
-        <v-row>
-            <h1 class="pa-3 pt-0">Browse Projects</h1>
+    <v-container class="px-12">
+        <v-row class="mt-3" align="center">
+            <h2 class="ml-5 pt-0">Browse Projects</h2>
             <v-spacer></v-spacer>
-            <v-col cols="12" md="2">
-                <v-select :items="genres" dense rounded solo flat label="Filter..." color="#4DB848">
+            <v-col cols="12" md="3">
+                <v-select :items="genreList" append-icon="" clearable clear-icon="fas fa-times fa-xs" dense rounded solo flat label="Filter..." color="#4DB848" v-model="filterItem">
+                    <v-icon slot="prepend-inner" left small>fas fa-filter</v-icon>
                 </v-select>
             </v-col>
         </v-row>
         <v-row>
-            <v-col class="pa-3" cols="12" xs="12" sm="6" md="4" v-for="i in 6" :key="i.index">
-                <v-card>
-                    <v-img height="200px" src="../assets/placeholder.gif"></v-img>
-                    <v-card-title class="pb-0 px-6">Project Name</v-card-title>
-                    <v-card-text class="pb-2 px-6">Lorem ipsum dolor sit amet, consecteturadip iscing elit.</v-card-text>
+            <div v-if="filterProjects.length == 0">
+                <v-col>
+                    <h3 class="ml-1 mt-5 grey--text font-weight-regular">Sorry, there are no projects with this genre.</h3>
+                </v-col>
+            </div>
+            <v-col class="pa-5" cols="12" xs="12" sm="6" md="4" v-for="project in filterProjects" :key="project.index">
+                <v-card outlined>
+                    <v-img height="130px" src="../assets/placeholder.gif"></v-img>
+                    <v-card-title class="pb-0 px-6">{{project.title}}</v-card-title>
+                    <v-card-text class="pb-2 px-6">{{project.description}}</v-card-text>
                     <v-card-actions class="px-6 pb-6">
-                        <v-chip-group class="hidden-xs-only">
-                            <v-chip small outlined disabled>Action</v-chip>
-                            <v-chip small outlined disabled>Adventure</v-chip>
+                        <v-chip-group class="hidden-xs-only" v-for="genre in project.genres" :key="genre.index">
+                            <v-chip small outlined disabled>{{genre}}</v-chip>
                         </v-chip-group>
                         <v-spacer></v-spacer>
-                        <router-link to="/project"><v-btn class="body-2" color="#4DB848" outlined>View More</v-btn></router-link>
+                        <router-link to="/project"><v-btn class="body-2 font-weight-medium" color="#4DB848" text small>View More</v-btn></router-link>
                     </v-card-actions>
                 </v-card>
             </v-col>
         </v-row>
     </v-container>
+    <Footer />
 </v-app>
 </template>
 
@@ -43,16 +49,62 @@ import {
     Slide
 } from 'vue-carousel';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 export default {
     components: {
         Navbar,
         Carousel,
-        Slide
+        Slide,
+        Footer
     },
     data() {
         return {
-            genres: ['Adventure', 'Action', 'Simulation', 'Mystery', 'Casual', 'Puzzle', 'Sports']
+            genreList: ['Adventure', 'Action', 'Simulation', 'Mystery', 'Casual', 'Puzzle', 'Sports'],
+            filterItem: '',
+            projects: [
+                {
+                    title: 'FarmVille',
+                    description: 'Lorem ipsum dolor sit amet, consect eturadip iscing elit.',
+                    genres: ['Simulation']
+                },
+                {
+                    title: 'Pokemon',
+                    description: 'Lorem ipsum dolor sit amet, consect eturadip iscing elit.',
+                    genres: ['Adventure', 'Action']
+                },
+                {
+                    title: 'Tetris',
+                    description: 'Lorem ipsum dolor sit amet, consect eturadip iscing elit.',
+                    genres: ['Casual', 'Puzzle']
+                },
+                {
+                    title: 'Flappy Bird',
+                    description: 'Lorem ipsum dolor sit amet, consect eturadip iscing elit.',
+                    genres: ['Casual']
+                },
+                {
+                    title: 'Halo',
+                    description: 'Lorem ipsum dolor sit amet, consect eturadip iscing elit.',
+                    genres: ['Action']
+                },
+                {
+                    title: 'The Sims',
+                    description: 'Lorem ipsum dolor sit amet, consect eturadip iscing elit.',
+                    genres: ['Casual', 'Simulation']
+                }
+            ]
+        }
+    },
+    computed: {
+        filterProjects() {
+            if(this.filterItem) {
+                return this.projects.filter((item)=> {
+                    return item.genres.includes(this.filterItem);
+                })
+            }else {
+                return this.projects;
+            }
         }
     }
 }
