@@ -93,20 +93,18 @@
                 <v-flex md1></v-flex>
             </v-layout>
         </v-container>
-        <v-container text-center fluid class="rectangle-bottom">
-            <p class="paragraph-font">
-                Copyright
-            </p>
-        </v-container>
+        <Footer />
     </v-app>
 </template>
 
 <script>
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 export default {
     components: {
-        Navbar
+        Navbar,
+        Footer
     }
 }
 </script>

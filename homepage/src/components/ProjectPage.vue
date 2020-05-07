@@ -1,92 +1,106 @@
 <template>
-  <v-app>
-      <Navbar />
-
-      <!-- Project gallery, title, and description -->
-      <v-container class="mt-3">
-          <br>
-          <br>
-          <br>
-          <v-row>
-              <v-col class="px-4" cols="12" sm="6">
-                  <carousel :perPage="1" :navigationEnabled="true" :paginationPosition="'bottom-overlay'" :loop="true" :navigationNextLabel='`<i class="fas fa-chevron-right"></i>`' :navigationPrevLabel='`<i class="fas fa-chevron-left"></i>`'>
-                      <slide>
-                          <img width="100%" :src=game.thumbnailURL.S />
-                      </slide>
-                      <slide>
-                          <img width="100%" src="../assets/placeholder3.png" />
-                      </slide>
-                  </carousel>
-              </v-col>
-              <v-col class="px-4" cols="12" sm="6">
-                  <v-container class="pt-0">
-                      <v-row class="pa-1 pt-0">
-                          <h1>{{ game.title.S }}</h1>
-                      </v-row>
-                      <v-row class="pa-1">
-                          <p>{{ game.description.S }}</p>
-                      </v-row>
-                      <v-row class="mt-3">
-                          <v-btn dark large class="body-1 text--white" color="#4DB848" v-on:click=goToGameWebsite()>PLAY NOW</v-btn>
-                      </v-row>
-                  </v-container>
-              </v-col>
-          </v-row>
-      </v-container>
-
-      <!-- Project group members -->
-      <v-container>
-          <v-row class="px-4">
-              <h2>Meet the Team</h2>
-          </v-row>
-          <v-row>
-              <v-col class="ma-3" md="1" v-for="(member, index) in teamMembers" :key="index">
-                  <v-row justify="center">
+<v-app class="grey lighten-4 spacer">
+    <Navbar />
+    <!-- Project gallery, title, and description -->
+    <v-container class="mt-3 px-12">
+        <v-row align="center">
+            <v-col class="px-4" cols="12" sm="6">
+                <br>
+                <br>
+                <br>
+                <carousel :perPage="1" :navigationEnabled="true" :paginationPosition="'bottom-overlay'" :loop="true" :navigationNextLabel='`<i class="fas fa-chevron-right"></i>`' :navigationPrevLabel='`<i class="fas fa-chevron-left"></i>`' :paginationSize="8">
+                    <slide>
+                        <v-img height="100%" width="100%" :src=game.thumbnailURL.S />
+                    </slide>
+                    <slide>
+                        <v-img height="100%" width="100%" src="../assets/placeholder3.png" />
+                    </slide>
+                </carousel>
+            </v-col>
+            <v-col class="px-4" cols="12" sm="6">
+                <v-card class="pa-3" outlined height="100%">
+                        <v-card-title class="subtitle-1">
+                            <h2 class="mr-5">{{ game.title.S }}</h2>
+                            <v-chip-group>
+                            <v-chip outlined small disabled>Action</v-chip>
+                            <v-chip outlined small disabled>Adventure</v-chip>
+                        </v-chip-group>
+                        </v-card-title>
+                        <v-card-text class="subtitle-1">{{ game.description.S }}</v-card-text>
+                        <v-spacer></v-spacer>
+                        <v-card-actions>
+                            <v-btn dark depressed x-large block class="subtitle-1 font-weight-medium" color="#4DB848" v-on:click=goToGameWebsite()>PLAY NOW</v-btn>
+                        </v-card-actions>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
+    <!-- Project group members -->
+    <v-container class="px-12">
+        <v-row class="px-4 mt-5">
+            <h2>Meet the Team</h2>
+        </v-row>
+        <v-row>
+            <v-col class="ma-3" md="1" v-for="(member, index) in teamMembers" :key="index">
+                <v-row justify="center">
                     <v-avatar size="60">
                         <v-img :src=member.profilePicture.S></v-img>
                     </v-avatar>
-                  </v-row>
-                  <v-row justify="center">
-                    <p>{{ member.displayName.S }}</p>
-                  </v-row>
-              </v-col>
-          </v-row>
-      </v-container>
-
-      <!-- Project logs -->
-      <v-container>
-          <v-row>
-              <h2 class="pa-3 pt-0">Project Log</h2>
-          </v-row>
-          <v-row>
-              <v-col cols="12" xs="12" sm="4" v-for="i in 6" :key="i.index">
-                  <v-card>
-                    <v-img height="200px" src="../assets/gc_photo.jpg"></v-img>
+                </v-row>
+                <v-row justify="center">
+                    <p class="pa-2">{{ member.displayName.S }}</p>
+                </v-row>
+            </v-col>
+        </v-row>
+    </v-container>
+    
+    <!-- Project logs -->
+    <v-container class="px-12">
+        <v-row>
+            <h2 class="pa-3 ml-2 pt-0">Project Log</h2>
+            <v-spacer></v-spacer>
+            <router-link to="/logsubmission">
+                <v-btn outlined dark color="#4DB848" class="body-1 font-weight-medium mr-5">
+                    Add Log
+                </v-btn>
+            </router-link>
+        </v-row>
+        <v-row>
+            <v-col class="pa-5" cols="12" sm="6" md="6" lg="4" v-for="i in 6" :key="i.index">
+                <v-card outlined>
+                    <v-img height="180px" src="../assets/gc_photo.jpg"></v-img>
                     <v-card-title class="pb-0 px-6">Entry Title</v-card-title>
-                    <v-card-text class="pb-2 px-6">Lorem ipsum dolor sit amet, consecteturadip iscing elit.</v-card-text>
-                    <v-card-actions class="px-6 pb-6">
-                        <i class="far fa-calendar"></i>
-                        <span class="ml-2">February 28, 2020</span>
+                    <v-card-text class="px-6 pb-0">Lorem ipsum dolor sit amet, consecte turadip iscing elit.</v-card-text>
+                    <v-card-actions class="pb-1">
+                        <v-card-subtitle><v-icon small left>far fa-calendar</v-icon>February 28, 2020</v-card-subtitle>
                         <v-spacer></v-spacer>
-                        <router-link to="/projectlog"><v-btn class="body-2" color="#4DB848" outlined>Read More</v-btn></router-link>
+                        <router-link to="/projectlog">
+                            <v-btn class="body-2 font-weight-medium" color="#4DB848" text small>Read More</v-btn>
+                        </router-link>
                     </v-card-actions>
                 </v-card>
-              </v-col>
-          </v-row>
-      </v-container>
-  </v-app>
+            </v-col>
+        </v-row>
+    </v-container>
+    <Footer/>
+</v-app>
 </template>
 
 <script>
 import Navbar from './Navbar';
-import { Carousel, Slide} from 'vue-carousel';
+import Footer from './Footer'; 
 
+import {
+    Carousel,
+    Slide
+} from 'vue-carousel';
 
 export default {
     components: {
         Navbar,
         Carousel,
-        Slide
+        Slide,
+        Footer
     },
 
     props: {
@@ -183,6 +197,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.spacer {
+    margin-top: 4em;
+}
 </style>

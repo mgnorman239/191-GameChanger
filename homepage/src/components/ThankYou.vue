@@ -8,15 +8,18 @@
               <v-img contain height="400" width="auto" class="image" src="../assets/success.svg"></v-img>
           </v-card>
       </v-container>
+      <Footer />
   </v-app>
 </template>
 
 <script>
 import Navbar from './Navbar';
+import Footer from "./Footer";
 
 export default {
     components: {
-        Navbar
+        Navbar,
+        Footer
     }
 
 }
@@ -26,7 +29,6 @@ export default {
 
 .spacer {
     margin-top: 8em;
-    margin-bottom: 3em;
 }
 
 .thank-you {

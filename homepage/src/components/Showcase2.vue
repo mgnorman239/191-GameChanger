@@ -8,40 +8,43 @@
             <slide><img width="100%" src="../assets/showcase_3.jpg" class="showcase-picture" /></slide>
             <slide><img width="100%" src="../assets/placeholder2.png" class="showcase-picture" /></slide>
         </carousel>
-
-    <v-container>
+    <v-container class="px-12">
         <br>
-        <v-row>
-            <h1 class="pa-3 pt-0">Browse Projects</h1>
+        <v-row class="mt-3" align="center">
+            <h2 class="ml-5 pt-0">Browse Projects</h2>
             <v-spacer></v-spacer>
-            <v-col cols="12" md="2">
-                <v-select :items="genres" dense rounded solo flat label="Filter..." color="#4DB848">
+            <v-col cols="12" md="3">
+                <v-select :items="genreList" append-icon="" clearable clear-icon="fas fa-times fa-xs" dense rounded solo flat label="Filter..." color="#4DB848" v-model="filterItem">
+                    <v-icon slot="prepend-inner" left small>fas fa-filter</v-icon>
                 </v-select>
             </v-col>
         </v-row>
 
         <!-- Project/Game cards --> 
         <v-row>
-            <v-col class="pa-3" cols="12" xs="12" sm="6" md="4" v-for="(game, index) in games" :key="index">
-                <v-card>
-                    <v-img height="200px" :src=game.thumbnailURL.S></v-img>
+            <div v-if="filterProjects.length == 0">
+                <v-col>
+                    <h3 class="ml-1 mt-5 grey--text font-weight-regular">Sorry, there are no projects with this genre.</h3>
+                </v-col>
+            </div>
+            <v-col class="pa-5" cols="12" xs="12" sm="6" md="4" v-for="project in filterProjects" :key="project.index">
+                <v-card outlined>
+                    <v-img height="130px" src="../assets/placeholder.gif"></v-img>
                     <v-card-title class="pb-0 px-6">{{ game.title.S }}</v-card-title>
                     <v-card-text class="pb-2 px-6">{{ condensedDescription(game.description.S) }}</v-card-text>
                     <v-card-actions class="px-6 pb-6">
-                        <v-chip-group class="xs-only" v-for="(tag, index) in game.tags.L" :key="index">
-                            <v-chip small outlined >{{ tag.S }}</v-chip>
+                        <v-chip-group class="hidden-xs-only" v-for="(tag, index) in game.tags.L" :key="index">
+                            <v-chip small outlined disabled>{{ tag.S }}</v-chip>
                         </v-chip-group>
                         <v-spacer></v-spacer>
-                        <router-link to="/project"><v-btn class="body-2" color="#4DB848" outlined v-on:click="getGameTitle(game.title.S)">View More</v-btn></router-link>
+                        <router-link to="/project"><v-btn class="body-2 font-weight-medium" color="#4DB848" text small v-on:click="getGameTitle(game.title.S)">View More</v-btn></router-link>
                     </v-card-actions>
                 </v-card>
             </v-col>
         </v-row>
 
     </v-container>
-    
-
-
+    <Footer />
 </v-app>
 </template>
 
@@ -54,12 +57,14 @@ import {
 } from 'vue-carousel';
 import Navbar from './Navbar';
 import ProjectPage from './ProjectPage.vue'
+import Footer from './Footer';
 
 export default {
     components: {
         Navbar,
         Carousel,
         Slide,
+        Footer
     },
 
     data() {
@@ -68,7 +73,8 @@ export default {
             // list of games from database
             games: {},
             s3_url: "https://gamechangerhackathonprojects.s3-us-west-2.amazonaws.com/",
-            selected_title: ""
+            selected_title: "",
+            filterItem: '',
         }
     }, 
 
@@ -96,6 +102,17 @@ export default {
             this.games = game_database.Items;
         })
     }, 
+
+    computed: {
+        filterProjects() {
+            if(this.filterItem) {
+                return this.games.filter((item)=> {
+                    return item.tags.S.includes(this.filterItem);
+                })
+            }else {
+                return this.games;
+            }
+        },
     
     methods: {
         condensedDescription(description) {

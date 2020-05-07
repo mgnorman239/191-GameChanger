@@ -9,7 +9,7 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <router-link to="/projectsubmissionpage"><v-btn outlined color="#F6F6F6" class="ma-2 mr-7 body-2"><v-icon left>fas fa-upload</v-icon>Upload</v-btn></router-link>
-            <router-link to="#">
+            <router-link to="/profile">
                 <v-menu open-on-hover top offset-y>
                     <template v-slot:activator="{ on }">
                         <v-btn
@@ -26,7 +26,7 @@
                         v-for="(item, index) in dropdown_items"
                         :key="index"
                         >
-                        <v-list-item-title>{{ item }}</v-list-item-title>
+                        <router-link :to="item.route"><v-list-item-title class="text-color">{{ item.title }}</v-list-item-title></router-link>
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -38,7 +38,11 @@
 <script>
 export default {
     data: () => ({
-        dropdown_items: ['Profile', 'Logout']
+        dropdown_items: [
+            { title: 'Profile', route: '/profile'},
+            { title: 'Setting', route: '/usersettings'},
+            { title: 'Logout', route: '/#'}
+            ]
     })
 }
 </script>
@@ -46,5 +50,13 @@ export default {
 <style>
 a {  
     text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.text-color {
+    color: black;
 }
 </style>
