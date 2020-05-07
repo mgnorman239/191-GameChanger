@@ -70,8 +70,14 @@
 </template>
 
 <script>
+<<<<<<< HEAD
+//This script needs the access key and the secret ID to work. 
+import Navbar2 from "./Navbar-2";
+import { APIGateway } from 'aws-sdk';
+=======
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+>>>>>>> master
 
 export default {
     components: {
@@ -106,8 +112,8 @@ export default {
         var AWS = require('aws-sdk');
         AWS.config.update({
           region: 'us-west-2', 
-          accessKeyId: "AKIAJRWUKYZZN7AOEV7Q",
-          secretAccessKey: "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"
+          accessKeyId: "",
+          secretAccessKey: ""
         });
 
         
