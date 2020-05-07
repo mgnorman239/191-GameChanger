@@ -12,7 +12,7 @@
           <!-- Project title name -->
           <v-text-field 
             label="Project Name"
-            v-model="project_submission.projectName"
+            v-model="project_submission.title"
             required>
           </v-text-field>
           <br>
@@ -23,7 +23,7 @@
             label="Project Description"
             :rules="description_rules"
             :value="description_placeholder"
-            v-model="project_submission.projectDescription"
+            v-model="project_submission.description"
             counter
             class="project-description-spacing"
             >
@@ -33,14 +33,14 @@
             <v-text-field 
             label="Project URL"
             required
-            v-model="project_submission.projectURL"
+            v-model="project_submission.gameURL"
             class="input-width mr-5">
             </v-text-field>
             <!-- Project Tags -->
             <v-select
               :items="tags"
               label="Tags"
-              v-model="project_submission.projectTags"
+              v-model="project_submission.tags"
               outlined
               multiple
               class="input-width"
@@ -50,17 +50,17 @@
           <!-- Add team members -->
           <br>
           <v-text-field 
-            label="Member Names"
-            v-model="project_submission.memberNames"
+            label="Member Names: separate names with ;"
+            v-model="project_submission.teamMembers"
             required>
           </v-text-field>
           <br>
           <!-- Add picture for project -->
-          <v-file-input accept="image/*" label="Project Picture" v-model="project_submission.projectPicture"></v-file-input>
+          <v-file-input accept="image/*" label="Project Picture" v-model="project_submission.thumbnailURL"></v-file-input>
           <br>
           <br>
           <!-- Add the submit buttons -->
-          <router-link to='/success'><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Submit</v-btn></router-link>
+          <router-link to='/success'><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" v-on:click="postSubmissionToDatabase()">Submit</v-btn></router-link>
         </v-flex>
         <v-flex md2></v-flex>
       </v-layout>
@@ -71,46 +71,86 @@
 <script>
 //This script needs the access key and the secret ID to work. 
 import Navbar2 from "./Navbar-2";
+import { APIGateway } from 'aws-sdk';
 
 export default {
     components: {
         Navbar2
     },
     // This is for the project description counter
-    data: () => ({
-      description_rules: [v => v.length <= 500 || 'Max 500 characters'],
-      description_placeholder: 'Give a quick description about your game!',
-      tags: ['Action', 'Adventure', 'RPG', 'Romance'],
-      //Object that will be sent into the database for AWS
-      project_submission: 
-        {
-          projectName: '', 
-          projectDescription:'',
-          projectURL: '',
-          projectTags: '',
-          memberNames: '',
-          //projectPicture: null},
-        }
-    }),
+    data() {
+      return {
+        description_rules: [v => v.length <= 500 || 'Max 500 characters'],
+        description_placeholder: 'Give a quick description about your game!',
+        tags: ['Action', 'Adventure', 'RPG', 'Romance'],
+
+        //Object that will be sent into the database for AWS
+        project_submission: 
+          {
+            title: '', 
+            description: '',
+            gameURL: '',
+            tags: '',
+            teamMembers: '',
+            thumbnailURL: '../assets/placeholder.gif'
+            //projectPicture: null},
+          }
+          
+      }
+    },
+
     methods: {
       postSubmissionToDatabase()
       {
         var AWS = require('aws-sdk');
-        AWS.config.update({region: 'us-west-2', endpoint: 'http://dynamodb.us-west-2.amazonaws.com'});
-        //Accessing to the project dynamodb
-        let docClient = new AWS.DynamoDB.DocumentClient();
-  
+        AWS.config.update({
+          region: 'us-west-2', 
+          accessKeyId: "AKIAJRWUKYZZN7AOEV7Q",
+          secretAccessKey: "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"
+        });
+
+        
+        var dynamodb = new AWS.DynamoDB.DocumentClient()
+
         var params = {
-            TableName: "Testing1",
-            Item: this.project_submission,
+          TableName: 'Projects',
+          Item: {
+            title: this.project_submission.title,
+            description: this.project_submission.description,
+            gameURL: this.project_submission.gameURL,
+            thumbnailURL: this.project_submission.thumbnailURL,
+            teamMembers: this.formatTeamMembers(this.project_submission.teamMembers),
+            tags: this.project_submission.tags
+          }
+          
         }
-        docClient.put(params, function(err)
-        {
-          console.log(err);
+
+        dynamodb.put(params, function(err) {
+          if (err) {
+            console.log(err)
+          }
+          else {
+            console.log('success')
+          }
         })
+
+
+      },
+
+      /* Format team members into an item that DynamboDB accepts*/
+      formatTeamMembers(members) {
+        //console.log(members)
+        var member_list = members.split(';')
+        var results = []
+
+        for (var i in member_list) {
+          results.push(member_list[i].trim())
+        }
+        return results
       }
-    },
 }
+}
+
 </script>
 
 <style scoped>

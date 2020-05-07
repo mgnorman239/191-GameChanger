@@ -23,14 +23,16 @@
             <h1 class="pa-3 pt-0">Events</h1>
         </v-row>
         <v-row>
-            <v-col cols="12" sm="6" justify="center" v-for="i in 4" :key="i.index">
+            <v-col cols="12" sm="6" justify="center" v-for="(event, index) in events" :key="index">
                 <v-card raised>
                     <v-img src="../assets/event-card2.png" alt="Guy wearing headphones in front of a computer.">
                         <v-container fill-height align="center">
                             <v-row>
                                 <v-col justify="center">
-                                    <h2 class="text-center white--text">DreamHack {{location}}</h2>
-                                    <p class="text-center white--text">{{place}}</p>
+                                    <h2 class="text-center white--text">{{event.name.S}}</h2>
+                                    <p class="text-center white--text">{{event.location.S}}</p>
+                                    <p class="text-center white--text">{{event.date.S}}</p>
+                                    <v-btn class="body-2 card-button" color="white" outlined v-on:click=goToEventPage(event.eventLink.S)>Learn More</v-btn>
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -49,10 +51,44 @@ export default {
     components: {
         Navbar
     },
+
     data() {
         return {
+            events: {},
             location: 'Dallas',
             place: 'Kay Bailey Hutchinson Convention Center'
+        }
+    },
+
+    // runs when the page is created
+    created() {
+        // setting up AWS environment
+        var AWS = require("aws-sdk");
+        AWS.config.update({
+            region: "us-west-2",
+            accessKeyId: "",
+            secretAccessKey: ""
+        });
+        
+        // create the dynambodb object to call dynamodb functions
+        var dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}); 
+
+        // pick which database table to draw data from
+        var params = {
+            TableName: "Events"
+        }
+
+        // get games from the projects database
+        dynamodb.scan(params).promise().then(events_database => {
+            //store games into games list
+            this.events = events_database.Items;
+        })
+    }, 
+
+    methods: {
+        goToEventPage(link) {
+            //console.log(link)
+            window.open(link)
         }
     }
 
@@ -75,6 +111,12 @@ export default {
         background-repeat: no-repeat;
         background-size: contain;
         
+    }
+
+    .card-button {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
     
 </style>>

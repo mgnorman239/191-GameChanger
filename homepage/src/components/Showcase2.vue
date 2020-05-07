@@ -2,14 +2,15 @@
 <v-app class="grey lighten-4">
     <Navbar />
         <!-- Winning Project Carosuel -->
-        <carousel :navigationEnabled="true" :perPage="1" :loop="true" :paginationPosition="'bottom-overlay'" :navigationNextLabel='`<i class="fas fa-chevron-right fa-2x"></i>`' :navigationPrevLabel='`<i class="fas fa-chevron-left fa-2x"></i>`'>
-            <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
-            <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
-            <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
-            <slide><img width="100%" src="../assets/placeholder2.png" /></slide>
+        <carousel :navigationEnabled="true" :perPage="1" :loop="true" :paginationPosition="'bottom-overlay'" class="carousel-background" :navigationNextLabel='`<i class="fas fa-chevron-right fa-2x"></i>`' :navigationPrevLabel='`<i class="fas fa-chevron-left fa-2x"></i>`'>
+            <slide><img width="100%" src="../assets/showcase_1.jpg" class="showcase-picture"/></slide>
+            <slide><img width="100%" src="../assets/showcase_2.jpg" class="showcase-picture" /></slide>
+            <slide><img width="100%" src="../assets/showcase_3.jpg" class="showcase-picture" /></slide>
+            <slide><img width="100%" src="../assets/placeholder2.png" class="showcase-picture" /></slide>
         </carousel>
 
     <v-container>
+        <br>
         <v-row>
             <h1 class="pa-3 pt-0">Browse Projects</h1>
             <v-spacer></v-spacer>
@@ -31,24 +32,20 @@
                             <v-chip small outlined >{{ tag.S }}</v-chip>
                         </v-chip-group>
                         <v-spacer></v-spacer>
-                        <router-link to="/project"><v-btn class="body-2" color="#4DB848" outlined>View More</v-btn></router-link>
+                        <router-link to="/project"><v-btn class="body-2" color="#4DB848" outlined v-on:click="getGameTitle(game.title.S)">View More</v-btn></router-link>
                     </v-card-actions>
                 </v-card>
             </v-col>
         </v-row>
 
     </v-container>
+    
+
 
 </v-app>
 </template>
 
 <script>
-var AWS = require("aws-sdk");
-AWS.config.update({
-    region: "us-west-2",
-
-    });
-
 
 
 import {
@@ -56,26 +53,35 @@ import {
     Slide
 } from 'vue-carousel';
 import Navbar from './Navbar';
+import ProjectPage from './ProjectPage.vue'
 
 export default {
     components: {
         Navbar,
         Carousel,
-        Slide
+        Slide,
     },
-
 
     data() {
         return {
             genres: ['Adventure', 'Action', 'Simulation', 'Mystery', 'Casual', 'Puzzle', 'Sports', 'RPG'],
             // list of games from database
             games: {},
-            s3_url: "https://gamechangerhackathonprojects.s3-us-west-2.amazonaws.com/"
+            s3_url: "https://gamechangerhackathonprojects.s3-us-west-2.amazonaws.com/",
+            selected_title: ""
         }
     }, 
 
     // runs when the page is created
     created() {
+        // setting up AWS environment
+        var AWS = require("aws-sdk");
+        AWS.config.update({
+            region: "us-west-2",
+            accessKeyId: "",
+            secretAccessKey: ""
+        });
+        
         // create the dynambodb object to call dynamodb functions
         var dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}); 
 
@@ -101,6 +107,11 @@ export default {
             // do nothing
             return description;
         }, 
+
+        getGameTitle(title) {
+            this.selected_title = title;
+            console.log(this.selected_title)
+        }
     }
 }
 
@@ -115,10 +126,12 @@ export default {
 <style>
 .VueCarousel-navigation-next[data-v-453ad8cd] {
     right: 60px;
+    color: white;
 }
 
 .VueCarousel-navigation-prev[data-v-453ad8cd] {
     left: 60px;
+    color: white
 }
 
 .VueCarousel-dot-container[data-v-438fd353] {
@@ -128,4 +141,17 @@ export default {
 .v-input__control {
     max-height: 40px;
 }
+
+.showcase-picture {
+    max-height: 600px;
+    max-width: 1200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel-background {
+    background: black
+}
+
 </style>
