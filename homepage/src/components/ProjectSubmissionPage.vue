@@ -1,6 +1,6 @@
 <template>
   <v-app class="background-color">
-    <Navbar2 />
+    <Navbar />
     <!-- Form page -->
     <v-container fluid class="header-spacing">
       <v-layout>
@@ -65,15 +65,18 @@
         <v-flex md2></v-flex>
       </v-layout>
     </v-container>
+    <Footer />
   </v-app>
 </template>
 
 <script>
-import Navbar2 from "./Navbar-2";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 export default {
     components: {
-        Navbar2
+        Navbar,
+        Footer
     },
     // This is for the project description counter
     data: () => ({
@@ -114,7 +117,6 @@ export default {
 <style scoped>
   .background-color {
     background: #E5E5E5;
-    padding-bottom: 4em;
   }
 
   .form-color {

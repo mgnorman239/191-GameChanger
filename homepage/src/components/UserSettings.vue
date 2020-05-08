@@ -1,6 +1,6 @@
 <template>
     <v-app class="background-color">
-        <Navbar2 />
+        <Navbar />
         <!-- Form page -->
         <v-container fluid class="header-spacing">
             <v-layout>
@@ -52,11 +52,11 @@
 </template>
 
 <script>
-import Navbar2 from "./Navbar-2";
+import Navbar from "./Navbar";
 
 export default {
     components: {
-        Navbar2
+        Navbar
     },
     // This is for the user information. Data right now is hard coded.
     data: () => ({

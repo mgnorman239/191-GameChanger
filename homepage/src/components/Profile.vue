@@ -1,10 +1,10 @@
 <template>
-<v-app>
+<v-app class="grey lighten-4">
     <Navbar />
     <v-container class="mt-12">
         <v-row class="mt-8">
             <v-col class="px-5" cols="4">
-                <v-card>
+                <v-card outlined>
                     <v-container>
                         <v-row>
                             <v-col align="center">
@@ -34,7 +34,7 @@
                 <v-container fluid>
                     <v-row>
                         <v-col cols="6" v-for="i in 6" :key="i.index">
-                            <v-card>
+                            <v-card outlined>
                                 <v-img src="../assets/placeholder3.png"></v-img>
                             </v-card>
                         </v-col>
@@ -43,14 +43,18 @@
             </v-col>
         </v-row>
     </v-container>
+    <Footer />
 </v-app>
 </template>
 
 <script>
-import Navbar from './Navbar'
+import Navbar from './Navbar';
+import Footer from './Footer';
+
 export default {
     components: {
-        Navbar
+        Navbar,
+        Footer
     }
 }
 </script>
