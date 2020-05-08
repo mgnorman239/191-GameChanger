@@ -12,6 +12,7 @@
           <!-- Project title name -->
           <v-text-field 
             label="Project Name"
+            v-model="project_submission.projectName"
             required>
           </v-text-field>
           <br>
@@ -22,6 +23,7 @@
             label="Project Description"
             :rules="description_rules"
             :value="description_placeholder"
+            v-model="project_submission.projectDescription"
             counter
             class="project-description-spacing"
             >
@@ -30,6 +32,7 @@
             <!-- Project URL -->
             <v-text-field 
             label="Project URL"
+            v-model="project_submission.projectURL"
             required
             class="input-width mr-5">
             </v-text-field>
@@ -37,6 +40,7 @@
             <v-select
               :items="tags"
               label="Tags"
+              v-model="project_submission.projectTags"
               outlined
               multiple
               class="input-width"
@@ -47,15 +51,16 @@
           <br>
           <v-text-field 
             label="Member Names"
+            v-model="project_submission.memberNames"
             required>
           </v-text-field>
           <br>
           <!-- Add picture for project -->
-          <v-file-input accept="image/*" label="Project Picture"></v-file-input>
+          <v-file-input accept="image/*" label="Project Picture" v-model="project_submission.projectPicture"></v-file-input>
           <br>
           <br>
           <!-- Add the submit buttons -->
-          <router-link to='/success'><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Submit</v-btn></router-link>
+          <router-link to='/success'><v-btn height="4em" width="13em" color="#4DB848" @click="postSubmissionToDatabase()" class="white--text body-1">Submit</v-btn></router-link>
         </v-flex>
         <v-flex md2></v-flex>
       </v-layout>
@@ -75,7 +80,34 @@ export default {
       description_rules: [v => v.length <= 500 || 'Max 500 characters'],
       description_placeholder: 'Give a quick description about your game!',
       tags: ['Action', 'Adventure', 'RPG', 'Romance'],
-    })
+      project_submission: 
+        {
+          projectName: '', 
+          projectDescription:'',
+          projectURL: '',
+          projectTags: '',
+          memberNames: '',
+          //projectPicture: null},
+        },
+    }),
+    methods: {
+      postSubmissionToDatabase()
+      {
+        var AWS = require('aws-sdk');
+        AWS.config.update({accessKeyId:'', secretAccessKey: '', region: 'us-west-2', endpoint: 'http://dynamodb.us-west-2.amazonaws.com'});
+        //Accessing to the project dynamodb
+        let docClient = new AWS.DynamoDB.DocumentClient();
+  
+        var params = {
+            TableName: "Testing1",
+            Item: this.project_submission,
+        }
+        docClient.put(params, function(err)
+        {
+          console.log(err);
+        })
+      }
+    },
 }
 </script>
 
