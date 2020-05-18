@@ -1,54 +1,48 @@
 <template>
-    <v-app>
+    <v-app class="grey lighten-4">
         <Navbar />
-        <v-container fluid id="navbar-spacing">
+        <v-container id="navbar-spacing">
             <v-row>
-                <v-flex md1></v-flex>
-                <!--Log Archive-->
-                <v-flex md2>
-                    <h1>Log Archive</h1>
-                        <br>
-                        <button class="full-button mt-5 mb-5">April 2020<i class="fas fa-plus right-align"></i></button>
-                        <!--Replace these with actual entries for the year-->
-                        <div class="dropdown-container">
-                            <ul class="mb-5">
-                                <li><a class="text-to-gray" href="#">Link 1</a></li>
-                                <li><a class="text-to-gray" href="#">Link 2</a></li>
-                                <li><a class="text-to-gray" href="#">Link 3</a></li>
-                            </ul>
-                        </div>
-                        <hr>
-                        <button class="full-button mt-5 mb-5">March 2020<i class="fas fa-plus right-align"></i></button>
-                        <div class="dropdown-container">
-                            <ul class="mb-5">
-                                <li><a class="text-to-gray" href="#">Link 1</a></li>
-                                <li><a class="text-to-gray" href="#">Link 2</a></li>
-                                <li><a class="text-to-gray" href="#">Link 3</a></li>
-                            </ul>
-                        </div>
-                        <hr>
-                        <button class="full-button mt-5 mb-5">February 2020<i class="fas fa-plus right-align"></i></button>
-                        <div class="dropdown-container">
-                            <ul class="mb-5">
-                                <li><a class="text-to-gray" href="#">Link 1</a></li>
-                                <li><a class="text-to-gray" href="#">Link 2</a></li>
-                                <li><a class="text-to-gray" href="#">Link 3</a></li>
-                            </ul>
-                        </div>
-                </v-flex>
-                <v-flex md1></v-flex>
-                <!--Actual thing-->
-                <v-flex md6>
-                    <h1>Title</h1>
-                    <p>Team: Name, Name, Name</p>
-                    <br>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. At laoreet mattis fermentum rhoncus cursus. Aliquam curabitur mattis lorem tincidunt ac feugiat varius urna risus. Id magna sed nam consequat arcu, iaculis commodo vulputate eu. Pretium vitae in lectus pellentesque. Blandit magna libero, sollicitudin convallis mi posuere suscipit nulla. Ipsum faucibus neque bibendum non vitae, cras ultricies arcu a. Adipiscing lacinia eget in arcu pharetra mus.</p>
-
-                    <p>At ullamcorper adipiscing ultrices et eu adipiscing neque pulvinar. Tortor, pellentesque proin risus enim sit a massa. Ut faucibus rutrum tincidunt id. Ipsum ullamcorper aliquam dignissim lacus massa in fringilla lectus a. Etiam integer et odio magnis neque sed. Elementum sit diam nunc, urna in elementum cras sed. Varius sit egestas porttitor vitae eleifend adipiscing nisl nulla ultricies. In donec nibh integer feugiat.
-                    </p>
-                    
-                </v-flex>
-                <v-flex md2></v-flex>
+                <v-col class="pt-0 mt-0" cols="12" md="12">
+                    <v-btn to="/project" text class="subtitle-2 font-weight-bold"><v-icon small left>fas fa-arrow-left</v-icon>Back to Project</v-btn>
+                </v-col>
+            </v-row>
+            <v-row justify="center">
+                <v-col cols="12" md="3">
+                    <v-card outlined class="pa-2" height="100%">
+                        <v-card-title class="pb-1"><b>Recent Entries</b></v-card-title>
+                        <v-divider class="pb-2"></v-divider>
+                        <v-card-text class="pa-0">
+                            <v-list-item v-for="item in recents" :key="item.index">
+                                <v-list-item-content>
+                                    <v-list-item-title>{{item.title}}</v-list-item-title>
+                                    <v-list-item-subtitle>{{item.date}}</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" md="8">
+                    <v-card outlined class="pa-2">
+                        <v-card-title class="headline"><b>Log Title</b></v-card-title>
+                        <v-card-subtitle>Author(s): Name, Name, Name
+                            <v-spacer></v-spacer>
+                            April 30, 2020
+                        </v-card-subtitle>
+                        <v-card-text>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus accumsan tortor posuere ac ut consequat semper. Ac ut consequat semper viverra nam libero justo laoreet. Quam nulla porttitor massa id neque aliquam vestibulum morbi blandit. Lorem donec massa sapien faucibus et. Dolor sit amet consectetur adipiscing elit pellentesque. Porttitor leo a diam sollicitudin tempor. Aliquet nibh praesent tristique magna sit amet. Eu tincidunt tortor aliquam nulla facilisi cras fermentum. Vitae tortor condimentum lacinia quis vel eros donec. Auctor augue mauris augue neque gravida. Arcu vitae elementum curabitur vitae nunc sed velit dignissim. Interdum velit euismod in pellentesque massa placerat duis ultricies.<br><br>
+                            Sed blandit libero volutpat sed cras ornare arcu. Lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci. Lacus suspendisse faucibus interdum posuere lorem ipsum dolor sit. Sagittis vitae et leo duis. Tortor aliquam nulla facilisi cras fermentum odio eu. Lectus quam id leo in vitae turpis massa sed elementum. Aliquet sagittis id consectetur purus ut faucibus. Nibh cras pulvinar mattis nunc. Praesent elementum facilisis leo vel fringilla est ullamcorper eget nulla. Donec enim diam vulputate ut pharetra sit amet aliquam. Scelerisque in dictum non consectetur. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl vel. Suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Quis imperdiet massa tincidunt nunc pulvinar sapien et. In ante metus<br><br>
+                            dictum at. Ut placerat orci nulla pellentesque dignissim enim sit. Libero justo laoreet sit amet cursus sit amet. Sed lectus vestibulum mattis ullamcorper velit sed ullamcorper. Id volutpat lacus laoreet non curabitur.
+                        </v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col align="center">
+                                    <v-img width="350" height="200" src="https://via.placeholder.com/350x200"></v-img>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card>
+                </v-col>
             </v-row>
         </v-container>
         <Footer />
@@ -58,34 +52,29 @@
 <script>
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import $ from 'jquery';
-
-//Code to make the dropdown button work
-$(function(){
-    var dropdown = document.getElementsByClassName("full-button");
-    var i;
-
-    for (i = 0; i < dropdown.length; i++) {
-    dropdown[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        $(this).find("i").toggleClass("fas fa-plus fas fa-minus");
-        var dropdownContent = this.nextElementSibling;
-        if (dropdownContent.style.display === "block") 
-        {
-            dropdownContent.style.display = "none";
-        } 
-        else 
-        {
-            dropdownContent.style.display = "block";
-        }
-    });
-    }
-});
 
 export default {
     components: {
         Navbar,
         Footer
+    },
+    data() {
+        return {
+            recents: [
+                {
+                    title: 'Some title',
+                    date: '5/6/2020' 
+                },
+                {
+                    title: 'Title 2',
+                    date: '3/10/2020'
+                },
+                {
+                    title: 'Title 3',
+                    date: '12/25/2019'
+                }
+            ]
+        }
     }
 }
 
@@ -107,7 +96,7 @@ a:hover {
 }
 
 #navbar-spacing{
-    margin-top: 6em;
+    margin-top: 5em;
 }
 
 .dropdown-container {
