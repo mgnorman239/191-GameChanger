@@ -32,12 +32,8 @@
             <!-- Project URL -->
             <v-text-field 
             label="Project URL"
+            required
             v-model="project_submission.projectURL"
-            required>
-            <!-- Game URL -->
-            <v-text-field
-            label="Game URL"
-            v-model="project_submission.gameURL"
             class="input-width mr-5">
             </v-text-field>
             <!-- Project Tags -->
@@ -99,7 +95,7 @@ export default {
           {
             title: '', 
             description: '',
-            gameURL: '',
+            projectURL: '',
             tags: '',
             teamMembers: '',
             thumbnailURL: ''
@@ -114,7 +110,7 @@ export default {
       {
         var AWS = require('aws-sdk');
         AWS.config.update({
-          region: 'us-west-2', 
+          region: 'us-west-2',
         });
 
         
@@ -125,7 +121,7 @@ export default {
           Item: {
             title: this.project_submission.title,
             description: this.project_submission.description,
-            gameURL: this.project_submission.gameURL,
+            gameURL: this.project_submission.projectURL,
             thumbnailURL: this.project_submission.thumbnailURL,
             teamMembers: this.formatTeamMembers(this.project_submission.teamMembers),
             tags: this.project_submission.tags,
