@@ -6,7 +6,6 @@
             <slide><img width="100%" src="../assets/showcase_1.jpg" class="showcase-picture"/></slide>
             <slide><img width="100%" src="../assets/showcase_2.jpg" class="showcase-picture" /></slide>
             <slide><img width="100%" src="../assets/showcase_3.jpg" class="showcase-picture" /></slide>
-            <slide><img width="100%" src="../assets/placeholder2.png" class="showcase-picture" /></slide>
         </carousel>
     <v-container class="px-12">
         <br>
@@ -14,7 +13,7 @@
             <h2 class="ml-5 pt-0">Browse Projects</h2>
             <v-spacer></v-spacer>
             <v-col cols="12" md="3">
-                <v-select :items="genreList" append-icon="" clearable clear-icon="fas fa-times fa-xs" dense rounded solo flat label="Filter..." color="#4DB848" v-model="filterItem">
+                <v-select :items="genres" append-icon="" clearable clear-icon="fas fa-times fa-xs" dense rounded solo flat label="Filter..." color="#4DB848" v-model="filterItem">
                     <v-icon slot="prepend-inner" left small>fas fa-filter</v-icon>
                 </v-select>
             </v-col>
@@ -27,9 +26,10 @@
                     <h3 class="ml-1 mt-5 grey--text font-weight-regular">Sorry, there are no projects with this genre.</h3>
                 </v-col>
             </div>
-            <v-col class="pa-5" cols="12" xs="12" sm="6" md="4" v-for="project in filterProjects" :key="project.index">
+            <v-col class="pa-5" cols="12" xs="12" sm="6" md="4" v-for="game in filterProjects" :key="game.index">
                 <v-card outlined>
-                    <v-img height="130px" src="../assets/placeholder.gif"></v-img>
+                    <v-img height="130px" v-if="game.thumbnailURL.S == ''" src='../assets/placeholder.gif'></v-img>
+                    <v-img height="130px" v-else :src=game.thumbnailURL.S></v-img>
                     <v-card-title class="pb-0 px-6">{{ game.title.S }}</v-card-title>
                     <v-card-text class="pb-2 px-6">{{ condensedDescription(game.description.S) }}</v-card-text>
                     <v-card-actions class="px-6 pb-6">
@@ -37,7 +37,7 @@
                             <v-chip small outlined disabled>{{ tag.S }}</v-chip>
                         </v-chip-group>
                         <v-spacer></v-spacer>
-                        <router-link to="/project"><v-btn class="body-2 font-weight-medium" color="#4DB848" text small v-on:click="getGameTitle(game.title.S)">View More</v-btn></router-link>
+                        <router-link :to="{name: 'Project', params: {title: game.title.S}}"><v-btn class="body-2 font-weight-medium" color="#4DB848" text small v-on:click="getGameTitle(game.title.S)">View More</v-btn></router-link>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -69,7 +69,7 @@ export default {
 
     data() {
         return {
-            genres: ['Adventure', 'Action', 'Simulation', 'Mystery', 'Casual', 'Puzzle', 'Sports', 'RPG'],
+            genres: ['Adventure', 'Action', 'Simulation', 'Mystery', 'Casual', 'Puzzle', 'Sports', 'RPG', 'Romance'],
             // list of games from database
             games: {},
             s3_url: "https://gamechangerhackathonprojects.s3-us-west-2.amazonaws.com/",
@@ -84,8 +84,6 @@ export default {
         var AWS = require("aws-sdk");
         AWS.config.update({
             region: "us-west-2",
-            accessKeyId: "",
-            secretAccessKey: ""
         });
         
         // create the dynambodb object to call dynamodb functions
@@ -107,9 +105,16 @@ export default {
         filterProjects() {
             if(this.filterItem) {
                 return this.games.filter((item)=> {
-                    return item.tags.S.includes(this.filterItem);
+                    for (var i in item.tags.L) {
+                        if (item.tags.L[i].S.includes(this.filterItem)){
+                            return item
+                        }
+                    }
+
+                    //return item.tags.L.includes(this.filterItem);
                 })
-            }else {
+            }
+            else {
                 return this.games;
             }
         }
@@ -128,7 +133,6 @@ export default {
 
         getGameTitle(title) {
             this.selected_title = title;
-            console.log(this.selected_title)
         }
     }
 }

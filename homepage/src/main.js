@@ -30,10 +30,10 @@ const routes = [
   {path: '/login', component: Login},
   {path: '/events', component: Events},
   {path: '/projectlog', component: ProjectLog},
-  {path: '/project', component: Project},
+  {path: '/project/:title', name: 'Project', component: Project},
   {path: '/projectsubmissionpage', component: ProjectSubmissionPage},
   {path: '/forgotpassword', component: ForgotPassword},
-  {path: '/profile', component: Profile},
+  {path: '/profile/:username', component: Profile, name: 'Profile'},
   {path: '/success', component: ThankYou},
   {path: '/logsubmission', component: LogSubmission},
   {path: '/usersettings', component: UserSettings}

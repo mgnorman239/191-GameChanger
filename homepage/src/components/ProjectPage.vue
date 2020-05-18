@@ -21,9 +21,8 @@
                 <v-card class="pa-3" outlined height="100%">
                         <v-card-title class="subtitle-1">
                             <h2 class="mr-5">{{ game.title.S }}</h2>
-                            <v-chip-group>
-                            <v-chip outlined small disabled>Action</v-chip>
-                            <v-chip outlined small disabled>Adventure</v-chip>
+                            <v-chip-group v-for="(tag, index) in game.tags.L" :key="index">
+                                <v-chip outlined small disabled>{{ tag.S }}</v-chip>
                         </v-chip-group>
                         </v-card-title>
                         <v-card-text class="subtitle-1">{{ game.description.S }}</v-card-text>
@@ -43,9 +42,11 @@
         <v-row>
             <v-col class="ma-3" md="1" v-for="(member, index) in teamMembers" :key="index">
                 <v-row justify="center">
+                    <router-link :to="{name: 'Profile', params: {username: member.displayName.S}}">
                     <v-avatar size="60">
                         <v-img :src=member.profilePicture.S></v-img>
                     </v-avatar>
+                    </router-link>
                 </v-row>
                 <v-row justify="center">
                     <p class="pa-2">{{ member.displayName.S }}</p>
@@ -65,22 +66,31 @@
                 </v-btn>
             </router-link>
         </v-row>
-        <v-row>
-            <v-col class="pa-5" cols="12" sm="6" md="6" lg="4" v-for="i in 6" :key="i.index">
-                <v-card outlined>
-                    <v-img height="180px" src="../assets/gc_photo.jpg"></v-img>
-                    <v-card-title class="pb-0 px-6">Entry Title</v-card-title>
-                    <v-card-text class="px-6 pb-0">Lorem ipsum dolor sit amet, consecte turadip iscing elit.</v-card-text>
-                    <v-card-actions class="pb-1">
-                        <v-card-subtitle><v-icon small left>far fa-calendar</v-icon>February 28, 2020</v-card-subtitle>
+            <!-- <v-col class="pa-5" cols="12" sm="6" md="6" lg="4" v-for="(log, index) in game.logs.L" :key="index"> -->
+        <v-row class="px-4 mt-5" v-for="(log, index) in game.logs.L" :key="index">
+                <v-card outlined style="width: 100% ">
+                    <!-- <v-img height="180px" src="../assets/gc_photo.jpg"></v-img> -->
+                    <v-card-title class="pb-0 px-6">{{ log.M.title.S }}</v-card-title>
+                    <v-card-text class="px-6 pb-0">{{ log.M.description.S }}</v-card-text>
+                    <v-card-text class="px-6 pb-0">
+                        <v-row class="px-4 pb-0" style="font-weight: bold; text-decoration: underline">Contributors: </v-row>
+                        <v-row class="px-4 pb-0" v-for="(member, index) in log.M.teamMembers.L" :key="index">
+                            {{member.S}}
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions></v-card-actions>
+                </v-card>
+        </v-row>
+
+                    
+                    <!-- <v-card-actions class="pb-1">
+                        <v-card-subtitle><v-icon small left>far fa-calendar</v-icon>February 28, 2020</v-card-subtitle> 
                         <v-spacer></v-spacer>
                         <router-link to="/projectlog">
                             <v-btn class="body-2 font-weight-medium" color="#4DB848" text small>Read More</v-btn>
                         </router-link>
-                    </v-card-actions>
-                </v-card>
-            </v-col>
-        </v-row>
+                    </v-card-actions> -->
+            <!-- </v-col> -->
     </v-container>
     <Footer/>
 </v-app>
@@ -103,27 +113,23 @@ export default {
         Footer
     },
 
-    props: {
-        title: {
-            type: String
-        }
-    },
-
     data() {
         return {
+            selected_title: '',
             game: {},
             teamMembers: [],
         }
     },
 
     created() {
-        console.log(this.title)
+        // get selected title from route
+        //console.log(this.$route.params.title)
+        this.selected_title = this.$route.params.title
+
         // setting up AWS environment
         var AWS = require("aws-sdk");
         AWS.config.update({
             region: "us-west-2",
-            accessKeyId: "",
-            secretAccessKey: ""
         });
 
         // create the dynambodb object to call dynamodb functions
@@ -133,7 +139,7 @@ export default {
         var projects_params = {
             TableName: "Projects",
             Key: {
-                "title": {"S": 'Roblox'}
+                "title": {"S": this.selected_title}
             }
         }
 
@@ -191,7 +197,7 @@ export default {
             })
             */
             
-        }
+        },
     }
 
 }

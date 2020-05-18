@@ -69,8 +69,6 @@ export default {
         var AWS = require("aws-sdk");
         AWS.config.update({
             region: "us-west-2",
-            accessKeyId: "",
-            secretAccessKey: ""
         });
         
         // create the dynambodb object to call dynamodb functions

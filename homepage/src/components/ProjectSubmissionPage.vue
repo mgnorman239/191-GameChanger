@@ -50,7 +50,7 @@
           <!-- Add team members -->
           <br>
           <v-text-field 
-            label="Member Names: separate names with ;"
+            label="Member Names (separate names with ;)"
             v-model="project_submission.teamMembers"
             required>
           </v-text-field>
@@ -111,8 +111,6 @@ export default {
         var AWS = require('aws-sdk');
         AWS.config.update({
           region: 'us-west-2', 
-          accessKeyId: "",
-          secretAccessKey: ""
         });
 
         
@@ -126,7 +124,8 @@ export default {
             gameURL: this.project_submission.gameURL,
             thumbnailURL: this.project_submission.thumbnailURL,
             teamMembers: this.formatTeamMembers(this.project_submission.teamMembers),
-            tags: this.project_submission.tags
+            tags: this.project_submission.tags,
+            logs: []
           }
           
         }
