@@ -32,7 +32,11 @@
             <!-- Project URL -->
             <v-text-field 
             label="Project URL"
-            required
+            v-model="project_submission.projectURL"
+            required>
+            <!-- Game URL -->
+            <v-text-field
+            label="Game URL"
             v-model="project_submission.gameURL"
             class="input-width mr-5">
             </v-text-field>
@@ -98,7 +102,7 @@ export default {
             gameURL: '',
             tags: '',
             teamMembers: '',
-            thumbnailURL: '../assets/placeholder.gif'
+            thumbnailURL: ''
             //projectPicture: null},
           }
           
