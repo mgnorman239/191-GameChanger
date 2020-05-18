@@ -70,14 +70,13 @@
 </template>
 
 <script>
-<<<<<<< HEAD
+
 //This script needs the access key and the secret ID to work. 
 import Navbar2 from "./Navbar-2";
 import { APIGateway } from 'aws-sdk';
-=======
-import Navbar from "./Navbar";
-import Footer from "./Footer";
->>>>>>> master
+
+//import Navbar from "./Navbar";
+//import Footer from "./Footer";
 
 export default {
     components: {

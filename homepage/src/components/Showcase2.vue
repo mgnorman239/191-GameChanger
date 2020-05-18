@@ -112,7 +112,8 @@ export default {
             }else {
                 return this.games;
             }
-        },
+        }
+    },
     
     methods: {
         condensedDescription(description) {
