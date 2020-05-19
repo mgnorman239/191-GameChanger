@@ -129,7 +129,7 @@ export default {
         // setting up AWS environment
         var AWS = require("aws-sdk");
         AWS.config.update({
-            region: "us-west-2",
+            region: "us-west-2"
         });
 
         // create the dynambodb object to call dynamodb functions

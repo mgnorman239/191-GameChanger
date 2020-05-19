@@ -9,7 +9,7 @@
     "deploy": "vue-cli-service s3-deploy"
   },
   "dependencies": {
-    "aws-sdk": "^2.656.0",
+    "aws-sdk": "^2.679.0",
     "axios": "^0.19.2",
     "core-js": "^3.4.4",
     "dotenv": "^8.2.0",
