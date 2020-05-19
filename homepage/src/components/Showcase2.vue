@@ -28,8 +28,7 @@
             </div>
             <v-col class="pa-5" cols="12" xs="12" sm="6" md="4" v-for="game in filterProjects" :key="game.index">
                 <v-card outlined>
-                    <v-img height="130px" v-if="game.thumbnailURL.S == ''" src='../assets/placeholder.gif'></v-img>
-                    <v-img height="130px" v-else :src=game.thumbnailURL.S></v-img>
+                    <v-img height="130px" :src=game.thumbnailURL.S></v-img>
                     <v-card-title class="pb-0 px-6">{{ game.title.S }}</v-card-title>
                     <v-card-text class="pb-2 px-6">{{ condensedDescription(game.description.S) }}</v-card-text>
                     <v-card-actions class="px-6 pb-6">

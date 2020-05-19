@@ -132,6 +132,7 @@ export default {
           
         }
 
+        /* uncomment this when finished with adding project to user profile
         dynamodb.put(params, function(err) {
           if (err) {
             console.log(err)
@@ -140,6 +141,18 @@ export default {
             console.log('success')
           }
         })
+        */
+
+      /*
+      Add project title to the each team member's user profile (projects attribute in the Users database)
+      */
+      for (var i in this.project_submission.teamMembers){
+        console.log(this.project_submission[i].S)
+      }
+
+      var user_params = {
+        TableName: 'Users',
+      }
 
 
       },
