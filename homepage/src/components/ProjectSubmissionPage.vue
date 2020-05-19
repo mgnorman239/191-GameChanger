@@ -109,8 +109,10 @@ export default {
       postSubmissionToDatabase()
       {
         var AWS = require('aws-sdk');
-        AWS.config.update({
-          region: 'us-west-2'
+        // Initialize the Amazon Cognito credentials provider
+        AWS.config.region = 'us-west-2'; // Region
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
         });
 
         
