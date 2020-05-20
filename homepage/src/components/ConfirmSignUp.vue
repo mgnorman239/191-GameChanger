@@ -10,51 +10,37 @@
             <v-layout column md7 text-center>
                 <v-flex xs2></v-flex>
                 <v-flex xs1 class="mb-10">
-                    <h1>Create an Account</h1>
+                    <h1>Confirm Signing Up</h1>
                 </v-flex>
-                <!--This is the input box for the user email-->
-                <v-flex xs1>
-                    <v-text-field text-center class="center-block input-width"
-                        prepend-inner-icon="far fa-envelope fa-xs"
-                        v-model="email"
-                        id="email"
-                        name="email"
-                        label="email"
-                        placeholder="E-mail"
-                        solo
-                    ></v-text-field>
-                </v-flex>
-                <!--This is the input box for the user password-->
+                <!--This is the user's email after initially signing up-->
                 <v-flex xs1>
                     <v-text-field 
-                        :type="'password'"
+                        :type="'confirmation'"
+                        prepend-inner-icon="far fa-envelope"
+                        class="center-block input-width"
+                        :label="email"
+                        placeholder=""
+                        solo
+                        disabled
+                    ></v-text-field>
+                </v-flex>
+                <!--This is the input box for the user's confirmation code-->
+                <v-flex xs1>
+                    <v-text-field 
+                        :type="'confirmation'"
+                        v-model="confirmationCode"
                         prepend-inner-icon="fas fa-lock"
-                        v-model="password"
-                        id="password"
-                        name="password"
                         class="center-block input-width"
-                        label="password"
-                        placeholder="Password"
+                        label="confirmation"
+                        placeholder="Confirmation code"
                         solo
                     ></v-text-field>
                 </v-flex>
-                <!--This is the input box for the display name-->
-                <v-flex xs1>
-                    <v-text-field 
-                        prepend-inner-icon="far fa-user"
-                        v-model="username"
-                        id="username"
-                        name="username"
-                        class="center-block input-width"
-                        label="password"
-                        placeholder="Display Name"
-                        solo
-                    ></v-text-field>
-                </v-flex>
+                <p><span class="underlined"><a href="#">Resend code</a></span></p>
                 <v-flex xs1></v-flex>
                 <v-flex xs2>
                     <!--This is the submit button that you have to bind an on-click event for-->
-                    <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" @click='createAccount'>Sign Up</v-btn>
+                    <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" @click="confirmSignUp">Confirm</v-btn>
                     <!--Eventually, add a link to take the user to the login page when they click the span-->
                     <p class="mt-6">Already have an account? <router-link to="/login"><span class="underlined">Log In!</span></router-link></p>
                 </v-flex>
@@ -70,30 +56,22 @@ import { Auth } from "aws-amplify";
 export default {
     data(){
         return {
-            email: '',
-            password: '',
-            username: ''
+            email: this.$route.query.email,
+            confirmationCode:''
         };
     },
     components: {
         Navbar
     },
     methods: {
-        async createAccount() {
-            Auth.signUp({
-                username: this.email,
-                password: this.password,
-                attributes: {
-                    email: this.email,
-                    name: this.username
-                },
-                validationData: [],
+        async confirmSignUp(){
+            Auth.confirmSignUp(this.email, this.confirmationCode, {
+                forceAliasCreation: true
+            }).then(data => {
+                console.log(data)
+                this.$router.push({ path: '/login', query: { email: this.email } })
                 })
-                .then(data => {
-                    console.log(data)
-                    this.$router.push({ path: '/confirmsignup', query: { email: this.email } })
-                    })
-                .catch(err => console.log(err));
+            .catch(err => console.log(err));
         }
     }
 }

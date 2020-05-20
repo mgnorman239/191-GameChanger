@@ -24,7 +24,12 @@
             <v-list>
                 <!-- add @click="" to add a function for each button -->
                 <v-list-item v-for="(item, index) in dropdown_items" :key="index" @click="item.link">
-                    <router-link :to="item.link">
+                    <router-link :to="item.link" v-if="item.text==='Logout'" >
+                        <v-list-item-title class="black--text" @click="logout">
+                            <v-icon small left class="mr-4" >{{item.icon}}</v-icon>{{ item.text }}
+                        </v-list-item-title>
+                    </router-link>
+                    <router-link :to="item.link" v-else>
                         <v-list-item-title class="black--text">
                             <v-icon small left class="mr-4">{{item.icon}}</v-icon>{{ item.text }}
                         </v-list-item-title>
@@ -52,10 +57,13 @@
 </template>
 
 <script>
+import { Auth } from "aws-amplify";
+import { AmplifyEventBus } from "aws-amplify-vue";
+
 export default {
     data() {
         return {
-            loggedIn: true,
+            loggedIn: false,
             dropdown_items: [{
                 text: 'Profile',
                 link: '/profile',
@@ -71,6 +79,34 @@ export default {
                 link: '/homepage',
                 icon: 'fas fa-sign-in-alt'
             }]
+        }
+    },
+    created() {
+        this.isUserSignedIn();
+        AmplifyEventBus.$on('authState', info =>{
+            if(info === 'signedIn'){
+                this.isUserSignedIn();
+            } else {
+                this.loggedIn = false;
+            }
+        })
+    },
+    methods: {
+        async isUserSignedIn(){
+            try{
+                const userObj = await Auth.currentAuthenticatedUser();
+                this.loggedIn = true;
+                console.log(userObj);
+            }catch(err){
+                this.loggedIn = false;
+                console.log(err);
+            }
+        },
+        logout(){
+            alert('worked')
+            Auth.signOut()
+                .then(data => console.log(data))
+                .catch(err => console.log(err));
         }
     }
 

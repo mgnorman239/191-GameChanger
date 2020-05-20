@@ -16,6 +16,7 @@
             <v-flex xs1>
                 <v-text-field 
                     prepend-inner-icon="far fa-envelope"
+                    v-model= "email"
                     text-center class="center-block input-width" 
                     label="email" 
                     placeholder="E-mail" 
@@ -27,18 +28,19 @@
                 <v-text-field 
                     :type="'password'"
                     prepend-inner-icon="fas fa-lock" 
+                    v-model= "password"
                     class="center-block input-width" 
                     label="password" 
                     placeholder="Password" 
                     solo>
                 </v-text-field>
                 <br>
-                <p><span class="underlined">Forgot password?</span></P>
+                <router-link to="/ForgotPassword"><p><span class="underlined">Forgot password?</span></P></router-link>
             </v-flex>
             <v-flex xs1></v-flex>
             <v-flex xs2>
                 <!--This is the submit button that you have to bind an on-click event for-->
-                <router-link to="/homepage"><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1">Login</v-btn></router-link>
+                <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" @click="loginUser">Login</v-btn>
                 <!--Eventually, add a link to take the user to the login page when they click the span-->
                 <p class="mt-6">Don't have an account yet? <router-link to="/signup"><span class="underlined">Sign up!</span></router-link></p>
             </v-flex>
@@ -49,10 +51,27 @@
 
 <script>
 import Navbar from "./Navbar";
+import { Auth } from "aws-amplify";
 
 export default {
     components: {
         Navbar
+    },
+    data() {
+        return {
+            email: this.$route.query.email,
+            password: ''
+        }
+    },
+    methods: {
+        async loginUser() {
+            Auth.signIn(this.email, this.password)
+                .then(user => {
+                    console.log(user)
+                    this.$router.push({ path: '/homepage', query: { email: this.email } })
+                    })
+                .catch(err => console.log(err));
+        }
     }
 }
 </script>
