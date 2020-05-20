@@ -5,7 +5,7 @@
     <v-container class="header-spacing">
         <v-row justify="center">
             <v-col cols="12" md="8">
-                <v-card outlined class="pa-5">
+                <v-card outlined class="pa-5 pl-8">
                     <!-- Inputs -->
                     <v-card-title class="headline font-weight-bold">Add New Project</v-card-title>
                     <!-- Project title name -->
@@ -19,7 +19,7 @@
                         <!-- Project Description -->
                         <v-row>
                             <v-col cols="12" md="10">
-                                <v-textarea rows="5" row-height="15" label="Project Description" :rules="description_rules" :value="description_placeholder" counter class="project-description-spacing">
+                                <v-textarea outlined rows="5" row-height="15" label="Project Description" :rules="description_rules" :value="description_placeholder" counter class="project-description-spacing">
                                 </v-textarea>
                             </v-col>
                         </v-row>

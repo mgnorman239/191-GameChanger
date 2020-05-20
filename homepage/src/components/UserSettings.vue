@@ -1,77 +1,91 @@
 <template>
-<<<<<<< Updated upstream
-    <v-app class="background-color">
-        <Navbar2 />
-        <!-- Form page -->
-        <v-container fluid class="header-spacing">
-            <v-layout>
-                <v-flex md2></v-flex>
-                <v-flex md8 class="form-color bigger-font">
-                    <h1 class="header-padding">User Settings</h1>
-                    <br>
-                    <p class="left-tab"> <i class="fas fa-edit right-tab gamechanger-green"></i><b class="right-tab">Display name:</b> {{ userSubmission.userName }} </p>
-                    <br>
-                    <p class="left-tab"> <i class="fas fa-edit right-tab gamechanger-green"></i><b class="right-tab">Password:</b> {{ userSubmission.userPassword }} </p>
-                    <br>
-                    <p class="left-tab"> <i class="fas fa-edit right-tab gamechanger-green"></i> <b class="right-tab">Email:</b> {{ userSubmission.userEmail }} </p>
-                    <br>
-                    <v-file-input class="left-tab" accept="image/*" label="User Picture" v-model="userSubmission.userPicture"></v-file-input>
-                </v-flex>
-                <v-flex md2></v-flex>
-            </v-layout>
-=======
-    <v-app class="grey lighten-4">
-        <Navbar />
-        <!-- Form page -->
-        <v-container class="header-spacing">
-            <v-row justify="center">
-                <v-col cols="12" md="8">
-                    <v-card outlined class="pa-3">
-                        <v-card-title class="font-weight-bold headline">Settings</v-card-title>
-                            <v-row align="center">
-                                <v-col class="pr-0" cols="12" md="3">
-                                    <v-card-text class="font-weight-medium">Display Name</v-card-text>
-                                </v-col>
-                                <v-col class="pl-0 ml-n6" cols="12" md="5">
-                                    <v-text-field dense outlined :value="userSubmission.userName"></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row align="center">
-                                <v-col class="pr-0" cols="12" md="3">
-                                    <v-card-text class="font-weight-medium">Password</v-card-text>
-                                </v-col>
-                                <v-col class="pl-0 ml-n6" cols="12" md="5">
-                                    <v-text-field dense outlined :value="userSubmission.userPassword"></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-col class="pr-0" cols="12" md="3">
-                                    <v-card-text class="font-weight-medium">Email</v-card-text>
-                                </v-col>
-                                <v-col class="pl-0 ml-n6" cols="12" md="5">
-                                    <v-text-field dense outlined :value="userSubmission.userEmail"></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-card-actions>
-                                <v-btn dark depressed large color="#4DB848" class="body-1 font-weight-medium">Save</v-btn>
-                            </v-card-actions>
-                    </v-card>
-                </v-col>
-            </v-row>
->>>>>>> Stashed changes
-        </v-container>
-        <Footer />
-    </v-app>
+<v-app class="grey lighten-4">
+    <Navbar />
+    <!-- Form page -->
+    <v-container class="header-spacing">
+        <v-row justify="center">
+            <v-col cols="12" md="8">
+                <v-card outlined class="pa-3 pl-6">
+                    <v-card-title class="font-weight-bold headline">Settings</v-card-title>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Display Name</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="5">
+                            <v-text-field color="#4DB848" readonly dense outlined :prefix="userSubmission.userName"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Password</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="5">
+                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field>
+                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Email</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="5">
+                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userEmail"></v-text-field>
+                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userEmail"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Profile Bio</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="7">
+                            <v-textarea v-if="changingNames" :rows="4" :row-height="32" color="#4DB848" dense outlined :value="userSubmission.userBio"></v-textarea>
+                            <v-textarea v-else :rows="4" :row-height="32" color="#4DB848" readonly dense outlined :prefix="userSubmission.userBio"></v-textarea>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">linkedIn</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="7">
+                            <v-text-field v-if="changingNames" autofocus color="#4DB848" dense outlined :value="userSubmission.linkedIn"></v-text-field>
+                            <v-text-field v-else color="#4DB848" autofocus readonly dense outlined :value="userSubmission.linkedIn"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Github</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="7">
+                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.github"></v-text-field>
+                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.github"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-card-actions v-if="changingNames"> 
+                        <v-btn @click="success = true" dark depressed large color="#4DB848" class="ma-2 body-1 font-weight-medium">
+                            <v-icon left>far fa-save</v-icon>Save
+                        </v-btn>
+                        <v-snackbar top color="success" v-model="success" timeout="2000">
+                            Changes saved!
+                            <v-btn text @click="success = false">Close</v-btn>
+                        </v-snackbar>
+                        <v-btn @click="cancelChanges" dark outlined large color="#4DB848" class="ma-2 body-1 font-weight-medium">
+                            <v-icon left color="#4DB848">fas fa-times</v-icon>Cancel 
+                        </v-btn>
+                    </v-card-actions>
+                    <v-card-actions v-else>
+                        <v-btn @click="updateInformation" dark depressed large color="#4DB848" class="ma-2 body-1 font-weight-medium">
+                            <v-icon left>far fa-edit</v-icon>Edit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
+    <Footer />
+</v-app>
 </template>
 
 <script>
-<<<<<<< Updated upstream
-import Navbar2 from "./Navbar-2";
-
-export default {
-    components: {
-        Navbar2
-=======
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
@@ -79,27 +93,88 @@ export default {
     components: {
         Navbar,
         Footer
->>>>>>> Stashed changes
     },
     // This is for the user information. Data right now is hard coded.
     data: () => ({
-        userSubmission: 
-        { 
+        userSubmission: {
             userName: 'Sam',
             userPassword: '********',
             userEmail: 'testing@gmail.com',
             userPicture: null,
-        }
+            userBio: 'Some random bio.',
+            linkedIn: 'https://www.linkedin.com/in/someexample/',
+            github: 'https://github.com/test_example',
+            facebook: 'link'
+        },
+        changingNames: false,
+        success: false,
+        userPicture: null,
     }),
+    methods: {
+        updateInformation() {
+            this.changingNames = true;
+        },
+        cancelChanges() {
+            this.changingNames = false;
+        },
+        saveChanges() {
+            var AWS = require('aws-sdk');
+            var docClient = new AWS.DynamoDB.DocumentClient();
+            var params = {
+                TableName: "user-info",
+                Item: {
+                    "email": this.userSubmission.userEmail,
+                    "password": this.userSubmission.userPassword,
+                    "displayName": this.userSubmission.userName,
+                }
+            }
+            docClient.put(params, function (err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+        },
+        beforeCreate() {
+            var AWS = require('aws-sdk');
+            AWS.config.update({
+                accessKeyId: '',
+                secretAccessKey: '',
+                region: 'us-west-2',
+                endpoint: 'http://dynamodb.us-west-2.amazonaws.com'
+            });
+
+            //How to tell which user has logged in? Right now, hard coded
+            var params = {
+                TableName: "user-info",
+                Key: {
+                    "email": "anneflynn@example.com",
+                },
+            }
+
+            var thisObject = this;
+            var docClient = new AWS.DynamoDB.DocumentClient();
+            var promise = docClient.get(params).promise();
+            promise.then(function (data) {
+                thisObject.userSubmission.userName = data.Item.displayName;
+                thisObject.userSubmission.userPassword = data.Item.password;
+                thisObject.userSubmission.userEmail = data.Item.email;
+            }).catch(function (err) {
+                console.log(err);
+            });
+        },
+    }
 }
 </script>
 
 <style scoped>
-  .gamechanger-green {
-      color: #4DB848;
-  }
+.gamechanger-green {
+    color: #4DB848;
+}
 
-  .header-spacing {
+.header-spacing {
     margin-top: 5em;
-  }
+}
 </style>
