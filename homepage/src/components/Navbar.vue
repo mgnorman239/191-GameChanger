@@ -23,7 +23,7 @@
             </template>
             <v-list>
                 <!-- add @click="" to add a function for each button -->
-                <v-list-item v-for="(item, index) in dropdown_items" :key="index" @click="item.link">
+                <v-list-item v-for="(item, index) in dropdown_items" :key="index">
                     <router-link :to="item.link" v-if="item.text==='Logout'" >
                         <v-list-item-title class="black--text" @click="logout">
                             <v-icon small left class="mr-4" >{{item.icon}}</v-icon>{{ item.text }}
@@ -76,7 +76,7 @@ export default {
             },
             {
                 text: 'Logout',
-                link: '/homepage',
+                link: '/login',
                 icon: 'fas fa-sign-in-alt'
             }]
         }
@@ -103,7 +103,7 @@ export default {
             }
         },
         logout(){
-            alert('worked')
+            alert('You have successfully signed out')
             Auth.signOut()
                 .then(data => console.log(data))
                 .catch(err => console.log(err));
