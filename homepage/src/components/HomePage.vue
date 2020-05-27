@@ -47,7 +47,7 @@
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tempus cursus eu justo enim.
                     </p>
                     <br>
-                    <v-btn height="3em" width="10em" color="#4DB848" class="white--text body-1">
+                    <v-btn depressed height="3em" width="10em" color="#4DB848" class="white--text body-1">
                         <v-icon left>mdi-open-in-new</v-icon>
                         REGISTER
                     </v-btn>

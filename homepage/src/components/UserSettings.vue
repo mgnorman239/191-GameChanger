@@ -1,73 +1,112 @@
 <template>
-    <v-app class="background-color">
-        <Navbar />
-        <!-- Form page -->
-        <v-container fluid class="header-spacing">
-            <v-layout>
-                <v-flex md2></v-flex>
-                <v-flex md8 class="form-color bigger-font">
-                    <h1 class="header-padding">User Settings</h1>
-                    <br>
-                    <p :class="[success ? 'show' : 'hidden']">Changes saved!</p>
-                    <div :class="[changingNames ? 'show' : 'hidden']">
-                        <p class="left-tab"><b class="right-tab">Display name:</b> {{ userSubmission.userName }}</p>
-                        <br>
-                        <p class="left-tab"><b class="right-tab">Password:</b> {{ userSubmission.userPassword }} </p>
-                        <br>
-                        <p class="left-tab"><b class="right-tab">Email:</b> {{ userSubmission.userEmail }} </p>
-                        <br>
-                        <v-btn @click="updateInformation" color="#4DB848" class="button-placement white--text body-1"><i class="fas fa-edit right-tab white-icon"></i> Edit Information</v-btn>
-                    </div>
-
-                    <div :class="[changingNames ? 'hidden' : 'show']">
-                        <v-text-field
-                            label="Display Name"
-                            placeholder="Enter New Name"
-                            class="left-tab"
-                            v-model="userSubmission.userName"
-                        ></v-text-field>
-                        <br>
-                        <v-text-field
-                            label="Password"
-                            placeholder="Enter New Password"
-                            class="left-tab"
-                            v-model="userSubmission.userPassword"
-                        ></v-text-field>
-                        <br>
-                        <v-text-field
-                            label="Email"
-                            placeholder="Enter New Email"
-                            class="left-tab"
-                            v-model="userSubmission.userEmail"
-                        ></v-text-field>
-                        <br>
-                        <v-file-input class="left-tab" accept="image/*" label="User Picture" v-model="userSubmission.userPicture"></v-file-input>
-                        <v-btn @click="cancelChanges" color="#e04141" class="button-spacing button-placement white--text body-1">Cancel</v-btn><v-btn @click="saveChanges" color="#4DB848" class="button-placement white--text body-1">Save Changes</v-btn>
-                    </div>
-                </v-flex>
-                <v-flex md2></v-flex>
-            </v-layout>
-        </v-container>
-    </v-app>
+<v-app class="grey lighten-4">
+    <Navbar />
+    <!-- Form page -->
+    <v-container class="header-spacing">
+        <v-row justify="center">
+            <v-col cols="12" md="8">
+                <v-card outlined class="pa-3 pl-6">
+                    <v-card-title class="font-weight-bold headline">Settings</v-card-title>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Display Name</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="5">
+                            <v-text-field color="#4DB848" readonly dense outlined :prefix="userSubmission.userName"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Password</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="5">
+                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field>
+                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Email</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="5">
+                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userEmail"></v-text-field>
+                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userEmail"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Profile Bio</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="7">
+                            <v-textarea v-if="changingNames" :rows="4" :row-height="32" color="#4DB848" dense outlined :value="userSubmission.userBio"></v-textarea>
+                            <v-textarea v-else :rows="4" :row-height="32" color="#4DB848" readonly dense outlined :prefix="userSubmission.userBio"></v-textarea>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">linkedIn</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="7">
+                            <v-text-field v-if="changingNames" autofocus color="#4DB848" dense outlined :value="userSubmission.linkedIn"></v-text-field>
+                            <v-text-field v-else color="#4DB848" autofocus readonly dense outlined :value="userSubmission.linkedIn"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center">
+                        <v-col class="pr-0" cols="12" md="3">
+                            <v-card-text class="font-weight-medium">Github</v-card-text>
+                        </v-col>
+                        <v-col class="pl-0 ml-n6" cols="12" md="7">
+                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.github"></v-text-field>
+                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.github"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-card-actions v-if="changingNames"> 
+                        <v-btn @click="success = true" dark depressed large color="#4DB848" class="ma-2 body-1 font-weight-medium">
+                            <v-icon left>far fa-save</v-icon>Save
+                        </v-btn>
+                        <v-snackbar top color="success" v-model="success" timeout="2000">
+                            Changes saved!
+                            <v-btn text @click="success = false">Close</v-btn>
+                        </v-snackbar>
+                        <v-btn @click="cancelChanges" dark outlined large color="#4DB848" class="ma-2 body-1 font-weight-medium">
+                            <v-icon left color="#4DB848">fas fa-times</v-icon>Cancel 
+                        </v-btn>
+                    </v-card-actions>
+                    <v-card-actions v-else>
+                        <v-btn @click="updateInformation" dark depressed large color="#4DB848" class="ma-2 body-1 font-weight-medium">
+                            <v-icon left>far fa-edit</v-icon>Edit
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
+    <Footer />
+</v-app>
 </template>
 
 <script>
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 export default {
     components: {
-        Navbar
+        Navbar,
+        Footer
     },
     // This is for the user information. Data right now is hard coded.
     data: () => ({
-        userSubmission:
-        { 
+        userSubmission: {
             userName: 'Sam',
             userPassword: '********',
             userEmail: 'testing@gmail.com',
             userPicture: null,
+            userBio: 'Some random bio.',
+            linkedIn: 'https://www.linkedin.com/in/someexample/',
+            github: 'https://github.com/test_example',
+            facebook: 'link'
         },
-        changingNames: true,
+        changingNames: false,
         success: false,
         userPicture: null,
     }),
@@ -112,7 +151,7 @@ export default {
                     "email": "anneflynn@example.com",
                 },
             }
-        
+            
         var thisObject = this;
         var docClient = new AWS.DynamoDB.DocumentClient();
         var promise = docClient.get(params).promise();
@@ -130,57 +169,11 @@ export default {
 </script>
 
 <style scoped>
-  .background-color {
-    background: #E5E5E5;
-    padding-bottom: 4em;
-  }
+.gamechanger-green {
+    color: #4DB848;
+}
 
-  .form-color {
-    background: #FFFFFF;
-    padding-top: 2em;
-    padding-bottom: 6em;
-    padding-left: 6em;
-    padding-right: 6em;
-  }
-
-  .left-tab {
-      padding-left: 3em;
-  }
-
-  .right-tab {
-      padding-right: 1em;
-  }
-
-  .white-icon {
-      color:white;
-  }
-
-  .header-spacing {
-    margin-top: 9em;
-  }
-
-  .header-padding {
-      margin-bottom: 1.5em;
-  }
-
-  .bigger-font {
-      font-size: 18px;
-  }
-
-  .hidden {
-      display: none;
-  }
-
-  .show {
-      display: block;
-  }
-
-  .button-placement {
-      margin-top: 5em;
-      float: right;
-  }
-
-  .button-spacing {
-      margin-left: 2em;
-  }
+.header-spacing {
+    margin-top: 5em;
+}
 </style>

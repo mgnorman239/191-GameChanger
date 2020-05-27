@@ -63,18 +63,16 @@ import { AmplifyEventBus } from "aws-amplify-vue";
 export default {
     data() {
         return {
-            loggedIn: false,
+            loggedIn: true,
             dropdown_items: [{
                 text: 'Profile',
                 link: '/profile',
                 icon: 'far fa-user'
-            }, 
-            {
-                text: 'Settings',
+            }, {
+                text: 'Settings', 
                 link: '/usersettings',
                 icon: 'fas fa-cog'
-            },
-            {
+            }, {
                 text: 'Logout',
                 link: '/login',
                 icon: 'fas fa-sign-in-alt'
@@ -116,9 +114,5 @@ export default {
 <style>
 a {
     text-decoration: none;
-}
-
-.text-color {
-    color: black;
 }
 </style>

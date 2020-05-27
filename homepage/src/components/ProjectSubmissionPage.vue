@@ -1,72 +1,69 @@
 <template>
-  <v-app class="background-color">
+<v-app class="grey lighten-4">
     <Navbar />
     <!-- Form page -->
-    <v-container fluid class="header-spacing">
-      <v-layout>
-        <v-flex md2></v-flex>
-        <!-- Inputs -->
-        <v-flex md8 class="form-color">
-          <h1>Add New Project</h1>
-          <br>
-          <!-- Project title name -->
-          <v-text-field 
-            label="Project Name"
-            v-model="project_submission.title"
-            required>
-          </v-text-field>
-          <br>
-          <!-- Project Description -->
-          <v-textarea
-            rows="5"
-            row-height="15"
-            label="Project Description"
-            :rules="description_rules"
-            :value="description_placeholder"
-            v-model="project_submission.description"
-            counter
-            class="project-description-spacing"
-            >
-          </v-textarea>
-          <v-row class="spacing-left spacing-right">
-            <!-- Project URL -->
-            <v-text-field 
-            label="Project URL"
-            required
-            v-model="project_submission.projectURL"
-            class="input-width mr-5">
-            </v-text-field>
-            <!-- Project Tags -->
-            <v-select
-              :items="tags"
-              label="Tags"
-              v-model="project_submission.tags"
-              outlined
-              multiple
-              class="input-width"
-            >
-            </v-select>
-          </v-row>
-          <!-- Add team members -->
-          <br>
-          <v-text-field 
-            label="Member Names (separate names with ;)"
-            v-model="project_submission.teamMembers"
-            required>
-          </v-text-field>
-          <br>
-          <!-- Add picture for project -->
-          <v-file-input accept="image/*" label="Project Picture" v-model="project_submission.thumbnailURL"></v-file-input>
-          <br>
-          <br>
-          <!-- Add the submit buttons -->
-          <router-link to='/success'><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" v-on:click="postSubmissionToDatabase()">Submit</v-btn></router-link>
-        </v-flex>
-        <v-flex md2></v-flex>
-      </v-layout>
+    <v-container class="header-spacing">
+        <v-row justify="center">
+            <v-col cols="12" md="8">
+                <v-card outlined class="pa-5 pl-8">
+                    <!-- Inputs -->
+                    <v-card-title class="headline font-weight-bold">Add New Project</v-card-title>
+                    <!-- Project title name -->
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12" md="10">
+                                <v-text-field dense label="Project Name" required outlined v-model="project_submission.title">
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <!-- Project Description -->
+                        <v-row>
+                            <v-col cols="12" md="10">
+                                <v-textarea outlined rows="5" row-height="15" label="Project Description" v-model="project_submission.description" :rules="description_rules" :value="description_placeholder" counter class="project-description-spacing">
+                                </v-textarea>
+                            </v-col>
+                        </v-row>
+                        <!-- Project URL -->
+                        <v-row>
+                            <v-col cols="12" md="5">
+                                <v-text-field outlined label="Project URL" dense required v-model="project_submission.projectURL">
+                                </v-text-field>
+                            </v-col>
+                            <!-- Project Tags -->
+                            <v-col cols="12" md="5">
+                                <v-select :items="tags" label="Tags" dense outlined multiple v-model="project_submission.tags">
+                                </v-select>
+                            </v-col>
+                        </v-row>
+                        <!-- Add team members -->
+                        <v-row>
+                            <v-col cols="12" md="10">
+                                <v-text-field outlined dense label="Member Names (separate names with ;)" required v-model="project_submission.teamMembers">
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <!-- Add picture for project -->
+                        <v-row>
+                            <v-col cols="12" md="10">
+                                <v-file-input outlined dense accept="image/*" label="Project Picture" v-model="project_submission.thumbnailURL"></v-file-input>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <!-- Add the submit buttons -->
+                    <v-card-actions>
+                        <v-btn to="/success" class="subtitle-1 font-weight-medium space-2 mr-5" large depressed color="#4DB848" dark v-on:click="postSubmissionToDatabase()">
+                            <v-icon small left>far fa-paper-plane</v-icon>SUBMIT
+                        </v-btn>
+                        <v-btn class="subtitle-1 font-weight-medium space-2" large outlined color="#4DB848">
+                            <v-icon small left>far fa-trash-alt</v-icon>CANCEL
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+        </v-row>
     </v-container>
     <Footer />
-  </v-app>
+</v-app>
 </template>
 
 <script>
@@ -174,37 +171,35 @@ export default {
 </script>
 
 <style scoped>
-  .background-color {
+.background-color {
     background: #E5E5E5;
-  }
+}
 
-  .form-color {
+.form-color {
     background: #FFFFFF;
     padding-top: 2em;
     padding-bottom: 4em;
     padding-left: 6em;
     padding-right: 6em;
-  }
+}
 
-  .header-spacing {
-    margin-top: 9em;
-  }
+.header-spacing {
+    margin-top: 5em;
+}
 
-  .input-width {
+.input-width {
     width: 45%;
-  }
+}
 
-  .project-description-spacing
-  {
+.project-description-spacing {
     margin-bottom: 9em;
-  }
+}
 
-  .spacing-left {
+.spacing-left {
     margin-left: 0px;
-  }
+}
 
-  .spacing-right {
+.spacing-right {
     margin-right: 0px;
-  }
-
+}
 </style>>
