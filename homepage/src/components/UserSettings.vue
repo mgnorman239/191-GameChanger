@@ -112,10 +112,10 @@ export default {
     }),
     methods: {
         updateInformation() {
-            this.changingNames = true;
+            this.changingNames = false;
         },
         cancelChanges() {
-            this.changingNames = false;
+            this.changingNames = true;
         },
         saveChanges() {
             var AWS = require('aws-sdk');
@@ -128,44 +128,43 @@ export default {
                     "displayName": this.userSubmission.userName,
                 }
             }
-            docClient.put(params, function (err, data) {
+
+            docClient.put(params, function(err, data) {
                 if (err) {
                     console.log(err);
-                } else {
+                }
+                else {
                     console.log(data);
                     location.reload();
                 }
             });
-        },
-        beforeCreate() {
-            var AWS = require('aws-sdk');
-            AWS.config.update({
-                accessKeyId: '',
-                secretAccessKey: '',
-                region: 'us-west-2',
-                endpoint: 'http://dynamodb.us-west-2.amazonaws.com'
-            });
-
-            //How to tell which user has logged in? Right now, hard coded
-            var params = {
+        }
+    },
+    beforeCreate() {
+        var AWS = require('aws-sdk');
+        AWS.config.update({accessKeyId:'', secretAccessKey: '', region: 'us-west-2', endpoint: 'http://dynamodb.us-west-2.amazonaws.com'});
+        
+        //How to tell which user has logged in? Right now, hard coded
+        var params = {
                 TableName: "user-info",
                 Key: {
                     "email": "anneflynn@example.com",
                 },
             }
-
-            var thisObject = this;
-            var docClient = new AWS.DynamoDB.DocumentClient();
-            var promise = docClient.get(params).promise();
-            promise.then(function (data) {
-                thisObject.userSubmission.userName = data.Item.displayName;
-                thisObject.userSubmission.userPassword = data.Item.password;
-                thisObject.userSubmission.userEmail = data.Item.email;
-            }).catch(function (err) {
-                console.log(err);
-            });
-        },
-    }
+            
+        var thisObject = this;
+        var docClient = new AWS.DynamoDB.DocumentClient();
+        var promise = docClient.get(params).promise();
+        promise.then(function(data) 
+        {
+           thisObject.userSubmission.userName = data.Item.displayName;
+           thisObject.userSubmission.userPassword = data.Item.password;
+           thisObject.userSubmission.userEmail = data.Item.email;
+        }).catch(function(err)
+        {
+            console.log(err);
+        });
+    },
 }
 </script>
 

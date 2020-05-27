@@ -12,46 +12,46 @@
                     <v-card-text>
                         <v-row>
                             <v-col cols="12" md="10">
-                                <v-text-field dense label="Project Name" required outlined>
+                                <v-text-field dense label="Project Name" required outlined v-model="project_submission.title">
                                 </v-text-field>
                             </v-col>
                         </v-row>
                         <!-- Project Description -->
                         <v-row>
                             <v-col cols="12" md="10">
-                                <v-textarea outlined rows="5" row-height="15" label="Project Description" :rules="description_rules" :value="description_placeholder" counter class="project-description-spacing">
+                                <v-textarea outlined rows="5" row-height="15" label="Project Description" v-model="project_submission.description" :rules="description_rules" :value="description_placeholder" counter class="project-description-spacing">
                                 </v-textarea>
                             </v-col>
                         </v-row>
                         <!-- Project URL -->
                         <v-row>
                             <v-col cols="12" md="5">
-                                <v-text-field outlined label="Project URL" dense required>
+                                <v-text-field outlined label="Project URL" dense required v-model="project_submission.projectURL">
                                 </v-text-field>
                             </v-col>
                             <!-- Project Tags -->
                             <v-col cols="12" md="5">
-                                <v-select :items="tags" label="Tags" dense outlined multiple>
+                                <v-select :items="tags" label="Tags" dense outlined multiple v-model="project_submission.tags">
                                 </v-select>
                             </v-col>
                         </v-row>
                         <!-- Add team members -->
                         <v-row>
                             <v-col cols="12" md="10">
-                                <v-text-field outlined dense label="Member Names" required>
+                                <v-text-field outlined dense label="Member Names (separate names with ;)" required v-model="project_submission.teamMembers">
                                 </v-text-field>
                             </v-col>
                         </v-row>
                         <!-- Add picture for project -->
                         <v-row>
                             <v-col cols="12" md="10">
-                                <v-file-input outlined dense accept="image/*" label="Project Picture"></v-file-input>
+                                <v-file-input outlined dense accept="image/*" label="Project Picture" v-model="project_submission.thumbnailURL"></v-file-input>
                             </v-col>
                         </v-row>
                     </v-card-text>
                     <!-- Add the submit buttons -->
                     <v-card-actions>
-                        <v-btn to="/success" class="subtitle-1 font-weight-medium space-2 mr-5" large depressed color="#4DB848" dark>
+                        <v-btn to="/success" class="subtitle-1 font-weight-medium space-2 mr-5" large depressed color="#4DB848" dark v-on:click="postSubmissionToDatabase()">
                             <v-icon small left>far fa-paper-plane</v-icon>SUBMIT
                         </v-btn>
                         <v-btn class="subtitle-1 font-weight-medium space-2" large outlined color="#4DB848">
@@ -67,6 +67,11 @@
 </template>
 
 <script>
+
+//This script needs the access key and the secret ID to work. 
+//import Navbar2 from "./Navbar-2";
+//import { APIGateway } from 'aws-sdk';
+
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
@@ -76,12 +81,93 @@ export default {
         Footer
     },
     // This is for the project description counter
-    data: () => ({
+    data() {
+      return {
         description_rules: [v => v.length <= 500 || 'Max 500 characters'],
         description_placeholder: 'Give a quick description about your game!',
         tags: ['Action', 'Adventure', 'RPG', 'Romance'],
-    })
+
+        //Object that will be sent into the database for AWS
+        project_submission: 
+          {
+            title: '', 
+            description: '',
+            projectURL: '',
+            tags: '',
+            teamMembers: '',
+            thumbnailURL: ''
+            //projectPicture: null},
+          }
+          
+      }
+    },
+
+    methods: {
+      postSubmissionToDatabase()
+      {
+        var AWS = require('aws-sdk');
+        // Initialize the Amazon Cognito credentials provider
+        AWS.config.region = 'us-west-2'; // Region
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
+        });
+
+        
+        var dynamodb = new AWS.DynamoDB.DocumentClient()
+
+        var params = {
+          TableName: 'Projects',
+          Item: {
+            title: this.project_submission.title,
+            description: this.project_submission.description,
+            gameURL: this.project_submission.projectURL,
+            thumbnailURL: this.project_submission.thumbnailURL,
+            teamMembers: this.formatTeamMembers(this.project_submission.teamMembers),
+            tags: this.project_submission.tags,
+            logs: []
+          }
+          
+        }
+
+        /* uncomment this when finished with adding project to user profile
+        dynamodb.put(params, function(err) {
+          if (err) {
+            console.log(err)
+          }
+          else {
+            console.log('success')
+          }
+        })
+        */
+
+      /*
+      Add project title to the each team member's user profile (projects attribute in the Users database)
+      */
+      for (var i in this.project_submission.teamMembers){
+        console.log(this.project_submission[i].S)
+      }
+
+      var user_params = {
+        TableName: 'Users',
+      }
+
+
+      },
+
+      /* Format team members into an item that DynamboDB accepts*/
+      formatTeamMembers(members) {
+        //console.log(members)
+        var member_list = members.split(';')
+        var results = []
+
+        for (var i in member_list) {
+          results.push(member_list[i].trim())
+        }
+        return results
+      }
 }
+}
+
 </script>
 
 <style scoped>
