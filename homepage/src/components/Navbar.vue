@@ -63,7 +63,7 @@ import { AmplifyEventBus } from "aws-amplify-vue";
 export default {
     data() {
         return {
-            loggedIn: true,
+            loggedIn: false,
             dropdown_items: [{
                 text: 'Profile',
                 link: '/profile',
