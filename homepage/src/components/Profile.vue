@@ -98,7 +98,12 @@ export default {
         }
     },
 
+    props: {
+        email: String
+    },
+
     created() {
+        console.log(this.email)
         // setting up AWS environment
         var AWS = require("aws-sdk");
         // Initialize the Amazon Cognito credentials provider
@@ -111,10 +116,11 @@ export default {
         var dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}); 
 
         var params = {
-            TableName: 'Users',
+            TableName: 'user-info',
             Key: {
-                "displayName": {
-                    "S": this.$route.params.username
+                "email": {
+                    //"S": this.$route.params.email
+                    "S": this.$route.query.email
                 }
             }
         }

@@ -76,7 +76,7 @@
           </div>
           <br>
           <v-text-field 
-          label="Member Names * (separate names with ;)" 
+          label="Team member's emails *" 
           :error="this.members_error"
           v-model="project_submission.teamMembers"
           hint="Required, seperate names with ;" 
@@ -221,8 +221,8 @@ export default {
           */
 
         // redirect to success page
-        Vue.use(VueRouter)
-        this.$router.push({path: '/success'})
+        //Vue.use(VueRouter)
+        //this.$router.push({path: '/success'})
 
       },
 
@@ -315,12 +315,12 @@ export default {
       /*
       Get the user from the Users database. If user does not exist, returns undefined object
       */
-      getUser(dynamodb, username) {
+      getUser(dynamodb, user_email) {
         // create params to search the Users database for user
         var user_exist_params = {
-          TableName: 'Users',
+          TableName: 'user-info',
           Key: {
-            "displayName": {"S": username}
+            "email": {"S": user_email}
           }
         }
 
@@ -330,23 +330,22 @@ export default {
             return user.Item
           })
 
-        
-        
       },   
 
       /*
-      Display invalid users inputted
+      Display invalid users inputed
       */
       async displayInvalidUsers(dynamodb, team_members) {
-        // reset invalid user warning and message values before checking
+        // reset invalid user warning and invalid users list before checking
         this.invalid_user_warning = ""
         this.hide_invalid_user_message = true;
+        this.invalid_users = []
 
         for (var i in team_members) {
           //console.log(team_members[i] + ": " + await this.getUser(dynamodb, team_members[i]))
           var user = await this.getUser(dynamodb, team_members[i])
           
-          // check if user is undefined, if so add the name inputed to invalid_users and show warning box and message
+          // check if user is undefined, if so add the invalid user email to this.invalid_users and show warning box and message
           if (user == undefined) {
             this.invalid_users.push(team_members[i])
             this.invalid_user_warning = 'warning-box'
