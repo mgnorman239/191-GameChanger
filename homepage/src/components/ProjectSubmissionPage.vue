@@ -8,8 +8,9 @@
         <!-- Inputs -->
         <v-flex md8 class="form-color">
           <h1>Add New Project</h1>
-          <div :hidden="this.hide_message">{{ message }}</div>
-          <div style="color: red" :hidden="hide_field_error_message">
+          <div>{{ message }}</div>
+          <br>
+          <div class="missing-fields-box" :hidden="hide_field_error_message">
             Missing fields: 
             <ul v-for="(field, index) in missing_fields_list" :key="index">
               <li>{{ field }}</li>
@@ -31,15 +32,13 @@
           <v-textarea
             rows="5"
             row-height="15"
-            label="Project Description *" 
-            hint="Required" 
+            label="Project Description" 
             :error="this.description_error"
             :rules="description_rules"
             :value="description_placeholder"
             v-model="project_submission.description"
             counter
             class="project-description-spacing"
-            required
           >
           </v-textarea>
           <v-row class="spacing-left spacing-right">
@@ -68,14 +67,26 @@
 
           <!-- Add team members (required) -->
           <br>
+          <div :class="invalid_user_warning">
+          <div :hidden='hide_invalid_user_message'>
+            The following users do not exist: 
+            <ul v-for="(user, index) in invalid_users" :key="index">
+              <li>{{ user }}</li>
+            </ul>
+          </div>
+          <br>
           <v-text-field 
-            label="Member Names * (separate names with ;)" 
-            :error="this.members_error"
-            v-model="project_submission.teamMembers"
-            hint="Required" 
-            required>
+          label="Member Names * (separate names with ;)" 
+          :error="this.members_error"
+          v-model="project_submission.teamMembers"
+          hint="Required, seperate names with ;" 
+          persistent_hint="true"
+          required>
           </v-text-field>
           <br>
+          </div>
+          <br>
+          
 
           <!-- Add picture for project (optional) -->
           <v-file-input accept="image/*" label="Project Picture" v-model="project_submission.thumbnailURL"></v-file-input>
@@ -137,19 +148,25 @@ export default {
         members_error: false,
         message: '* required fields',
         missing_fields_list: [],
+
         
         
-        // handles hidden attribute for the message displayed at the top
+        // handles hidden attribute for the messages displayed at the top
         hide_message: false,
         hide_field_error_message: true,
+        hide_invalid_user_message: true,
 
-        teamMemberInputOK: true
+        // change to 'warning-box' if an invalid user is typed
+        invalid_user_warning: '',
+
+        // list of invalid users inputted
+        invalid_users: [],
           
       }
     },
 
     methods: {
-      async postSubmissionToDatabase()
+      postSubmissionToDatabase()
       {
         // make sure this value is set to True before starting
         this.teamMemberInputOK = true;
@@ -170,33 +187,24 @@ export default {
         */
         this.displayMissingFields()
 
-        
+        /*
+        Convert Member Names input string into a list of users
+        */
+        var team_list = this.formatTeamMembers(this.project_submission.teamMembers)
+
+        /*
+        Check if all team members listed exist BEFORE attemping to add project to User.project
+        */
+        this.displayInvalidUsers(dynamodb, team_list)
+
+
+        this.putResponseInDatabase(dynamodb)
+
 
         /*
         Add project title to the each team member's user profile (projects attribute in the Users database)
         */
-
-        // get list of team members
-        var team_list = this.formatTeamMembers(this.project_submission.teamMembers)
-
-        /*
-        // Check is all team members exists in Users database BEFORE attempting to add this project to their projects list
-        var memberInputOK = true;
-        for (var i in team_list) {
-          var username = team_list[i]
-          await this.getUser(dynamodb, username).then(user => {
-            if (user == undefined) {
-              this.teamMemberInputOK = false;
-              //console.log(username + ": does not exist")
-            }
-          })
-        
-        }
-        */
-          
-          
           /*
-
           var user_params = {
             TableName: 'Users',
             Key: {
@@ -213,8 +221,8 @@ export default {
           */
 
         // redirect to success page
-        //Vue.use(VueRouter)
-        //this.$router.push({path: '/success'})
+        Vue.use(VueRouter)
+        this.$router.push({path: '/success'})
 
       },
 
@@ -231,30 +239,16 @@ export default {
       },
 
       /*
-      Get the user from the Users database. If user does not exist, returns undefined object
-      */
-      getUser(dynamodb, username) {
-        // create params to search the Users database for user
-        var user_exist_params = {
-          TableName: 'Users',
-          Key: {
-            "displayName": {"S": username}
-          }
-        }
-
-          return dynamodb.getItem(user_exist_params).promise().then(user => {
-          return user.Item
-        })
-        
-      },   
-
-      /*
       Checks if required fields are empty. Changes text area to error if it is empty. 
       Returns boolean stating whether any of the required fields are empty
       */
       isRequiredFieldsEmpty() {
         //set returned value to false initially, any time there is an input error, change value to true
         var emptyField = false;
+
+        // reset hidden message values before checking
+        this.hide_message = false;
+        this.hide_field_error_message = true;
 
         // reset error values before checking
         this.title_error = false
@@ -282,11 +276,13 @@ export default {
             this.missing_fields_list.push('Project Name')
           }
           
+          /* no longer required
           //description field
           if (description.length == 0) {
             this.description_error = true
             this.missing_fields_list.push('Project Description')
           }
+          */
 
           //url field
           if (url.length == 0) {
@@ -303,10 +299,7 @@ export default {
           return true
         }
         
-
-        //return value containing boolean indicating if there is an empty field
         return false
-
       },
 
       /* 
@@ -319,6 +312,61 @@ export default {
         }
       },
 
+      /*
+      Get the user from the Users database. If user does not exist, returns undefined object
+      */
+      getUser(dynamodb, username) {
+        // create params to search the Users database for user
+        var user_exist_params = {
+          TableName: 'Users',
+          Key: {
+            "displayName": {"S": username}
+          }
+        }
+
+          //return dynamodb.getItem(user_exist_params).promise().then(user => {
+          //return user.Item
+          return dynamodb.getItem(user_exist_params).promise().then(user => {
+            return user.Item
+          })
+
+        
+        
+      },   
+
+      /*
+      Display invalid users inputted
+      */
+      async displayInvalidUsers(dynamodb, team_members) {
+        // reset invalid user warning and message values before checking
+        this.invalid_user_warning = ""
+        this.hide_invalid_user_message = true;
+
+        for (var i in team_members) {
+          //console.log(team_members[i] + ": " + await this.getUser(dynamodb, team_members[i]))
+          var user = await this.getUser(dynamodb, team_members[i])
+          
+          // check if user is undefined, if so add the name inputed to invalid_users and show warning box and message
+          if (user == undefined) {
+            this.invalid_users.push(team_members[i])
+            this.invalid_user_warning = 'warning-box'
+            this.hide_invalid_user_message = false
+          }
+        }
+
+        /*
+        for (var i in team_members) {
+          var username = team_members[i]
+          this.getUser(dynamodb, username).then(user => {
+            if (user == undefined) {
+              //this.invalid_users.push(team_members[i])
+              console.log(username + ": does not exist")
+            }
+          })
+        }
+        */
+     },
+
       putResponseInDatabase(dynamodb) {
           var params = {
           TableName: 'Projects',
@@ -327,7 +375,8 @@ export default {
             description: this.project_submission.description,
             gameURL: this.project_submission.projectURL,
             thumbnailURL: this.project_submission.thumbnailURL,
-            teamMembers: this.formatTeamMembers(this.project_submission.teamMembers),
+            //teamMembers: this.formatTeamMembers(this.project_submission.teamMembers),
+            teamMembers: [],
             tags: this.project_submission.tags,
             logs: []
           }
@@ -343,6 +392,7 @@ export default {
           }
         })
         */
+        
       }
       
 
@@ -386,5 +436,20 @@ export default {
     margin-right: 0px;
   }
 
+.warning-box {
+  border-style: solid;
+  border-color: #cccc00;
+  background-color: #ffffe6;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.missing-fields-box {
+  border-style: solid;
+  border-color: #e60000;
+  background-color: #ffcccc;
+  padding: 5px;
+  font-size: 14px;
+}
 
 </style>>
