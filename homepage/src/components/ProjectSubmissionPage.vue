@@ -148,6 +148,8 @@ export default {
         members_error: false,
         message: '* required fields',
         missing_fields_list: [],
+        team_member_field_ok: true,
+        duplicate_title: false,
 
         
         
@@ -165,8 +167,13 @@ export default {
       }
     },
 
+    created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
+    },
+
     methods: {
-      postSubmissionToDatabase()
+      async postSubmissionToDatabase()
       {
         // make sure this value is set to True before starting
         this.teamMemberInputOK = true;
@@ -180,7 +187,9 @@ export default {
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
             IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
         });
-        var dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}); 
+
+        //var dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}) 
+        var dynamodb = new AWS.DynamoDB.DocumentClient();
 
         /*
         Check fields for empty values
@@ -195,34 +204,39 @@ export default {
         /*
         Check if all team members listed exist BEFORE attemping to add project to User.project
         */
-        this.displayInvalidUsers(dynamodb, team_list)
-
-
-        this.putResponseInDatabase(dynamodb)
-
+        await this.displayInvalidUsers(dynamodb, team_list)
 
         /*
-        Add project title to the each team member's user profile (projects attribute in the Users database)
+        Check if title is duplicate
         */
-          /*
-          var user_params = {
-            TableName: 'Users',
-            Key: {
-                "displayName": teamMember
-            }, 
-            UpdateExpression: "SET #projects = list_append(#projects, :newProject)",
-            ExpressionAttributeNames: {
-              "#projects": "projects"
-            },
-            ExpressionAttributeValues: {
-              ":newProject": [this.project_submission.title]
-            }
-          }
-          */
+        this.duplicate_title = await this.titleIsDuplicate(dynamodb)
+        console.log(this.duplicate_title)
 
-        // redirect to success page
-        //Vue.use(VueRouter)
-        //this.$router.push({path: '/success'})
+        /*
+        If team member field is valid, title is not a duplicate, and missing field list is empty, begin adding project to team memebers
+        */
+        if(this.team_member_field_ok && (this.missing_fields_list) == 0) {
+
+          // add project to each user
+          for (var i in team_list) {
+            this.addProjectTitleToTeamMembers(dynamodb, team_list[i])
+          }
+          
+          // put project into database
+          this.putResponseInDatabase(dynamodb);
+
+          // redirect to success page
+          Vue.use(VueRouter)
+          this.$router.push({
+            name: 'Success', 
+            query: { project: this.project_submission.title }
+            })
+
+       }
+
+
+
+        
 
       },
 
@@ -320,13 +334,13 @@ export default {
         var user_exist_params = {
           TableName: 'user-info',
           Key: {
-            "email": {"S": user_email}
+            "email": user_email
           }
         }
 
           //return dynamodb.getItem(user_exist_params).promise().then(user => {
           //return user.Item
-          return dynamodb.getItem(user_exist_params).promise().then(user => {
+          return dynamodb.get(user_exist_params).promise().then(user => {
             return user.Item
           })
 
@@ -336,8 +350,11 @@ export default {
       Display invalid users inputed
       */
       async displayInvalidUsers(dynamodb, team_members) {
+        // reset team member field ok
+        this.team_member_field_ok = true;
+
         // reset invalid user warning and invalid users list before checking
-        this.invalid_user_warning = ""
+        this.invalid_user_warning = "";
         this.hide_invalid_user_message = true;
         this.invalid_users = []
 
@@ -346,27 +363,79 @@ export default {
           var user = await this.getUser(dynamodb, team_members[i])
           
           // check if user is undefined, if so add the invalid user email to this.invalid_users and show warning box and message
+          // change team member field ok to false
           if (user == undefined) {
+            console.log(user)
+            this.team_member_field_ok = false;
             this.invalid_users.push(team_members[i])
             this.invalid_user_warning = 'warning-box'
             this.hide_invalid_user_message = false
           }
         }
 
-        /*
-        for (var i in team_members) {
-          var username = team_members[i]
-          this.getUser(dynamodb, username).then(user => {
-            if (user == undefined) {
-              //this.invalid_users.push(team_members[i])
-              console.log(username + ": does not exist")
-            }
-          })
-        }
-        */
      },
 
+     /*
+     Check for duplicate title
+     */
+     async titleIsDuplicate(dynamodb) {
+        var params = {
+          TableName: 'Projects',
+          Key: {
+            "title": this.project_submission.title
+          }
+        }
+
+        // will return undefined if it does not exist
+        var project = await dynamodb.get(params).promise().then(project => {
+          return project
+        })
+
+        if (project == undefined) {
+          return false;
+        }
+        
+        return true;
+
+    },
+
+      /*
+      Add the project title to given team member's project list
+      */
+      addProjectTitleToTeamMembers(dynamodb, user_email) {
+        var params = {
+            TableName: 'user-info',
+            Key: {
+              "email": user_email
+            },
+            UpdateExpression: "SET #projects = list_append(#projects, :newProject)",
+            ExpressionAttributeNames: {
+              "#projects": "projects"
+            },
+            ExpressionAttributeValues: {
+              ":newProject": [this.project_submission.title]
+            }
+        }
+
+        dynamodb.update(params, function(err) {
+          if(err) {
+            console.log(err)
+          }
+        })
+
+      },
+
       putResponseInDatabase(dynamodb) {
+          // if tags is empty, convert empty string to empty list
+          if (this.project_submission.tags == '') {
+            this.project_submission.tags = []
+          }
+
+          // if project thumbnail is empty, set as default thumbnail picture (located in S3)
+          if (this.project_submission.thumbnailURL == '') {
+            this.project_submission.thumbnailURL = 'https://gamechangerhackathonprojects.s3-us-west-2.amazonaws.com/placeholder.gif';
+          }
+
           var params = {
           TableName: 'Projects',
           Item: {
@@ -374,14 +443,13 @@ export default {
             description: this.project_submission.description,
             gameURL: this.project_submission.projectURL,
             thumbnailURL: this.project_submission.thumbnailURL,
-            //teamMembers: this.formatTeamMembers(this.project_submission.teamMembers),
-            teamMembers: [],
+            teamMembers: this.formatTeamMembers(this.project_submission.teamMembers),
+            //teamMembers: [],
             tags: this.project_submission.tags,
             logs: []
           }
         }
 
-        /* uncomment this when finished with adding project to user profile
         dynamodb.put(params, function(err) {
           if (err) {
             console.log(err)
@@ -390,7 +458,6 @@ export default {
             console.log('success')
           }
         })
-        */
         
       }
       

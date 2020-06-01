@@ -80,6 +80,9 @@ export default {
         }
     },
     created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
+        
         this.isUserSignedIn();
         AmplifyEventBus.$on('authState', info =>{
             if(info === 'signedIn'){

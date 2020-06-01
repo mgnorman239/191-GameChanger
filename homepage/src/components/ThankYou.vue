@@ -3,8 +3,8 @@
       <Navbar />
       <v-container>
           <v-card outlined class="spacer">
-              <v-card-title class="thank-you justify-center">Thanks for your submission!</v-card-title>
-              <v-card-text class="text-center">View your project <u>here</u>.</v-card-text>
+              <v-card-title class="thank-you justify-center">Thanks for your submission! {{this.project_title}}</v-card-title>
+              <v-card-text class="text-center">View your project <router-link :to="{name: 'Project', params: {title: this.project_title}}"><u>here</u></router-link>.</v-card-text>
               <v-img contain height="400" width="auto" class="image" src="../assets/success.svg"></v-img>
           </v-card>
       </v-container>
@@ -20,6 +20,17 @@ export default {
     components: {
         Navbar,
         Footer
+    },
+    
+    data() {
+        return {
+            project_title: this.$route.query.project
+        }
+    },
+
+    created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
     }
 
 }

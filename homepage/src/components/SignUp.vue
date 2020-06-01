@@ -78,6 +78,12 @@ export default {
     components: {
         Navbar
     },
+
+    created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
+    },
+    
     methods: {
         async createAccount() {
             Auth.signUp({

@@ -123,6 +123,9 @@ export default {
     },
 
     created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
+        
         // get selected title from route
         //console.log(this.$route.params.title)
         this.selected_title = this.$route.params.title

@@ -106,6 +106,9 @@ export default {
     },
 
     async created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
+        
         // setting up AWS environment
         var AWS = require("aws-sdk");
         // Initialize the Amazon Cognito credentials provider
@@ -159,6 +162,8 @@ export default {
             for (var i in projects) {
                 var project_title = projects[i].S
 
+                
+
                 // set project params of project being searched
                 var project_params = {
                     TableName: "Projects",
@@ -173,21 +178,37 @@ export default {
                     //return project.Item.thumbnailURL.S
                 })
 
-                result.push(project)
+                // check if project does not exist, delete it from list
+                if (project == undefined) {
+                    var user_params = {
+                        TableName: 'user-info',
+                        Key: {
+                            email: {'S': this.user.email}
+                        },
+                        UpdateExpression: "REMOVE projects[" + i + "]",
+                    }
+
+                    dynamodb.updateItem(user_params, function(err) {
+                        if (err) {
+                            console.log(err)
+                        }
+                        else {
+                            console.log('success')
+                        }
+                    })
+                }
+                // otherwise add project to list
+                else {
+                    result.push(project)
+                }
                
 
             }
 
             //console.log(result)
             this.user.projects = result
-            console.log(this.user.projects)
+            //console.log(this.user.projects)
 
-            /*
-            return Promise.resolve(dynamodb.getItem(params).promise().then(project => {
-                //console.log(project.Item.thumbnailURL.S)
-                return project.Item.thumbnailURL.S
-            }))
-            */
             
         }
     }

@@ -110,6 +110,12 @@ export default {
         success: false,
         userPicture: null,
     }),
+    
+    created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
+    },
+
     methods: {
         updateInformation() {
             this.changingNames = false;

@@ -105,6 +105,11 @@ export default {
     components: {
         Navbar,
         Footer
+    },
+
+    created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
     }
 }
 </script>

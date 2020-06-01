@@ -79,6 +79,8 @@ export default {
 
     // runs when the page is created
     created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
         
         // setting up AWS environment
         var AWS = require("aws-sdk");
