@@ -2,7 +2,7 @@
 <v-app class="grey lighten-4">
     <Navbar />
         <!-- Main image for Events -->
-        <v-img class="background" src="../assets/events.png" alt="Concert with lights">
+        <v-img class="background top-spacer" src="../assets/events.png" alt="Concert with lights">
             <v-container fill-height align="center">
                 <v-col>
                     <v-row justify="center">
@@ -26,15 +26,13 @@
             <v-col class="pa-5" cols="12" sm="6" justify="center" v-for="(event, index) in events" :key="index">
                 <v-card outlined>
                     <v-img src="../assets/event-card2.png" alt="Guy wearing headphones in front of a computer.">
-                        <v-container fill-height align="center">
-                            <v-row>
-                                <v-col justify="center">
+                    <v-container fluid fill-height align="center" justify="center">
+                        <v-card-text class="center-text">
                                     <h2 class="text-center white--text">{{event.name.S}}</h2>
                                     <p class="text-center white--text">{{event.location.S}}</p>
                                     <p class="text-center white--text">{{event.date.S}}</p>
                                     <v-btn class="body-2 card-button" color="white" outlined v-on:click=goToEventPage(event.eventLink.S)>Learn More</v-btn>
-                                </v-col>
-                            </v-row>
+                                    </v-card-text>
                         </v-container>
                     </v-img>
                 </v-card>
@@ -101,11 +99,11 @@ export default {
 <style scoped>
 
     .event-title {
-        font-size: 3em;
+        font-size: 3.5vw;
     }
 
     .event-subtitles {
-        font-size: 1.5em;
+        font-size: 2vw;
         font-weight: 400;
     }
 
@@ -120,6 +118,10 @@ export default {
         display: block;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .top-spacer {
+        margin-top: 3.5em;
     }
     
 </style>>

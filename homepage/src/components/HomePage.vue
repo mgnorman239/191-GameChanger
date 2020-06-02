@@ -1,7 +1,7 @@
 <template>
     <v-app class="grey lighten-4">
         <Navbar />
-        <v-img class="background" src="../assets/Rectangle81.png" alt="Backview of man play games">
+        <v-img class="background top-spacer" src="../assets/Rectangle81.png" alt="Backview of man play games">
             <v-container fluid text-center class="white--text center-in-image">
                 <h1 class="event-title">Pause For a Cause Hackathon</h1>
                 <h1 class="event-subtitles">Anaheim Convention Center</h1>
@@ -10,30 +10,30 @@
         </v-img>
         <v-container fluid>
             <!--About area-->
-            <v-layout class="padding-between-text">
+            <v-layout row class="padding-between-text">
                 <v-flex md1></v-flex>
-                <v-flex md4 xs12>
+                <v-flex xs12 md4 class="pa-5">
                     <h1>ABOUT</h1>
                     <br>
                     <p class="paragraph-font">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent molestie facilisis sapien, ac lacinia nunc rhoncus et. Mauris vehicula vehicula lacus id ultricies. Nulla eu ligula dapibus, laoreet quam luctus, pharetra ligula. Nunc et ornare diam. Ut ut urna et dui varius gravida venenatis eget lacus. 
                     </p>
                 </v-flex>
                 <v-flex md1></v-flex>
-                <v-flex md5>
-                    <v-img justify-center align-center src="../assets/about-image.svg" alt="Image from unDraw"></v-img>
+                <v-flex xs12 md5>
+                    <v-img class="ma-5" justify-center align-center src="../assets/about-image.svg" alt="Image from unDraw"></v-img>
                 </v-flex>
                 <v-flex md1></v-flex>
             </v-layout>
         </v-container>
         <v-container fluid>
             <!--Judging Criteria area-->
-            <v-layout class="padding-between-text">
+            <v-layout row class="padding-between-text">
                 <v-flex md1></v-flex>
-                <v-flex md5>
-                    <v-img justify-center align-center src="../assets/judging-image.svg" alt="Image from unDraw"></v-img>
+                <v-flex xs12 md5>
+                    <v-img class="ma-5" justify-center align-center src="../assets/judging-image.svg" alt="Image from unDraw"></v-img>
                 </v-flex>
                 <v-flex md1></v-flex>
-                <v-flex md4 xs12>
+                <v-flex md4 xs12 class="pa-5">
                     <h1>JUDGING CRITERIA</h1>
                     <br>
                     <ul class="paragraph-font">
@@ -57,9 +57,9 @@
         </v-container>
         <v-container fluid>
             <!--FAQ area-->
-            <v-layout class="padding-between-text">
+            <v-layout row class="padding-between-text">
                 <v-flex md1></v-flex>
-                <v-flex md4 xs12>
+                <v-flex md4 xs12 class="pa-5">
                     <h1>F.A.Q.</h1>
                     <br>
                     <p class="questions-font"> What do you do at a hackathon?
@@ -76,8 +76,8 @@
                     </p>
                 </v-flex>
                 <v-flex md1></v-flex>
-                <v-flex md5>
-                    <v-img justify-center align-center src="../assets/questions.svg" alt="Image from unDraw"></v-img>
+                <v-flex md5 xs12>
+                    <v-img class="ma-5" justify-center align-center src="../assets/questions.svg" alt="Image from unDraw"></v-img>
                 </v-flex>
                 <v-flex md1></v-flex>
             </v-layout>
@@ -85,7 +85,7 @@
         <v-container fluid>
             <v-layout class="padding-between-text">
                 <v-flex md1></v-flex>
-                <v-flex md10>
+                <v-flex md10 class="pa-5">
                     <h1>SPONSORS</h1>
                     <br>
                     <v-img justify-center align-center src="../assets/sponsors.svg" alt="Image from unDraw"></v-img>
@@ -124,16 +124,16 @@ export default {
     }
 
     .event-title {
-        font-size: 3em;
+        font-size: 3.5vw;
     }
 
     .event-subtitles {
-        font-size: 1.5em;
+        font-size: 2vw;
         font-weight: 400;
     }
 
     .padding-between-text {
-        margin-top: 12em;
+        margin-top: 11vw;
     }
 
     .questions-font {
@@ -149,6 +149,14 @@ export default {
     .rectangle-bottom {
         margin-top: 5em;
         background: #E5F0E5;
+    }
+
+    .top-spacer {
+        margin-top: 3.5em;
+    }
+
+    .image-space {
+        margin-bottom: 5vw;
     }
 
 </style>

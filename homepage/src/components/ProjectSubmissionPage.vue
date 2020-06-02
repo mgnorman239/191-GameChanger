@@ -70,7 +70,7 @@
 
 //This script needs the access key and the secret ID to work. 
 //import Navbar2 from "./Navbar-2";
-//import { APIGateway } from 'aws-sdk';
+import { APIGateway } from 'aws-sdk';
 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -105,53 +105,52 @@ export default {
     methods: {
       postSubmissionToDatabase()
       {
+        // make sure this value is set to True before starting
+        this.teamMemberInputOK = true;
+        /*
+        Set up the AWS environment 
+        */
         var AWS = require('aws-sdk');
         // Initialize the Amazon Cognito credentials provider
         AWS.config.region = 'us-west-2'; // Region
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
             IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
         });
-
-        
-        var dynamodb = new AWS.DynamoDB.DocumentClient()
-
-        var params = {
-          TableName: 'Projects',
-          Item: {
-            title: this.project_submission.title,
-            description: this.project_submission.description,
-            gameURL: this.project_submission.projectURL,
-            thumbnailURL: this.project_submission.thumbnailURL,
-            teamMembers: this.formatTeamMembers(this.project_submission.teamMembers),
-            tags: this.project_submission.tags,
-            logs: []
-          }
-          
-        }
-
-        /* uncomment this when finished with adding project to user profile
-        dynamodb.put(params, function(err) {
-          if (err) {
-            console.log(err)
-          }
-          else {
-            console.log('success')
-          }
-        })
+        var dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}); 
+        /*
+        Check fields for empty values
         */
-
-      /*
-      Add project title to the each team member's user profile (projects attribute in the Users database)
-      */
-      for (var i in this.project_submission.teamMembers){
-        console.log(this.project_submission[i].S)
-      }
-
-      var user_params = {
-        TableName: 'Users',
-      }
-
-
+        this.displayMissingFields()
+        /*
+        Convert Member Names input string into a list of users
+        */
+        var team_list = this.formatTeamMembers(this.project_submission.teamMembers)
+        /*
+        Check if all team members listed exist BEFORE attemping to add project to User.project
+        */
+        this.displayInvalidUsers(dynamodb, team_list)
+        this.putResponseInDatabase(dynamodb)
+        /*
+        Add project title to the each team member's user profile (projects attribute in the Users database)
+        */
+          /*
+          var user_params = {
+            TableName: 'Users',
+            Key: {
+                "displayName": teamMember
+            }, 
+            UpdateExpression: "SET #projects = list_append(#projects, :newProject)",
+            ExpressionAttributeNames: {
+              "#projects": "projects"
+            },
+            ExpressionAttributeValues: {
+              ":newProject": [this.project_submission.title]
+            }
+          }
+          */
+        // redirect to success page
+        //Vue.use(VueRouter)
+        //this.$router.push({path: '/success'})
       },
 
       /* Format team members into an item that DynamboDB accepts*/
