@@ -19,6 +19,10 @@
           <br>
 
           <!-- Project title name (required) -->
+          <div :class="invalid_title_warning">
+          <div :hidden="hide_invalid_title_message">
+            Project Title already in use.
+          </div>
           <v-text-field 
             label="Project Name *"
             v-model="project_submission.title"
@@ -26,6 +30,7 @@
             :error="this.title_error"
             required>
           </v-text-field>
+          </div>
           <br>
 
           <!-- Project Description (required) -->
@@ -154,12 +159,14 @@ export default {
         
         
         // handles hidden attribute for the messages displayed at the top
-        hide_message: false,
+        hide_message: true,
         hide_field_error_message: true,
         hide_invalid_user_message: true,
+        hide_invalid_title_message: true,
 
-        // change to 'warning-box' if an invalid user is typed
+        // change to 'warning-box' if an invalid entry is typed
         invalid_user_warning: '',
+        invalid_title_warning: '',
 
         // list of invalid users inputted
         invalid_users: [],
@@ -178,6 +185,8 @@ export default {
         // make sure this value is set to True before starting
         this.teamMemberInputOK = true;
 
+        // resest hidden values
+
         /*
         Set up the AWS environment 
         */
@@ -192,14 +201,23 @@ export default {
         var dynamodb = new AWS.DynamoDB.DocumentClient();
 
         /*
-        Check fields for empty values
+        Check fields for empty values, if any fields are missing, stop process
         */
         this.displayMissingFields()
+
+        /*
+        Check if title is duplicate
+        */
+        this.duplicate_title = await this.titleIsDuplicate(dynamodb)
 
         /*
         Convert Member Names input string into a list of users
         */
         var team_list = this.formatTeamMembers(this.project_submission.teamMembers)
+        // if team list is empty, skip rest of the function
+        if (team_list.length == 0) {
+          return
+        }
 
         /*
         Check if all team members listed exist BEFORE attemping to add project to User.project
@@ -207,15 +225,16 @@ export default {
         await this.displayInvalidUsers(dynamodb, team_list)
 
         /*
-        Check if title is duplicate
+        If any of the fields are empty, stop the function
         */
-        this.duplicate_title = await this.titleIsDuplicate(dynamodb)
-        console.log(this.duplicate_title)
+        if ((this.missing_fields_list).length > 0) {
+          return;
+        }
 
         /*
         If team member field is valid, title is not a duplicate, and missing field list is empty, begin adding project to team memebers
         */
-        if(this.team_member_field_ok && (this.missing_fields_list) == 0) {
+        if(this.team_member_field_ok && (this.missing_fields_list) == 0 && this.duplicate_title == false) {
 
           // add project to each user
           for (var i in team_list) {
@@ -262,7 +281,7 @@ export default {
 
         // reset hidden message values before checking
         this.hide_message = false;
-        this.hide_field_error_message = true;
+        this.hide_field_error_message = false;
 
         // reset error values before checking
         this.title_error = false
@@ -282,7 +301,7 @@ export default {
         // if any of the fields are empty: make error message visible, make message invisible, return true
         if (title.length == 0 || description.length == 0 || url.length == 0 || members.length == 0) {
           this.hide_message = true;
-          this.hide_field_error_message = false;
+          this.hide_field_error_message = true;
 
           // title field
           if (title.length == 0) {
@@ -365,7 +384,6 @@ export default {
           // check if user is undefined, if so add the invalid user email to this.invalid_users and show warning box and message
           // change team member field ok to false
           if (user == undefined) {
-            console.log(user)
             this.team_member_field_ok = false;
             this.invalid_users.push(team_members[i])
             this.invalid_user_warning = 'warning-box'
@@ -388,16 +406,36 @@ export default {
 
         // will return undefined if it does not exist
         var project = await dynamodb.get(params).promise().then(project => {
-          return project
+          //console.log(project.Item)
+          return project.Item
         })
 
+        //console.log(project)
+
         if (project == undefined) {
+          // make sure error message is/stays hidden
+          this.hide_invalid_title_message = true;
+          this.invalid_title_warning = '';
+
           return false;
         }
+
+        // display error/warning message
+        else {
+          this.displayInvalidTitle();
+          return true;
+        }
         
-        return true;
 
     },
+
+      /*
+      Display error message to let user know the title is already being used
+      */
+      displayInvalidTitle() {
+        this.invalid_title_warning = "warning-box"
+        this.hide_invalid_title_message = false
+      },
 
       /*
       Add the project title to given team member's project list
