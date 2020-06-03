@@ -100,6 +100,7 @@
 <script>
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { Auth } from "aws-amplify";
 
 export default {
     components: {
@@ -110,6 +111,9 @@ export default {
     created() {
         //scroll to the top 
         window.scrollTo(0, 0)
+
+        var currentUser = Auth.currentUserInfo()
+        console.log(currentUser)
     }
 }
 </script>

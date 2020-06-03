@@ -11,7 +11,14 @@
                 <v-flex xs2></v-flex>
                 <v-flex xs1 class="mb-10">
                     <h1>Create an Account</h1>
+                    <!-- Potential Error Message -->
+                    <div id="error_message" hidden>
+                        <br>
+                        <p>{{message}}</p>
+                        <p :hidden='display_name_error_hidden'>Display name cannot be blank</p>
+                    </div>
                 </v-flex>
+
                 <!--This is the input box for the user email-->
                 <v-flex xs1>
                     <v-text-field text-center class="center-block input-width"
@@ -72,7 +79,9 @@ export default {
         return {
             email: '',
             password: '',
-            username: ''
+            username: '',
+            message: '',
+            display_name_error_hidden: true
         };
     },
     components: {
@@ -86,6 +95,21 @@ export default {
     
     methods: {
         async createAccount() {
+            // check if display name is blank
+            if ((this.username).trim().length == 0) {
+                this.display_name_error_hidden = false;
+            }
+            else {
+                this.display_name_error_hidden = true;
+            }
+
+            // error message element id
+            var err_message = document.getElementById('error_message')
+
+            // reset error message before starting
+            this.message = '';
+            err_message.style.display = 'none'
+
             Auth.signUp({
                 username: this.email,
                 password: this.password,
@@ -96,10 +120,24 @@ export default {
                 validationData: [],
                 })
                 .then(data => {
-                    console.log(data)
+                    //console.log(data)
                     this.$router.push({ path: '/confirmsignup', query: { email: this.email } })
                     })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err)
+                    err_message.style.display = 'block';
+                    if ((err.message).includes("validation error detected: Value at 'password'")) {
+                        // shorten error message
+                        this.message = 'Password must be at least 6 characters.'
+                    }
+                    else {
+                        this.message = err.message;
+                    }
+                    
+                });
+
+
+
         }
     }
 }
@@ -127,6 +165,14 @@ export default {
     font-weight: normal;
     margin: 2em;
     font-size:2.5em;
+}
+
+.hidden {
+  display:none;
+}
+
+#error_message {
+    color: red;
 }
 
 </style>

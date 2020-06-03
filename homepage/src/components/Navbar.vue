@@ -38,6 +38,8 @@
             </v-list>
         </v-menu>
     </v-app-bar>
+
+    
     <v-app-bar v-else flat app class="grey darken-4">
         <img :src="require('../assets/logo.png')" height="100%" />
         <v-toolbar-title class="ml-12 white--text subtitle-1">
@@ -63,6 +65,7 @@ import { AmplifyEventBus } from "aws-amplify-vue";
 export default {
     data() {
         return {
+            loggedInUser: '',
             loggedIn: false,
             dropdown_items: [{
                 text: 'Profile',
@@ -82,7 +85,11 @@ export default {
     created() {
         //scroll to the top 
         window.scrollTo(0, 0)
-        
+
+        // get user email if logged in
+        //console.log(this.$route.query.email)        
+        this.loggedInUser = this.$route.query.email
+
         this.isUserSignedIn();
         AmplifyEventBus.$on('authState', info =>{
             if(info === 'signedIn'){
@@ -91,6 +98,9 @@ export default {
                 this.loggedIn = false;
             }
         })
+
+        
+        
     },
     methods: {
         async isUserSignedIn(){
