@@ -11,6 +11,10 @@
             <v-flex xs2></v-flex>
             <v-flex xs1 class="mb-10">
                 <h1>Welcome Back</h1>
+                <div :hidden="login_error_hidden" style="color: red">
+                    <br>
+                    <p>{{message}}</p>
+                </div>
             </v-flex>
             <!--This is the input box for the user email-->
             <v-flex xs1>
@@ -60,17 +64,26 @@ export default {
     data() {
         return {
             email: this.$route.query.email,
-            password: ''
+            password: '',
+            login_error_hidden: true,
+            message: ''
         }
     },
     methods: {
         async loginUser() {
+            // reset error message stuff
+            this.login_error_hidden = true;
+
             Auth.signIn(this.email, this.password)
                 .then(user => {
-                    console.log(user)
+                    //console.log(user)
                     this.$router.push({ path: '/homepage', query: { email: this.email } })
                     })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err);
+                    this.login_error_hidden = false;
+                    this.message = err.message;
+                });
         }
     }
 }
