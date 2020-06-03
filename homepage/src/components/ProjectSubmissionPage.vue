@@ -3,10 +3,10 @@
     <Navbar />
     <!-- Form page -->
     <v-container fluid class="header-spacing">
-      <v-layout>
-        <v-flex md2></v-flex>
+      <v-layout row>
+        <v-flex md2 sm1></v-flex>
         <!-- Inputs -->
-        <v-flex md8 class="form-color">
+        <v-flex xs12 md8 class="form-color">
           <h1>Add New Project</h1>
           <div>{{ message }}</div>
           <br>
@@ -41,6 +41,8 @@
             class="project-description-spacing"
           >
           </v-textarea>
+          <!--Show on bigger screens as row-->
+          <v-container d-none d-md-block>
           <v-row class="spacing-left spacing-right">
 
             <!-- Project URL (required) -->
@@ -64,7 +66,32 @@
             >
             </v-select>
           </v-row>
+          </v-container>
+          <!--Show on bigger screens as single-->
+          <v-layout d-flex d-md-none column>
 
+            <!-- Project URL (required) -->
+            <v-text-field 
+            label="Project URL *"
+            :error="this.url_error"
+            hint="Required" 
+            required
+            v-model="project_submission.projectURL"
+            >
+            </v-text-field>
+            <br>
+            <br>
+            <!-- Project Tags (optional) -->
+            <v-select
+              :items="tags"
+              label="Tags"
+              v-model="project_submission.tags"
+              outlined
+              multiple
+            >
+            </v-select>
+
+          </v-layout>
           <!-- Add team members (required) -->
           <br>
           <div :class="invalid_user_warning">
@@ -95,9 +122,15 @@
 
           <!-- Add the submit buttons -->
           <!-- <router-link to='/success'><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" v-on:click="postSubmissionToDatabase()">Submit</v-btn></router-link> -->
-          <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" v-on:click="postSubmissionToDatabase()">Submit</v-btn>
+          <v-flex  d-none d-sm-block>
+            <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" v-on:click="postSubmissionToDatabase()">Submit</v-btn>
+          </v-flex>
+          <!--Center Button for smaller screens-->
+          <v-flex d-flex d-sm-none>
+            <v-btn height="3em" width="7em" color="#4DB848" class="white--text body-1 center-block" v-on:click="postSubmissionToDatabase()">Submit</v-btn>
+          </v-flex>
         </v-flex>
-        <v-flex md2></v-flex>
+        <v-flex md2 sm1></v-flex>
       </v-layout>
     </v-container>
     <Footer />
@@ -449,6 +482,12 @@ export default {
   background-color: #ffcccc;
   padding: 5px;
   font-size: 14px;
+}
+
+.center-block {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 </style>>
