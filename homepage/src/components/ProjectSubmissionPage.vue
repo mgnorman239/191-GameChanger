@@ -239,7 +239,7 @@ export default {
         this.displayMissingFields()
 
         /*
-        Check if title is duplicate
+        Check if title is duplicate, skip this step if title is empty
         */
         this.duplicate_title = await this.titleIsDuplicate(dynamodb)
 
@@ -256,6 +256,16 @@ export default {
         Check if all team members listed exist BEFORE attemping to add project to User.project
         */
         await this.displayInvalidUsers(dynamodb, team_list)
+
+        /*
+        Check if title is duplicate
+        If any of the fields are empty, stop the function
+        */
+        this.duplicate_title = await this.titleIsDuplicate(dynamodb)
+        console.log(this.duplicate_title)
+        if ((this.missing_fields_list).length > 0) {
+          return;
+        }
 
         /*
         If any of the fields are empty, stop the function
@@ -314,6 +324,7 @@ export default {
 
         // reset hidden message values before checking
         this.hide_message = false;
+        this.hide_field_error_message = true;
         this.hide_field_error_message = false;
 
         // reset error values before checking
@@ -334,6 +345,7 @@ export default {
         // if any of the fields are empty: make error message visible, make message invisible, return true
         if (title.length == 0 || description.length == 0 || url.length == 0 || members.length == 0) {
           this.hide_message = true;
+          this.hide_field_error_message = false;
           this.hide_field_error_message = true;
 
           // title field
