@@ -39,10 +39,10 @@ const routes = [
   {path: '/login', component: Login},
   {path: '/events', component: Events},
   {path: '/projectlog', component: ProjectLog},
-  {path: '/project/:title', name: 'Project', component: Project},
+  {path: '/project/:title', name: 'Project', component: Project, props: true},
   {path: '/projectsubmissionpage', component: ProjectSubmissionPage},
   {path: '/forgotpassword', component: ForgotPassword},
-  {path: '/profile/:username', component: Profile, name: 'Profile'},
+  {path: '/profile/:username', component: Profile, name: 'Profile', props: true},
   {path: '/success', component: ThankYou},
   {path: '/logsubmission', component: LogSubmission},
   {path: '/usersettings', component: UserSettings}

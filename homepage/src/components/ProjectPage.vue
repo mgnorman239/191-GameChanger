@@ -32,6 +32,7 @@
             </v-col>
         </v-row>
     </v-container>
+
     <!-- Project group members -->
     <v-container class="px-12">
         <v-row class="px-4 mt-5" align="center">
@@ -40,7 +41,7 @@
         <v-row>
             <v-col class="ma-3" md="1" v-for="(member, index) in teamMembers" :key="index">
                 <v-row justify="center">
-                    <router-link :to="{name: 'Profile', params: {username: member.displayName.S}}">
+                    <router-link :to="{name: 'Profile', params: {username: member.displayName.S}, query: {email: member.email.S} }">
                     <v-avatar size="60">
                         <v-img :src=member.profilePicture.S></v-img>
                     </v-avatar>

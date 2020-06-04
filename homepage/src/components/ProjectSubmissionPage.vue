@@ -2,72 +2,142 @@
 <v-app class="grey lighten-4">
     <Navbar />
     <!-- Form page -->
-    <v-container class="header-spacing">
-        <v-row justify="center">
-            <v-col cols="12" md="8">
-                <v-card outlined class="pa-5 pl-8">
-                    <!-- Inputs -->
-                    <v-card-title class="headline font-weight-bold">Add New Project</v-card-title>
-                    <!-- Project title name -->
-                    <v-card-text>
-                        <v-row>
-                            <v-col cols="12" md="10">
-                                <v-text-field dense label="Project Name" required outlined v-model="project_submission.title">
-                                </v-text-field>
-                            </v-col>
-                        </v-row>
-                        <!-- Project Description -->
-                        <v-row>
-                            <v-col cols="12" md="10">
-                                <v-textarea outlined rows="5" row-height="15" label="Project Description" v-model="project_submission.description" :rules="description_rules" :value="description_placeholder" counter class="project-description-spacing">
-                                </v-textarea>
-                            </v-col>
-                        </v-row>
-                        <!-- Project URL -->
-                        <v-row>
-                            <v-col cols="12" md="5">
-                                <v-text-field outlined label="Project URL" dense required v-model="project_submission.projectURL">
-                                </v-text-field>
-                            </v-col>
-                            <!-- Project Tags -->
-                            <v-col cols="12" md="5">
-                                <v-select :items="tags" label="Tags" dense outlined multiple v-model="project_submission.tags">
-                                </v-select>
-                            </v-col>
-                        </v-row>
-                        <!-- Add team members -->
-                        <v-row>
-                            <v-col cols="12" md="10">
-                                <v-text-field outlined dense label="Member Names (separate names with ;)" required v-model="project_submission.teamMembers">
-                                </v-text-field>
-                            </v-col>
-                        </v-row>
-                        <!-- Add picture for project -->
-                        <v-row>
-                            <v-col cols="12" md="10">
-                                <v-file-input outlined dense accept="image/*" label="Project Picture" v-model="project_submission.thumbnailURL"></v-file-input>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-                    <!-- Add the submit buttons -->
-                    <v-card-actions>
-                        <v-btn to="/success" class="subtitle-1 font-weight-medium space-2 mr-5" large depressed color="#4DB848" dark v-on:click="postSubmissionToDatabase()">
-                            <v-icon small left>far fa-paper-plane</v-icon>SUBMIT
-                        </v-btn>
-                        <v-btn class="subtitle-1 font-weight-medium space-2" large outlined color="#4DB848">
-                            <v-icon small left>far fa-trash-alt</v-icon>CANCEL
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-col>
-        </v-row>
+    <v-container fluid class="header-spacing">
+      <v-layout row>
+        <v-flex md2 sm1></v-flex>
+        <!-- Inputs -->
+        <v-flex xs12 md8 class="form-color">
+          <h1>Add New Project</h1>
+          <div>{{ message }}</div>
+          <br>
+          <div class="missing-fields-box" :hidden="hide_field_error_message">
+            Missing fields: 
+            <ul v-for="(field, index) in missing_fields_list" :key="index">
+              <li>{{ field }}</li>
+            </ul>
+          </div>
+          <br>
+
+          <!-- Project title name (required) -->
+          <v-text-field 
+            label="Project Name *"
+            v-model="project_submission.title"
+            hint="Required" 
+            :error="this.title_error"
+            required>
+          </v-text-field>
+          <br>
+
+          <!-- Project Description (required) -->
+          <v-textarea
+            rows="5"
+            row-height="15"
+            label="Project Description" 
+            :error="this.description_error"
+            :rules="description_rules"
+            :value="description_placeholder"
+            v-model="project_submission.description"
+            counter
+            class="project-description-spacing"
+          >
+          </v-textarea>
+          <!--Show on bigger screens as row-->
+          <v-container d-none d-md-block>
+          <v-row class="spacing-left spacing-right">
+
+            <!-- Project URL (required) -->
+            <v-text-field 
+            label="Project URL *"
+            :error="this.url_error"
+            hint="Required" 
+            required
+            v-model="project_submission.projectURL"
+            class="input-width mr-5">
+            </v-text-field>
+
+            <!-- Project Tags (optional) -->
+            <v-select
+              :items="tags"
+              label="Tags"
+              v-model="project_submission.tags"
+              outlined
+              multiple
+              class="input-width"
+            >
+            </v-select>
+          </v-row>
+          </v-container>
+          <!--Show on bigger screens as single-->
+          <v-layout d-flex d-md-none column>
+
+            <!-- Project URL (required) -->
+            <v-text-field 
+            label="Project URL *"
+            :error="this.url_error"
+            hint="Required" 
+            required
+            v-model="project_submission.projectURL"
+            >
+            </v-text-field>
+            <br>
+            <br>
+            <!-- Project Tags (optional) -->
+            <v-select
+              :items="tags"
+              label="Tags"
+              v-model="project_submission.tags"
+              outlined
+              multiple
+            >
+            </v-select>
+
+          </v-layout>
+          <!-- Add team members (required) -->
+          <br>
+          <div :class="invalid_user_warning">
+          <div :hidden='hide_invalid_user_message'>
+            The following users do not exist: 
+            <ul v-for="(user, index) in invalid_users" :key="index">
+              <li>{{ user }}</li>
+            </ul>
+          </div>
+          <br>
+          <v-text-field 
+          label="Team member's emails *" 
+          :error="this.members_error"
+          v-model="project_submission.teamMembers"
+          hint="Required, seperate names with ;" 
+          persistent_hint="true"
+          required>
+          </v-text-field>
+          <br>
+          </div>
+          <br>
+          
+
+          <!-- Add picture for project (optional) -->
+          <v-file-input accept="image/*" label="Project Picture" v-model="project_submission.thumbnailURL"></v-file-input>
+          <br>
+          <br>
+
+          <!-- Add the submit buttons -->
+          <!-- <router-link to='/success'><v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" v-on:click="postSubmissionToDatabase()">Submit</v-btn></router-link> -->
+          <v-flex  d-none d-sm-block>
+            <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" v-on:click="postSubmissionToDatabase()">Submit</v-btn>
+          </v-flex>
+          <!--Center Button for smaller screens-->
+          <v-flex d-flex d-sm-none>
+            <v-btn height="3em" width="7em" color="#4DB848" class="white--text body-1 center-block" v-on:click="postSubmissionToDatabase()">Submit</v-btn>
+          </v-flex>
+        </v-flex>
+        <v-flex md2 sm1></v-flex>
+      </v-layout>
     </v-container>
     <Footer />
 </v-app>
 </template>
 
 <script>
-
 //This script needs the access key and the secret ID to work. 
 //import Navbar2 from "./Navbar-2";
 //import { APIGateway } from 'aws-sdk';
@@ -317,15 +387,12 @@ export default {
       
 } // methods end
 } // export end
-
-
 </script>
 
 <style scoped>
 .background-color {
     background: #E5E5E5;
 }
-
 .form-color {
     background: #FFFFFF;
     padding-top: 2em;
@@ -333,24 +400,38 @@ export default {
     padding-left: 6em;
     padding-right: 6em;
 }
-
 .header-spacing {
     margin-top: 5em;
 }
-
 .input-width {
     width: 45%;
 }
-
 .project-description-spacing {
     margin-bottom: 9em;
 }
-
 .spacing-left {
     margin-left: 0px;
 }
-
 .spacing-right {
     margin-right: 0px;
+  }
+.warning-box {
+  border-style: solid;
+  border-color: #cccc00;
+  background-color: #ffffe6;
+  padding: 5px;
+  font-size: 14px;
+}
+.missing-fields-box {
+  border-style: solid;
+  border-color: #e60000;
+  background-color: #ffcccc;
+  padding: 5px;
+  font-size: 14px;
+}
+.center-block {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
 }
 </style>>
