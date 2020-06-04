@@ -107,7 +107,7 @@ export default {
             try{
                 const userObj = await Auth.currentAuthenticatedUser();
                 this.loggedIn = true;
-                console.log(userObj);
+                //console.log(userObj);
             }catch(err){
                 this.loggedIn = false;
                 console.log(err);

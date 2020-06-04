@@ -111,9 +111,7 @@ export default {
     created() {
         //scroll to the top 
         window.scrollTo(0, 0)
-
-        var currentUser = Auth.currentUserInfo()
-        console.log(currentUser)
+ 
     }
 }
 </script>

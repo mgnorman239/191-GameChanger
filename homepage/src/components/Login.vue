@@ -74,17 +74,91 @@ export default {
             // reset error message stuff
             this.login_error_hidden = true;
 
-            Auth.signIn(this.email, this.password)
+            await Auth.signIn(this.email, this.password)
                 .then(user => {
                     //console.log(user)
                     this.$router.push({ path: '/homepage', query: { email: this.email } })
                     })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                     this.login_error_hidden = false;
                     this.message = err.message;
                 });
-        }
+
+            var user = await Auth.currentUserInfo().then(data => {
+                return data.attributes
+            })
+            console.log(user)
+
+            /*
+            Set up the AWS environment 
+            */
+            var AWS = require('aws-sdk');
+            // Initialize the Amazon Cognito credentials provider
+            AWS.config.region = 'us-west-2'; // Region
+            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
+            });
+
+            var dynamodb = new AWS.DynamoDB.DocumentClient();
+
+            // if user does not exist in user database, add them in there
+            if (await this.checkIfUserExistsInDatabase(dynamodb, user.email) == false) {
+                this.addUserToDatabase(dynamodb, user)
+            }
+
+            
+
+        },
+
+        /*
+        Return false if the user does not exist in the database, otherwise return true
+        */
+        async checkIfUserExistsInDatabase(dynamodb, userEmail) {
+            // check if user exists in database first
+            var params = {
+                TableName: 'user-info',
+                Key: {
+                    "email": userEmail
+                }
+            }
+
+            // return whether the user does exist (or not)
+            return await dynamodb.get(params).promise().then(user => {
+                if (user.Item == undefined) {
+                    return false
+                }
+                else {
+                    return true
+                }
+            })
+        },
+
+        addUserToDatabase(dynamodb, user) {
+            var params = {
+                TableName: 'user-info',
+                Item: {
+                    email: user.email,
+                    password: this.password,
+                    displayName: user.name,
+                    projects: [],
+                    socialMedia: {},
+                    bio: '', 
+                    profilePicture: 'https://gamechangerhackathonusers.s3-us-west-2.amazonaws.com/blank.png'
+                }
+            }
+
+            dynamodb.put(params, function(err) {
+                if (err) {
+                    console.log(err)
+                }
+                else {
+                    console.log('success')
+                }
+            })
+        }        
+        
+
     }
 }
 </script>
