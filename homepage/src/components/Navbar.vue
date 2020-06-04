@@ -96,7 +96,7 @@
                 <template v-slot:activator="{ on }">
                     <v-btn icon v-on="on" class="mr-9">
                         <v-avatar color="indigo" size="40">
-                            <span class="white--text headline">P</span>
+                            <v-img :src=loggedInUser.profilePicture></v-img>
                         </v-avatar>
                     </v-btn>
                 </template>
