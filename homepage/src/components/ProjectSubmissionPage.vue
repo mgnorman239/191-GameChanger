@@ -239,9 +239,15 @@ export default {
         this.displayMissingFields()
 
         /*
-        Check if title is duplicate
+        Check if title is duplicate, skip this step if title is empty
         */
-        this.duplicate_title = await this.titleIsDuplicate(dynamodb)
+        if ((this.project_submission.title).trim().length == 0) {
+          // do nothing
+        }
+        else {
+          this.duplicate_title = await this.titleIsDuplicate(dynamodb)
+        }
+        
 
         /*
         Convert Member Names input string into a list of users
@@ -375,6 +381,7 @@ export default {
         //if any of the required fields are empty, display message and scroll page back to top
         if (this.isRequiredFieldsEmpty()) {
           window.scrollTo(0, 0);
+          this.hide_field_error_message = false;
         }
       },
 
