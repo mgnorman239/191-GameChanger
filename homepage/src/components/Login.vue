@@ -88,7 +88,6 @@ export default {
             var user = await Auth.currentUserInfo().then(data => {
                 return data.attributes
             })
-            console.log(user)
 
             /*
             Set up the AWS environment 
@@ -134,6 +133,9 @@ export default {
             })
         },
 
+        /*
+        Add the user to the database if they are not in it already.
+        */
         addUserToDatabase(dynamodb, user) {
             var params = {
                 TableName: 'user-info',
@@ -156,7 +158,8 @@ export default {
                     console.log('success')
                 }
             })
-        }        
+        },
+        
         
 
     }

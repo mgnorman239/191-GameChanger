@@ -16,8 +16,11 @@
         <v-menu bottom offset-y left>
             <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on" class="mr-9">
-                    <v-avatar color="indigo" size="40">
+                    <!-- <v-avatar color="indigo" size="40">
                         <span class="white--text headline">P</span>
+                    </v-avatar> -->
+                    <v-avatar size="40">
+                        <img :src=loggedInUser.profilePicture>
                     </v-avatar>
                 </v-btn>
             </template>
@@ -29,6 +32,7 @@
                             <v-icon small left class="mr-4" >{{item.icon}}</v-icon>{{ item.text }}
                         </v-list-item-title>
                     </router-link>
+
                     <router-link :to="item.link" v-else>
                         <v-list-item-title class="black--text">
                             <v-icon small left class="mr-4">{{item.icon}}</v-icon>{{ item.text }}
@@ -61,11 +65,13 @@
 <script>
 import { Auth } from "aws-amplify";
 import { AmplifyEventBus } from "aws-amplify-vue";
+import { DynamoDB } from 'aws-sdk';
 
 export default {
     data() {
         return {
             loggedInUser: '',
+            loggedInUserEmail: '',
             loggedIn: false,
             dropdown_items: [{
                 text: 'Profile',
@@ -82,15 +88,12 @@ export default {
             }]
         }
     },
-    created() {
+    async created() {
         //scroll to the top 
         window.scrollTo(0, 0)
 
-        // get user email if logged in
-        //console.log(this.$route.query.email)        
-        this.loggedInUser = this.$route.query.email
+        await this.isUserSignedIn();
 
-        this.isUserSignedIn();
         AmplifyEventBus.$on('authState', info =>{
             if(info === 'signedIn'){
                 this.isUserSignedIn();
@@ -99,9 +102,20 @@ export default {
             }
         })
 
-        
+        // if a user is logged in, get their user information from the user-info database
+        if (this.loggedIn) {
+            // get users email
+            this.loggedInUserEmail = await Auth.currentUserInfo().then(user => {
+                return user.attributes.email;
+            })
+
+            // get user Object
+            this.loggedInUser = await this.getUserInfoFromDatabase(this.loggedInUserEmail);
+            console.log(this.loggedInUser.profilePicture)
+        }
         
     },
+
     methods: {
         async isUserSignedIn(){
             try{
@@ -113,12 +127,39 @@ export default {
                 console.log(err);
             }
         },
+
         logout(){
             alert('You have successfully signed out')
             Auth.signOut()
                 .then(data => console.log(data))
                 .catch(err => console.log(err));
-        }
+        },
+
+        async getUserInfoFromDatabase(userEmail) {
+            // setting up AWS environment
+            var AWS = require("aws-sdk");
+            // Initialize the Amazon Cognito credentials provider
+            AWS.config.region = 'us-west-2'; // Region
+            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
+            });
+
+            var params = {
+                TableName: 'user-info',
+                Key: {
+                    "email": userEmail
+                }
+            }
+
+            var dynamodb = new AWS.DynamoDB.DocumentClient();
+            return await dynamodb.get(params).promise().then(user => {
+                return user.Item
+            })
+
+
+        
+        },
+
     }
 
 }
