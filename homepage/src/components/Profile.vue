@@ -54,11 +54,11 @@
                 <v-container fluid>
                     <v-row>
                         <v-col cols="6" v-for="(project, index) in this.user.projects" :key="index">
-                            <router-link :to="{name: 'Project', params: {title: project.S}}">
+                            <router-link :to="{name: 'Project', params: {title: project.title.S}}">
                             <v-card outlined>
                                 <!-- <v-img class="small-card-img" :src="getProjectThumbnail(project.S)"></v-img> -->                                                           
-                                <v-img class="small-card-img"></v-img>
-                                <v-card-title class="pb-0 px-6 small-card">{{ project.S }}</v-card-title>
+                                <v-img class="small-card-img" :src=project.thumbnailURL.S></v-img>
+                                <v-card-title class="pb-0 px-6 small-card">{{ project.title.S }}</v-card-title>
                             </v-card>
                             </router-link>
                         </v-col>
@@ -87,7 +87,7 @@ export default {
         return {
             user: {
                 displayName: '',
-                email: '',
+                email: this.$route.query.email,
                 profilePicture: '',
                 projects: [],
                 github: '',
@@ -95,10 +95,17 @@ export default {
                 linkedin: '',
                 bio: ''
             },
+
+            // will contain Project objects
+            projects: []
         }
     },
 
-    created() {
+    props: {
+        email: String
+    },
+
+    async created() {
         // setting up AWS environment
         var AWS = require("aws-sdk");
         // Initialize the Amazon Cognito credentials provider
@@ -111,33 +118,31 @@ export default {
         var dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}); 
 
         var params = {
-            TableName: 'Users',
+            TableName: 'user-info',
             Key: {
-                "displayName": {
-                    "S": this.$route.params.username
+                "email": {
+                    //"S": this.$route.params.email
+                    "S": this.user.email
                 }
             }
         }
 
-        dynamodb.getItem(params, function(err, data) {
-            if (err) {
-                console.log(err)
-            }
-        }).promise().then(user => {
-                //console.log(user)
-                this.user.displayName = user.Item.displayName.S
-                this.user.email = user.Item.email.S
-                this.user.profilePicture = user.Item.profilePicture.S
-                this.user.projects = user.Item.projects.L
-                this.user.bio = user.Item.bio.S
-                this.user.github = user.Item.socialMedia.M.Github.S
-                this.user.linkedin = user.Item.socialMedia.M.LinkedIn.S
-                this.user.twitter = user.Item.socialMedia.M.Twitter.S
+        var fetched_user = await dynamodb.getItem(params).promise().then(user => {
+            return user
         })
 
-        for (var i in this.user.projects) {
-            console.log(this.user.projects[i].S)
-        }
+        // set blank data variables as fetched_user values
+        this.user.displayName = fetched_user.Item.displayName.S
+        this.user.profilePicture = fetched_user.Item.profilePicture.S
+        //this.user.projects = fetched_user.Item.projects.L
+        this.user.projects = 
+        this.user.bio = fetched_user.Item.bio.S
+        this.user.github = fetched_user.Item.socialMedia.M.Github.S
+        this.user.linkedin = fetched_user.Item.socialMedia.M.LinkedIn.S
+        this.user.twitter = fetched_user.Item.socialMedia.M.Twitter.S
+        
+        // get project information for each project
+        this.getProjectThumbnails(dynamodb, fetched_user.Item.projects.L)
 
         
 
@@ -147,24 +152,35 @@ export default {
         /*
         Return the url of the project thumbnail url
         */
-        getProjectThumbnail(projectTitle) {
-            // setting up AWS environment
-            var AWS = require("aws-sdk");
-            // Initialize the Amazon Cognito credentials provider
-            AWS.config.region = 'us-west-2'; // Region
-            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-                IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
-            });
-            // create the dynambodb object to call dynamodb functions
-            var dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}); 
+        async getProjectThumbnails(dynamodb, projects) {
+            // list that will be returned at end of method
+            var result = []
 
-            var params = {
-                TableName: "Projects",
-                Key: {
-                    "title": {"S": projectTitle}
-                },
-                ProjectionExpression: "thumbnailURL"
+            for (var i in projects) {
+                var project_title = projects[i].S
+
+                // set project params of project being searched
+                var project_params = {
+                    TableName: "Projects",
+                    Key: {
+                        "title": {"S": project_title}
+                    },
+                    //ProjectionExpression: "thumbnailURL"
+                }
+
+                var project = await dynamodb.getItem(project_params).promise().then(project => {
+                    return project.Item
+                    //return project.Item.thumbnailURL.S
+                })
+
+                result.push(project)
+               
+
             }
+
+            //console.log(result)
+            this.user.projects = result
+            console.log(this.user.projects)
 
             /*
             return Promise.resolve(dynamodb.getItem(params).promise().then(project => {
@@ -172,11 +188,6 @@ export default {
                 return project.Item.thumbnailURL.S
             }))
             */
-
-           dynamodb.getItem(params).promise().then(project => {
-               console.log(project.Item.thumbnailURL.S)
-               return project.Item.thumbnailURL.S
-           })
             
         }
     }

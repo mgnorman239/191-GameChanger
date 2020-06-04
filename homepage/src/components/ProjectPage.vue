@@ -95,12 +95,10 @@
 <script>
 import Navbar from './Navbar';
 import Footer from './Footer'; 
-
 import {
     Carousel,
     Slide
 } from 'vue-carousel';
-
 export default {
     components: {
         Navbar,
@@ -108,7 +106,6 @@ export default {
         Slide,
         Footer
     },
-
     data() {
         return {
             selected_title: '',
@@ -116,12 +113,10 @@ export default {
             teamMembers: [],
         }
     },
-
     created() {
         // get selected title from route
         //console.log(this.$route.params.title)
         this.selected_title = this.$route.params.title
-
         // setting up AWS environment
         var AWS = require("aws-sdk");
         // Initialize the Amazon Cognito credentials provider
@@ -129,10 +124,8 @@ export default {
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
             IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
         });
-
         // create the dynambodb object to call dynamodb functions
         this.dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}); 
-
         // pick which game to get from database
         var projects_params = {
             TableName: "Projects",
@@ -140,55 +133,43 @@ export default {
                 "title": {"S": this.selected_title}
             }
         }
-
         // get selected game from database and store in data
         this.dynamodb.getItem(projects_params).promise().then(game => {
             // console.log(selected_game.Item)
             this.game = game.Item
             var teamMemberNames = this.game.teamMembers.L
-
             for (var index in teamMemberNames) {
                 //console.log(this.teamMembers[index].S)
-                var displayName = teamMemberNames[index].S
+                var user_email = teamMemberNames[index].S
                  
                 // adjust params based on user being searched for
                 var user_params = {
-                    TableName: "Users",
+                    TableName: "user-info",
                     Key: {
-                        "displayName": {"S": displayName}
+                        "email": {"S": user_email}
                     }
                 }
-
-
                 // search for user in database and add to this.team
                 var list_of_users = []
                 this.dynamodb.getItem(user_params).promise().then(user => {
                     //console.log(user.Item)
                     this.teamMembers.push(user.Item)
                 })
-
             }
-
         })
-
-
-
     }, 
-
     methods: {
         goToGameWebsite() {
             window.open(this.game.gameURL.S);
         },
-
-        getProfilePicture(displayName) {
-            console.log(displayName)
+        getProfilePicture(user_email) {
+            console.log(user_email)
             var params = {
-                TableName: "Users",
+                TableName: "user-info",
                 Key: {
-                    "displayName": {"S": displayName}
+                    "email": {"S": user_email}
                 }
             }
-
             /*
             this.dynamodb.getItem(params).promise().then(user => {
                 console.log(user.Item.profilePicture.S)
@@ -196,8 +177,10 @@ export default {
             */
             
         },
+        getProfileName(dynamodb, profile_email) {
+            console.log(profile_email)
+        }
     }
-
 }
 </script>
 

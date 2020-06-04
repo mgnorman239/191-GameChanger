@@ -22,8 +22,8 @@
         <v-row>
             <h1 class="pa-3 pt-0">Events</h1>
         </v-row>
-        <v-row>
-            <v-col class="pa-5" cols="12" sm="6" justify="center" v-for="(event, index) in events" :key="index">
+        <v-row class="d-flex justify-sm-center justify-md-space-between">
+            <v-col class="pa-5" cols="12" sm="8" md="6" justify="center" v-for="(event, index) in events" :key="index">
                 <v-card outlined>
                     <v-img src="../assets/event-card2.png" alt="Guy wearing headphones in front of a computer.">
                     <v-container fluid fill-height align="center" justify="center">
