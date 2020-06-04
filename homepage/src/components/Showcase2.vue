@@ -1,12 +1,12 @@
 <template>
 <v-app class="grey lighten-4">
     <Navbar />
-        <!-- Winning Project Carosuel -->
-        <carousel :navigationEnabled="true" :perPage="1" :loop="true" :paginationPosition="'bottom-overlay'" class="carousel-background" :navigationNextLabel='`<i class="fas fa-chevron-right fa-2x"></i>`' :navigationPrevLabel='`<i class="fas fa-chevron-left fa-2x"></i>`'>
-            <slide><img width="100%" src="../assets/showcase_1.jpg" class="showcase-picture"/></slide>
-            <slide><img width="100%" src="../assets/showcase_2.jpg" class="showcase-picture" /></slide>
-            <slide><img width="100%" src="../assets/showcase_3.jpg" class="showcase-picture" /></slide>
-        </carousel>
+    <!-- Winning Project Carosuel -->
+    <carousel :navigationEnabled="true" :perPage="1" :loop="true" :paginationPosition="'bottom-overlay'" class="carousel-background" :navigationNextLabel='`<i class="fas fa-chevron-right fa-2x"></i>`' :navigationPrevLabel='`<i class="fas fa-chevron-left fa-2x"></i>`'>
+        <slide><img width="100%" src="../assets/showcase_1.jpg" class="showcase-picture" /></slide>
+        <slide><img width="100%" src="../assets/showcase_2.jpg" class="showcase-picture" /></slide>
+        <slide><img width="100%" src="../assets/showcase_3.jpg" class="showcase-picture" /></slide>
+    </carousel>
     <v-container class="px-12">
         <br>
         <v-row class="mt-3" align="center">
@@ -19,24 +19,28 @@
             </v-col>
         </v-row>
 
-        <!-- Project/Game cards --> 
-        <v-row>
+        <!-- Project/Game cards -->
+        <v-row justify="center">
             <div v-if="filterProjects.length == 0">
                 <v-col>
                     <h3 class="ml-1 mt-5 grey--text font-weight-regular">Sorry, there are no projects with this genre.</h3>
                 </v-col>
             </div>
-            <v-col class="pa-5" cols="12" xs="12" sm="6" md="4" v-for="game in filterProjects" :key="game.index">
+            <v-col class="pa-5" cols="12" xs="12" sm="8" md="6" lg="4" v-for="game in filterProjects" :key="game.index">
                 <v-card outlined>
-                    <v-img height="130px" :src=game.thumbnailURL.S></v-img>
-                    <v-card-title class="pb-0 px-6">{{ game.title.S }}</v-card-title>
+                    <v-img height="150px" :src=game.thumbnailURL.S></v-img>
+                    <v-card-title class="pb-0 px-6 text-truncate">{{ game.title.S }}</v-card-title>
                     <v-card-text class="pb-2 px-6">{{ condensedDescription(game.description.S) }}</v-card-text>
-                    <v-card-actions class="px-6 pb-6">
+                    <v-card-actions class="px-6 pb-4">
                         <v-chip-group class="hidden-xs-only" v-for="(tag, index) in game.tags.L" :key="index">
-                            <v-chip small outlined disabled>{{ tag.S }}</v-chip>
+                            <v-chip small outlined disabled v-if="index === 0">{{ tag.S }}</v-chip>
+                            <v-chip small outlined disabled v-if="index === 1 && game.tags.L.length == 2">{{ tag.S }}</v-chip>
+                            <span v-if="index === 2 && game.tags.L.length > 2" class="grey--text caption">(+{{ game.tags.L.length - 1 }} others)</span>
                         </v-chip-group>
                         <v-spacer></v-spacer>
-                        <router-link :to="{name: 'Project', params: {title: game.title.S}}"><v-btn class="body-2 font-weight-medium" color="#4DB848" text small v-on:click="getGameTitle(game.title.S)">View More</v-btn></router-link>
+                        <router-link :to="{name: 'Project', params: {title: game.title.S}}">
+                            <v-btn class="body-2 font-weight-medium" color="#4DB848" text small v-on:click="getGameTitle(game.title.S)">View More</v-btn>
+                        </router-link>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -48,8 +52,6 @@
 </template>
 
 <script>
-
-
 import {
     Carousel,
     Slide
@@ -75,13 +77,13 @@ export default {
             selected_title: "",
             filterItem: '',
         }
-    }, 
+    },
 
     // runs when the page is created
     created() {
         //scroll to the top 
         window.scrollTo(0, 0)
-        
+
         // setting up AWS environment
         var AWS = require("aws-sdk");
         // Initialize the Amazon Cognito credentials provider
@@ -89,9 +91,11 @@ export default {
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
             IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
         });
-        
+
         // create the dynambodb object to call dynamodb functions
-        var dynamodb = new AWS.DynamoDB({apiVersion: "2012-08-10"}); 
+        var dynamodb = new AWS.DynamoDB({
+            apiVersion: "2012-08-10"
+        });
 
         // pick which database table to draw data from
         var params = {
@@ -103,50 +107,42 @@ export default {
             //store games into games list
             this.games = game_database.Items;
         })
-    }, 
+    },
 
     computed: {
         filterProjects() {
-            if(this.filterItem) {
-                return this.games.filter((item)=> {
+            if (this.filterItem) {
+                return this.games.filter((item) => {
                     for (var i in item.tags.L) {
-                        if (item.tags.L[i].S.includes(this.filterItem)){
+                        if (item.tags.L[i].S.includes(this.filterItem)) {
                             return item
                         }
                     }
 
                     //return item.tags.L.includes(this.filterItem);
                 })
-            }
-            else {
+            } else {
                 return this.games;
             }
         }
     },
-    
+
     methods: {
         condensedDescription(description) {
             // check length of text, if over 250 characters
             if (description.length > 200) {
                 // shorten description
-                return description.substring(0, 148) + "...";
+                return description.substring(0, 110) + "...";
             }
             // do nothing
             return description;
-        }, 
+        },
 
         getGameTitle(title) {
             this.selected_title = title;
         }
     }
 }
-
-
-
-
-
-
-
 </script>
 
 <style>
@@ -179,5 +175,4 @@ export default {
 .carousel-background {
     background: black
 }
-
 </style>

@@ -143,31 +143,25 @@
 </template>
 
 <script>
-
 //This script needs the access key and the secret ID to work. 
 //import Navbar2 from "./Navbar-2";
 //import { APIGateway } from 'aws-sdk';
-
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Vue from 'vue'
 import VueRouter from 'vue-router';
 import $ from 'jquery';
-
 export default {
     components: {
         Navbar,
         Footer
-
     },
-
     // This is for the project description counter
     data() {
       return {
         description_rules: [v => v.length <= 500 || 'Max 500 characters'],
         description_placeholder: 'Give a quick description about your game!',
         tags: ['Action', 'Adventure', 'RPG', 'Romance'],
-
         //Object that will be sent into the database for AWS
         project_submission: 
           {
@@ -179,7 +173,6 @@ export default {
             thumbnailURL: ''
             //projectPicture: null},
           },
-
         title_error: false,
         description_error: false,
         url_error: false,
@@ -237,7 +230,6 @@ export default {
         Check fields for empty values, if any fields are missing, stop process
         */
         this.displayMissingFields()
-
         /*
         Check if title is duplicate, skip this step if title is empty
         */
@@ -307,19 +299,16 @@ export default {
         
 
       },
-
       /* Format team members into an item that DynamboDB accepts*/
       formatTeamMembers(members) {
         //console.log(members)
         var member_list = members.split(';')
         var results = []
-
         for (var i in member_list) {
           results.push(member_list[i].trim())
         }
         return results
       },
-
       /*
       Checks if required fields are empty. Changes text area to error if it is empty. 
       Returns boolean stating whether any of the required fields are empty
@@ -327,18 +316,16 @@ export default {
       isRequiredFieldsEmpty() {
         //set returned value to false initially, any time there is an input error, change value to true
         var emptyField = false;
-
         // reset hidden message values before checking
-        this.hide_message = false;
+        this.hide_message = true;
         this.hide_field_error_message = true;
-        this.hide_field_error_message = false;
 
         // reset error values before checking
         this.title_error = false
         this.description_error = false
         this.url_error = false
         this.members_error = false;
-
+        
         // clear missing field list before checking
         this.missing_fields_list = []
 
@@ -367,25 +354,21 @@ export default {
             this.missing_fields_list.push('Project Description')
           }
           */
-
           //url field
           if (url.length == 0) {
             this.url_error = true
             this.missing_fields_list.push('Project URL')
           }
-
           //team member field
           if (members.length == 0) {
             this.members_error = true
             this.missing_fields_list.push('Member Names')
           }
-
           return true
         }
         
         return false
       },
-
       /* 
       Display which fields are missing and scroll page back to top of the page
       */
@@ -396,7 +379,6 @@ export default {
           this.hide_field_error_message = false;
         }
       },
-
       /*
       Get the user from the Users database. If user does not exist, returns undefined object
       */
@@ -408,15 +390,12 @@ export default {
             "email": user_email
           }
         }
-
           //return dynamodb.getItem(user_exist_params).promise().then(user => {
           //return user.Item
           return dynamodb.get(user_exist_params).promise().then(user => {
             return user.Item
           })
-
       },   
-
       /*
       Display invalid users inputed
       */
@@ -428,7 +407,6 @@ export default {
         this.invalid_user_warning = "";
         this.hide_invalid_user_message = true;
         this.invalid_users = []
-
         for (var i in team_members) {
           //console.log(team_members[i] + ": " + await this.getUser(dynamodb, team_members[i]))
           var user = await this.getUser(dynamodb, team_members[i])
@@ -539,31 +517,17 @@ export default {
             logs: []
           }
         }
-
-        dynamodb.put(params, function(err) {
-          if (err) {
-            console.log(err)
-          }
-          else {
-            console.log('success')
-          }
-        })
         
       }
       
-
-
 } // methods end
-
 } // export end
-
 </script>
 
 <style scoped>
 .background-color {
     background: #E5E5E5;
 }
-
 .form-color {
     background: #FFFFFF;
     padding-top: 2em;
@@ -571,27 +535,21 @@ export default {
     padding-left: 6em;
     padding-right: 6em;
 }
-
 .header-spacing {
     margin-top: 5em;
 }
-
 .input-width {
     width: 45%;
 }
-
 .project-description-spacing {
     margin-bottom: 9em;
 }
-
 .spacing-left {
     margin-left: 0px;
 }
-
 .spacing-right {
     margin-right: 0px;
   }
-
 .warning-box {
   border-style: solid;
   border-color: #cccc00;
@@ -599,7 +557,6 @@ export default {
   padding: 5px;
   font-size: 14px;
 }
-
 .missing-fields-box {
   border-style: solid;
   border-color: #e60000;
@@ -607,11 +564,9 @@ export default {
   padding: 5px;
   font-size: 14px;
 }
-
 .center-block {
   display: block;
   margin-right: auto;
   margin-left: auto;
 }
-
 </style>>
