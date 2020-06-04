@@ -1,65 +1,122 @@
 <template>
-<nav>
-    <v-app-bar v-if="loggedIn" flat app class="grey darken-4">
-        <img :src="require('../assets/logo.png')" class="ml-9" height="100%" />
-        <v-toolbar-title class="ml-12 white--text subtitle-1">
-            <router-link to="/homepage"><span class="ml-1 mr-7 white--text">Home</span></router-link>
-            <router-link to="/showcase"><span class="ml-7 mr-7 white--text">Showcase</span></router-link>
-            <router-link to="/events"><span class="ml-7 mr-7 white--text">Events</span></router-link>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <router-link to="/projectsubmissionpage">
-            <v-btn outlined color="#F6F6F6" class="ma-2 mr-7 body-2 font-weight-medium">
-                <v-icon x-small left>fas fa-upload</v-icon>Upload
-            </v-btn>
-        </router-link>
-        <v-menu bottom offset-y left>
-            <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" class="mr-9">
-                    <!-- <v-avatar color="indigo" size="40">
-                        <span class="white--text headline">P</span>
-                    </v-avatar> -->
-                    <v-avatar size="40">
-                        <img :src=loggedInUser.profilePicture>
-                    </v-avatar>
-                </v-btn>
-            </template>
-            <v-list>
-                <!-- add @click="" to add a function for each button -->
-                <v-list-item v-for="(item, index) in dropdown_items" :key="index">
-                    <router-link :to="item.link" v-if="item.text==='Logout'" >
-                        <v-list-item-title class="black--text" @click="logout">
-                            <v-icon small left class="mr-4" >{{item.icon}}</v-icon>{{ item.text }}
-                        </v-list-item-title>
-                    </router-link>
+<div>
+    <!-- Navigation drawer for collpased navbar -->
+    <v-navigation-drawer floating app clipped right disable-resize-watcher dark v-model="sideNav">
+        <v-list nav class="mx-2">
+            <!-- Links to profile (with avatar and display name) -->
+            <v-list-item class="px-2" to="/profile" v-if="loggedIn">
 
-                    <router-link :to="item.link" v-else>
+                <v-list-item-avatar>
+                    <v-img :src=loggedInUser.profilePicture></v-img>
+                </v-list-item-avatar>
+
+                <v-list-item-title>Display Name</v-list-item-title>
+
+            </v-list-item>
+
+            <!-- Login and Signup buttons when NOT logged in -->
+            <div v-if="!loggedIn">
+
+                <v-list-item to="/login">
+                    <v-btn block outlined color="#F6F6F6"> Login</v-btn>
+                </v-list-item>
+
+                <v-list-item to="/signup">
+                    <v-btn block depressed dark color="#4DB848"> Sign up</v-btn>
+                </v-list-item>
+
+            </div>
+
+            <v-divider class="my-3"></v-divider>
+
+            <!-- Main navigation links -->
+            <v-list-item class="my-2" v-for="item in main_nav" :key="item.index" :to="item.link">
+
+                <v-list-item-icon>
+                    <v-icon left dark dense> {{ item.icon }} </v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                    <v-list-item-title>{{ item.text }}</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <!-- User settings for when user IS logged in -->
+            <v-list-item class="my-2" to="usersettings" v-if="loggedIn">
+                <v-list-item-icon>
+                    <v-icon left dark dense>fas fa-cog</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title>Settings</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+        </v-list>
+
+        <!-- Logout button for when user IS logged in -->
+        <template v-slot:append v-if="loggedIn">
+            <div class="pa-2 mx-2">
+                <v-btn block depressed large color="#4DB848" @click="logout()">
+                    <v-icon left dark dense>fas fa-sign-in-alt</v-icon>Logout
+                </v-btn>
+            </div>
+        </template>
+
+    </v-navigation-drawer>
+
+    <!-- Regular navbar when user is in md/lg screens -->
+    <v-app-bar app dark>
+        <img :src="require('../assets/logo.png')" class="mx-md-9 mx-0 pa-0" height="55px">
+        <v-toolbar-items class="hidden-sm-and-down">
+            <v-btn class="mx-2" text v-for="item in main_nav" :key="item.index" :to="item.link">
+                <v-icon left dark> {{ item.icon }} </v-icon>
+                {{ item.text }}
+            </v-btn>
+        </v-toolbar-items>
+
+        <v-spacer></v-spacer>
+
+        <div v-if="!loggedIn" class="mr-9 hidden-sm-and-down">
+            <v-btn outlined color="#F6F6F6" class="mx-3" to="/login"> Login</v-btn>
+            <v-btn depressed dark color="#4DB848" class="ml-3" to="/signup"> Sign up</v-btn>
+        </div>
+
+        <v-btn v-if="loggedIn" to="/projectsubmissionpage" outlined color="#F6F6F6" class="ma-2 mr-3 mr-md-7 body-2 font-weight-medium hidden-xs-only">
+            <v-icon x-small left>fas fa-upload</v-icon>Upload
+        </v-btn>
+        <v-btn icon v-if="loggedIn" to="/projectsubmissionpage" class="hidden-sm-and-up mr-3">
+            <v-icon size="20">fas fa-upload</v-icon>
+        </v-btn>
+
+        <!-- Hamburger menu icon for collpased navbar -->
+        <v-app-bar-nav-icon @click.stop="sideNav = !sideNav" class="hidden-md-and-up "></v-app-bar-nav-icon>
+
+        <!-- Dropdown menu for md/lg screens -->
+        <div v-if="loggedIn" class="hidden-sm-and-down">
+            <v-menu bottom offset-y left>
+                <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" class="mr-9">
+                        <v-avatar color="indigo" size="40">
+                            <span class="white--text headline">P</span>
+                        </v-avatar>
+                    </v-btn>
+                </template>
+                <v-list nav>
+                    <!-- add @click="" to add a function for each button -->
+                    <v-list-item v-for="(item, index) in dropdown_items" :key="index" :to="item.link">
                         <v-list-item-title class="black--text">
                             <v-icon small left class="mr-4">{{item.icon}}</v-icon>{{ item.text }}
                         </v-list-item-title>
-                    </router-link>
-                </v-list-item>
-            </v-list>
-        </v-menu>
+                    </v-list-item>
+                    <v-list-item @click="logout()">
+                        <v-list-item-title class="black--text">
+                            <v-icon small left class="mr-4">fas fa-sign-in-alt</v-icon>Logout
+                        </v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+        </div>
     </v-app-bar>
-
-    
-    <v-app-bar v-else flat app class="grey darken-4">
-        <img :src="require('../assets/logo.png')" height="100%" />
-        <v-toolbar-title class="ml-12 white--text subtitle-1">
-            <router-link to="/homepage"><span class="ml-1 mr-7 white--text">Home</span></router-link>
-            <router-link to="/showcase"><span class="ml-7 mr-7 white--text">Showcase</span></router-link>
-            <router-link to="/events"><span class="ml-7 mr-7 white--text">Events</span></router-link>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <router-link to="/login">
-            <v-btn outlined color="#F6F6F6" width="90" class="mr-7 body-2">Login</v-btn>
-        </router-link>
-        <router-link to="/signup">
-            <v-btn color="#F6F6F6" width="90" class="mr-7 body-2">Sign Up</v-btn>
-        </router-link>
-    </v-app-bar>
-</nav>
+</div>
 </template>
 
 <script>
@@ -73,6 +130,7 @@ export default {
             loggedInUser: '',
             loggedInUserEmail: '',
             loggedIn: false,
+            sideNav: false,
             dropdown_items: [{
                 text: 'Profile',
                 link: {
@@ -94,11 +152,20 @@ export default {
                     }
                 },
                 icon: 'fas fa-cog'
+            }],
+            main_nav: [{
+                text: 'Home',
+                link: '/homepage',
+                icon: 'fas fa-home'
             }, {
-                text: 'Logout',
-                link: '/login',
-                icon: 'fas fa-sign-in-alt'
-            }]
+                text: 'Showcase',
+                link: '/showcase',
+                icon: 'fas fa-th-large'
+            }, {
+                text: 'Events',
+                link: '/events',
+                icon: 'far fa-calendar'
+            }],
         }
     },
     async created() {
@@ -135,8 +202,8 @@ export default {
     },
 
     methods: {
-        async isUserSignedIn(){
-            try{
+        async isUserSignedIn() {
+            try {
                 const userObj = await Auth.currentAuthenticatedUser();
                 this.loggedIn = true;
                 //console.log(userObj);
