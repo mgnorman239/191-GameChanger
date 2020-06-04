@@ -45,7 +45,7 @@ const routes = [
   {path: '/profile/:username', component: Profile, name: 'Profile'},
   {path: '/success/', component: ThankYou, name: 'Success'},
   {path: '/logsubmission', component: LogSubmission},
-  {path: '/usersettings', component: UserSettings}
+  {path: '/usersettings/:username', component: UserSettings, name: 'Settings'}
 ]
 
 const router = new VueRouter({

@@ -20,8 +20,10 @@
                             <v-card-text class="font-weight-medium">Password</v-card-text>
                         </v-col>
                         <v-col class="pl-0 ml-n6" cols="12" md="5">
-                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field>
-                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field>
+                            <!-- <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field>
+                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field> -->
+                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userPassword"></v-text-field>
+                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userPassword"></v-text-field>
                         </v-col>
                     </v-row>
                     <v-row align="center">
@@ -88,6 +90,7 @@
 <script>
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { Auth } from "aws-amplify";
 
 export default {
     components: {
@@ -97,24 +100,27 @@ export default {
     // This is for the user information. Data right now is hard coded.
     data: () => ({
         userSubmission: {
-            userName: 'Sam',
-            userPassword: '********',
-            userEmail: 'testing@gmail.com',
-            userPicture: null,
-            userBio: 'Some random bio.',
-            linkedIn: 'https://www.linkedin.com/in/someexample/',
-            github: 'https://github.com/test_example',
-            facebook: 'link'
+            // userName: 'Sam',
+            // userPassword: '********',
+            // userEmail: 'testing@gmail.com',
+            // userPicture: null,
+            // userBio: 'Some random bio.',
+            // linkedIn: 'https://www.linkedin.com/in/someexample/',
+            // github: 'https://github.com/test_example',
+            // facebook: 'link'
+            userName: '',
+            userPassword: '',
+            userEmail: '',
+            userPicture: '',
+            userBio: '',
+            linkedIn: '',
+            github: '', 
+            facebook: ''
         },
         changingNames: false,
         success: false,
         userPicture: null,
     }),
-    
-    created() {
-        //scroll to the top 
-        window.scrollTo(0, 0)
-    },
 
     methods: {
         updateInformation() {
@@ -123,9 +129,7 @@ export default {
         cancelChanges() {
             this.changingNames = true;
         },
-        saveChanges() {
-            var AWS = require('aws-sdk');
-            var docClient = new AWS.DynamoDB.DocumentClient();
+        saveChanges(dynamodb) {
             var params = {
                 TableName: "user-info",
                 Item: {
@@ -135,7 +139,7 @@ export default {
                 }
             }
 
-            docClient.put(params, function(err, data) {
+            dynamodb.put(params, function(err, data) {
                 if (err) {
                     console.log(err);
                 }
@@ -146,26 +150,37 @@ export default {
             });
         }
     },
-    beforeCreate() {
+    async created() {
+        //scroll to the top 
+        window.scrollTo(0, 0)
+
         var AWS = require('aws-sdk');
-        AWS.config.update({accessKeyId:'', secretAccessKey: '', region: 'us-west-2', endpoint: 'http://dynamodb.us-west-2.amazonaws.com'});
+        // Initialize the Amazon Cognito credentials provider
+        AWS.config.region = 'us-west-2'; // Region
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'us-west-2:c8838837-ac29-45f7-b5c2-6ec245a55ed1',
+        });
+
+        var dynamodb = new AWS.DynamoDB.DocumentClient();
+
+        var userEmail = await Auth.currentUserInfo().then(user => {
+            return user.attributes
+        })
         
         //How to tell which user has logged in? Right now, hard coded
         var params = {
-                TableName: "user-info",
-                Key: {
-                    "email": "anneflynn@example.com",
-                },
-            }
+            TableName: "user-info",
+            Key: {
+                "email": userEmail,
+            },
+        }
             
-        var thisObject = this;
-        var docClient = new AWS.DynamoDB.DocumentClient();
-        var promise = docClient.get(params).promise();
-        promise.then(function(data) 
+        dynamodb.get(params).promise().then(function(data) 
         {
-           thisObject.userSubmission.userName = data.Item.displayName;
-           thisObject.userSubmission.userPassword = data.Item.password;
-           thisObject.userSubmission.userEmail = data.Item.email;
+        //    this.userSubmission.userName = data.Item.displayName;
+        //    this.userSubmission.userPassword = data.Item.password;
+        //    this.userSubmission.userEmail = data.Item.email;
+        console.log(data.Item)
         }).catch(function(err)
         {
             console.log(err);

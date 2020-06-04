@@ -144,7 +144,11 @@ export default {
                     password: this.password,
                     displayName: user.name,
                     projects: [],
-                    socialMedia: {},
+                    socialMedia: {
+                        "Github": "none",
+                        "Twitter": "none",
+                        "LinkedIn": "none"
+                    },
                     bio: '', 
                     profilePicture: 'https://gamechangerhackathonusers.s3-us-west-2.amazonaws.com/blank.png'
                 }

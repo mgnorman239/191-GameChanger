@@ -75,11 +75,24 @@ export default {
             loggedIn: false,
             dropdown_items: [{
                 text: 'Profile',
-                link: '/profile',
+                link: {
+                    name: 'Profile',
+                    params: {
+                        username: ''
+                    },
+                    query: {
+                        email: ''
+                    }
+                },
                 icon: 'far fa-user'
             }, {
                 text: 'Settings', 
-                link: '/usersettings',
+                link: {
+                    name: 'Settings',
+                    params: {
+                        username: ''
+                    }
+                },
                 icon: 'fas fa-cog'
             }, {
                 text: 'Logout',
@@ -111,7 +124,12 @@ export default {
 
             // get user Object
             this.loggedInUser = await this.getUserInfoFromDatabase(this.loggedInUserEmail);
-            console.log(this.loggedInUser.profilePicture)
+            
+            // change profile and settings link to match user
+            this.dropdown_items[0].link.params.username = this.loggedInUser.displayName
+            this.dropdown_items[0].link.query.email = this.loggedInUserEmail
+            this.dropdown_items[1].link.params.username = this.loggedInUser.displayName
+
         }
         
     },

@@ -138,7 +138,7 @@ export default {
         this.user.displayName = fetched_user.Item.displayName.S
         this.user.profilePicture = fetched_user.Item.profilePicture.S
         //this.user.projects = fetched_user.Item.projects.L
-        this.user.projects = 
+        this.user.projects = []
         this.user.bio = fetched_user.Item.bio.S
         this.user.github = fetched_user.Item.socialMedia.M.Github.S
         this.user.linkedin = fetched_user.Item.socialMedia.M.LinkedIn.S
