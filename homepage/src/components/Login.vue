@@ -1,11 +1,11 @@
 <template>
 <v-app class="grey lighten-4">
     <Navbar />
-    <v-layout row>
+    <v-layout row class="top-spacer">
         <v-flex md6 sm12>
             <!--100% picture are larger screen size-->
             <v-container d-none d-md-block>
-                <v-img class="no-margin" height="100vh" src="../assets/keyboard.png" alt="Picture of hand typing on keyboard">
+                <v-img class="no-margin" height="auto" src="../assets/keyboard.png" alt="Picture of hand typing on keyboard">
                     <h1 class="tagline">Share the story of<br> your creation</h1>
                 </v-img>
             </v-container>
@@ -18,7 +18,7 @@
         </v-flex>    
         <v-layout column md7 text-center>
             <v-flex xs2 d-none d-md-block></v-flex>
-            <v-flex xs1 class="mb-10">
+            <v-flex xs1 class="mb-10 mt-6 mt-sm-0">
                 <h1>Welcome Back</h1>
                 <div :hidden="login_error_hidden" style="color: red">
                     <br>
@@ -54,11 +54,10 @@
                 <br>
                 <router-link to="/ForgotPassword"><p><span class="underlined">Forgot password?</span></P></router-link>
             </v-flex>
-            <v-flex xs1></v-flex>
-            <v-flex xs2>
+            <v-flex xs2 class="mt-10">
                 <!--This is the submit button that you have to bind an on-click event for-->
                  <v-flex  d-none d-md-block>
-                    <v-btn height="4em" width="13em" color="#4DB848" class="white--text body-1" @click="loginUser">Login</v-btn>
+                    <v-btn height="3.5em" width="10em" color="#4DB848" class="white--text body-1" @click="loginUser">Login</v-btn>
                  </v-flex>
                  <!--Center Button for smaller screens-->
                 <v-container d-flex d-md-none>
@@ -70,16 +69,19 @@
             </v-flex>
         </v-layout>
     </v-layout>
+    <Footer class="mt-8 mt-sm-0" />
 </v-app>
 </template>
 
 <script>
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import { Auth } from "aws-amplify";
 
 export default {
     components: {
         Navbar,
+        Footer
     },
     data() {
         return {
@@ -210,12 +212,16 @@ export default {
     text-transform: uppercase;
     color:white;
     font-weight: normal;
-    margin: 2em;
+    margin: 8vh;
     font-size:2.5em;
 }
 
 .no-margin {
     margin-bottom: -2em;
+}
+
+.top-spacer {
+    margin-top: 2.5em;
 }
 
 </style>

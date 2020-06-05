@@ -49,16 +49,16 @@
                 </v-card>
             </v-col>
 
-            <v-col cols="8" class="px-5">
-                <h1>{{ this.user.displayName }}'s Projects</h1>
+            <v-col cols="8" class="px-0 px-sm-5">
+                <h1 class="ml-0 ml-sm-3">{{ this.user.displayName }}'s Projects</h1>
                 <v-container fluid>
-                    <v-row>
-                        <v-col cols="12" md="6" v-for="(project, index) in this.user.projects" :key="index">
+                    <v-row class="justify-center justify-md-start">
+                        <v-col class="px-0 pa-sm-3" cols="12" sm="8" md="6" v-for="(project, index) in this.user.projects" :key="index">
                             <router-link :to="{name: 'Project', params: {title: project.title.S}}">
                             <v-card outlined>
                                 <!-- <v-img class="small-card-img" :src="getProjectThumbnail(project.S)"></v-img> -->                                                           
-                                <v-img class="small-card-img" :src=project.thumbnailURL.S></v-img>
-                                <v-card-title class="pb-0 px-6 small-card">{{ project.title.S }}</v-card-title>
+                                <v-img width="450" height="180" :src=project.thumbnailURL.S></v-img>
+                                <v-card-title class="justify-center">{{ project.title.S }}</v-card-title>
                             </v-card>
                             </router-link>
                         </v-col>
@@ -216,19 +216,6 @@ export default {
 </script>
 
 <style>
-.small-card {
-    display: block;
-    text-align: center;
-    margin: auto;
-    height: 60px;
-    
-}
-
-.small-card-img {
-    width: 450px;
-    height: 180px;
-}
-
 .icon-blank {
     pointer-events: none;
     color: #e6e6e6
