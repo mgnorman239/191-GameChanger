@@ -2,8 +2,8 @@
 <v-app class="grey lighten-4">
     <Navbar />
     <v-container class="mt-12">
-        <v-row class="mt-8">
-            <v-col class="px-5" cols="4">
+        <v-row class="mt-8 justify-center">
+            <v-col class="px-5" cols="9" md="4">
                 <v-card outlined>
                     <v-container>
                         <v-row>
@@ -53,7 +53,7 @@
                 <h1>{{ this.user.displayName }}'s Projects</h1>
                 <v-container fluid>
                     <v-row>
-                        <v-col cols="6" v-for="(project, index) in this.user.projects" :key="index">
+                        <v-col cols="12" md="6" v-for="(project, index) in this.user.projects" :key="index">
                             <router-link :to="{name: 'Project', params: {title: project.title.S}}">
                             <v-card outlined>
                                 <!-- <v-img class="small-card-img" :src="getProjectThumbnail(project.S)"></v-img> -->                                                           
