@@ -9,6 +9,11 @@
                     <h1 class="header-padding">User Settings</h1>
                     <br>
                     <p :class="[success ? 'show' : 'hidden']">Changes saved!</p>
+                    <div>
+                        <img width="400px" height="400px" v-bind:src="'https://gamechangerhackathonusers.s3-us-west-2.amazonaws.com/' + userPicture" /> 
+                        
+                    </div>
+                    <br>
                     <div :class="[changingNames ? 'show' : 'hidden']">
                         <p class="left-tab"><b class="right-tab">Display name:</b> {{ userSubmission.userName }}</p>
                         <br>
@@ -53,8 +58,36 @@
 
 <script>
 import Navbar from "./Navbar";
-
+import {CurrentUsername} from "./Variables.js";
+import S3 from 'aws-s3';
 export default {
+    computed: {
+        s3Keys(){
+            return this.$auth.user.s3_keys;
+            },
+            config(){
+                return {
+                    bucketName: 'vue-screencasts-uploads',
+                    dirName: this.directory,
+                    region: 'us-west-2',
+                    accessKeyId: this.s3Keys.id,
+                    secretAccessKey: this.s3Keys.secret,
+                    s3Url: this.baseURL
+                }
+            },
+            baseURL(){
+                return 'https://vue-screencasts-uploads.s3-us-west-2.amazonaws.com'
+            },
+            S3Client(){
+                return new S3(this.config);
+            },
+            newFileName(){
+                return Math.random().toString().slice(2)
+            },
+            url(){
+                return `${this.baseURL}/${this.directory}/${this.newFileName}`;
+            }
+    },
     components: {
         Navbar
     },
@@ -62,16 +95,28 @@ export default {
     data: () => ({
         userSubmission:
         { 
-            userName: 'Sam',
-            userPassword: '********',
-            userEmail: 'testing@gmail.com',
+            userName: 'GregoryBains',
+            userPassword: '$stUf3eAmT',
+            userEmail: 'gregorybains@example.com',
             userPicture: null,
         },
         changingNames: true,
         success: false,
-        userPicture: null,
+        userPicture: "GregoryBains.jpeg"
     }),
     methods: {
+        uploadFile(fieldName, files) {
+        let file = files[0]
+
+        this.isLoading = true
+        this.S3Client
+            .uploadFile(file, this.newFileName).finally(()=>{
+                this.isLoading = false
+                let fileExtension = file.type.split('/')[1]
+                this.obj[this.fieldName] = `${this.url}.${fileExtension}`
+            })
+        },
+        
         updateInformation() {
             this.changingNames = false;
         },
@@ -89,6 +134,7 @@ export default {
                     "displayName": this.userSubmission.userName,
                 }
             }
+            //this.CurrentUsername = this.userSubmission.userName;
 
             docClient.put(params, function(err, data) {
                 if (err) {
@@ -101,32 +147,50 @@ export default {
             });
         }
     },
+    props: ['fieldName', 'obj', 'directory'],
     beforeCreate() {
         var AWS = require('aws-sdk');
-        AWS.config.update({accessKeyId:'', secretAccessKey: '', region: 'us-west-2', endpoint: 'http://dynamodb.us-west-2.amazonaws.com'});
+        AWS.config.update({accessKeyId:'AKIATK7ZRBAF2PYBHD7L', secretAccessKey: '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', region: 'us-west-2', endpoint: 'http://dynamodb.us-west-2.amazonaws.com'});
         
         //How to tell which user has logged in? Right now, hard coded
         var params = {
                 TableName: "user-info",
                 Key: {
-                    "email": "anneflynn@example.com",
+                    "email": "demingz1@example.com",
                 },
             }
-        
+
         var thisObject = this;
         var docClient = new AWS.DynamoDB.DocumentClient();
         var promise = docClient.get(params).promise();
         promise.then(function(data) 
         {
-           thisObject.userSubmission.userName = data.Item.displayName;
-           thisObject.userSubmission.userPassword = data.Item.password;
-           thisObject.userSubmission.userEmail = data.Item.email;
+            if(data.Item != null)
+            {
+                thisObject.userSubmission.userName = data.Item.displayName;
+                thisObject.userSubmission.userPassword = data.Item.password;
+                thisObject.userSubmission.userEmail = data.Item.email;
+                thisObject.userPicture = "1.jpg"
+            }
+            else
+            {
+                //thisObject.userSubmission.userName = "meowmeow"
+                //thisObject.userSubmission.userPassword = "456456"
+                //hisObject.userSubmission.userEmail = "meowmeow@example.com"
+
+                thisObject.userSubmission.userName = "GregoryBains"
+                thisObject.userSubmission.userPassword = "$stUf3eAmT"
+                thisObject.userSubmission.userEmail = "gregorybains@example.com"
+                //thisObject.userPicture = "2.jpg"
+            }
+           
         }).catch(function(err)
         {
             console.log(err);
         });
     },
 }
+
 </script>
 
 <style scoped>
