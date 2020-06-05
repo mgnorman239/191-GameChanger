@@ -9,10 +9,10 @@
     </carousel>
     <v-container class="px-12">
         <br>
-        <v-row class="mt-3" align="center">
+        <v-row class="mt-3 justify-center" align="center">
             <h2 class="ml-5 pt-0">Browse Projects</h2>
             <v-spacer></v-spacer>
-            <v-col cols="12" md="3">
+            <v-col class="mr-3" cols="11" md="3">
                 <v-select :items="genres" append-icon="" clearable clear-icon="fas fa-times fa-xs" dense rounded solo flat label="Filter..." color="#4DB848" v-model="filterItem">
                     <v-icon slot="prepend-inner" left small>fas fa-filter</v-icon>
                 </v-select>

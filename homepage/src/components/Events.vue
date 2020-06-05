@@ -18,9 +18,9 @@
             </v-container>
         </v-img>
     <!-- Display event cards -->
-    <v-container class="px-12">
+    <v-container class="px-12 mt-6">
         <v-row>
-            <h1 class="pa-3 pt-0">Events</h1>
+            <h1 class="px-3 pt-0 ml-2">Events</h1>
         </v-row>
         <v-row class="d-flex justify-sm-center justify-md-space-between">
             <v-col class="pa-5" cols="12" sm="8" md="6" justify="center" v-for="(event, index) in events" :key="index">
