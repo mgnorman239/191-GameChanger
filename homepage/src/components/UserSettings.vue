@@ -4,81 +4,57 @@
     <!-- Form page -->
     <v-container class="header-spacing">
         <v-row justify="center">
-            <v-col cols="12" md="8">
-                <v-card outlined class="pa-3 pl-6">
-                    <v-card-title class="font-weight-bold headline">Settings</v-card-title>
-                    <v-row align="center">
-                        <v-col class="pr-0" cols="12" md="3">
-                            <v-card-text class="font-weight-medium">Display Name</v-card-text>
+            <v-col cols="12" md="7">
+                <v-card outlined class="pa-3">
+                    <v-row justify="center">
+                        <v-col cols="12" md="10">
+                            <v-card-title class="font-weight-bold headline pa-0">Settings</v-card-title>
                         </v-col>
-                        <v-col class="pl-0 ml-n6" cols="12" md="5">
-                            <v-text-field color="#4DB848" readonly dense outlined :prefix="userSubmission.userName"></v-text-field>
+                        <v-col cols="12" md="10">
+                            <v-text-field label="Display Name" color="#4DB848" readonly dense :prefix="userSubmission.userName"></v-text-field>
                         </v-col>
-                    </v-row>
-                    <v-row align="center">
-                        <v-col class="pr-0" cols="12" md="3">
-                            <v-card-text class="font-weight-medium">Password</v-card-text>
-                        </v-col>
-                        <v-col class="pl-0 ml-n6" cols="12" md="5">
+                        <v-col cols="12" md="10">
                             <!-- <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field>
                             <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userPassword" :type="show1 ? 'text' : 'password'"></v-text-field> -->
-                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userPassword"></v-text-field>
-                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userPassword"></v-text-field>
+                            <v-text-field v-if="changingNames" label="Password" color="#4DB848" dense :value="userSubmission.userPassword"></v-text-field>
+                            <v-text-field v-else label="Password" color="#4DB848" readonly dense :prefix="userSubmission.userPassword"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-text-field v-if="changingNames" label="Email" color="#4DB848" dense :value="userSubmission.userEmail"></v-text-field>
+                            <v-text-field v-else color="#4DB848" label="Email" readonly dense :prefix="userSubmission.userEmail"></v-text-field>
+                        </v-col>
+                        <v-col class="mb-12" cols="12" md="10">
+                            <v-textarea v-if="changingNames" label="Bio" :rows="3" :row-height="24" color="#4DB848" :value="userSubmission.userBio"></v-textarea>
+                            <v-textarea v-else :rows="3" :row-height="24" label="Bio" color="#4DB848" readonly :prefix="userSubmission.userBio"></v-textarea>
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-text-field v-if="changingNames" label="linkedIn" autofocus color="#4DB848" dense :value="userSubmission.linkedIn"></v-text-field>
+                            <v-text-field v-else color="#4DB848" label="linkedIn" autofocus readonly dense :value="userSubmission.linkedIn"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-text-field v-if="changingNames" label="Github" color="#4DB848" dense :value="userSubmission.github"></v-text-field>
+                            <v-text-field v-else label="Github" color="#4DB848" readonly dense :prefix="userSubmission.github"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-card-actions v-if="changingNames" class="pa-0">
+                                <v-btn @click="success = true" dark depressed large color="#4DB848" class="ma-2 body-1 font-weight-medium">
+                                    <v-icon left>far fa-save</v-icon>Save
+                                </v-btn>
+                                <v-snackbar top color="success" v-model="success" timeout="2000">
+                                    Changes saved!
+                                    <v-btn text @click="success = false">Close</v-btn>
+                                </v-snackbar>
+                                <v-btn @click="cancelChanges" dark outlined large color="#4DB848" class="ma-2 body-1 font-weight-medium">
+                                    <v-icon left color="#4DB848">fas fa-times</v-icon>Cancel
+                                </v-btn>
+                            </v-card-actions>
+                            <v-card-actions v-else class="pa-0">
+                                <v-btn @click="updateInformation" dark depressed large color="#4DB848" class="ma-2 body-1 font-weight-medium">
+                                    <v-icon left>far fa-edit</v-icon>Edit
+                                </v-btn>
+                            </v-card-actions>
                         </v-col>
                     </v-row>
-                    <v-row align="center">
-                        <v-col class="pr-0" cols="12" md="3">
-                            <v-card-text class="font-weight-medium">Email</v-card-text>
-                        </v-col>
-                        <v-col class="pl-0 ml-n6" cols="12" md="5">
-                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.userEmail"></v-text-field>
-                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.userEmail"></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row align="center">
-                        <v-col class="pr-0" cols="12" md="3">
-                            <v-card-text class="font-weight-medium">Profile Bio</v-card-text>
-                        </v-col>
-                        <v-col class="pl-0 ml-n6" cols="12" md="7">
-                            <v-textarea v-if="changingNames" :rows="4" :row-height="32" color="#4DB848" dense outlined :value="userSubmission.userBio"></v-textarea>
-                            <v-textarea v-else :rows="4" :row-height="32" color="#4DB848" readonly dense outlined :prefix="userSubmission.userBio"></v-textarea>
-                        </v-col>
-                    </v-row>
-                    <v-row align="center">
-                        <v-col class="pr-0" cols="12" md="3">
-                            <v-card-text class="font-weight-medium">linkedIn</v-card-text>
-                        </v-col>
-                        <v-col class="pl-0 ml-n6" cols="12" md="7">
-                            <v-text-field v-if="changingNames" autofocus color="#4DB848" dense outlined :value="userSubmission.linkedIn"></v-text-field>
-                            <v-text-field v-else color="#4DB848" autofocus readonly dense outlined :value="userSubmission.linkedIn"></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row align="center">
-                        <v-col class="pr-0" cols="12" md="3">
-                            <v-card-text class="font-weight-medium">Github</v-card-text>
-                        </v-col>
-                        <v-col class="pl-0 ml-n6" cols="12" md="7">
-                            <v-text-field v-if="changingNames" color="#4DB848" dense outlined :value="userSubmission.github"></v-text-field>
-                            <v-text-field v-else color="#4DB848" readonly dense outlined :prefix="userSubmission.github"></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-card-actions v-if="changingNames"> 
-                        <v-btn @click="success = true" dark depressed large color="#4DB848" class="ma-2 body-1 font-weight-medium">
-                            <v-icon left>far fa-save</v-icon>Save
-                        </v-btn>
-                        <v-snackbar top color="success" v-model="success" timeout="2000">
-                            Changes saved!
-                            <v-btn text @click="success = false">Close</v-btn>
-                        </v-snackbar>
-                        <v-btn @click="cancelChanges" dark outlined large color="#4DB848" class="ma-2 body-1 font-weight-medium">
-                            <v-icon left color="#4DB848">fas fa-times</v-icon>Cancel 
-                        </v-btn>
-                    </v-card-actions>
-                    <v-card-actions v-else>
-                        <v-btn @click="updateInformation" dark depressed large color="#4DB848" class="ma-2 body-1 font-weight-medium">
-                            <v-icon left>far fa-edit</v-icon>Edit
-                        </v-btn>
-                    </v-card-actions>
                 </v-card>
             </v-col>
         </v-row>
@@ -90,7 +66,9 @@
 <script>
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { Auth } from "aws-amplify";
+import {
+    Auth
+} from "aws-amplify";
 
 export default {
     components: {
@@ -114,7 +92,7 @@ export default {
             userPicture: '',
             userBio: '',
             linkedIn: '',
-            github: '', 
+            github: '',
             facebook: ''
         },
         changingNames: false,
@@ -139,11 +117,10 @@ export default {
                 }
             }
 
-            dynamodb.put(params, function(err, data) {
+            dynamodb.put(params, function (err, data) {
                 if (err) {
                     console.log(err);
-                }
-                else {
+                } else {
                     console.log(data);
                     location.reload();
                 }
@@ -166,7 +143,7 @@ export default {
         var userEmail = await Auth.currentUserInfo().then(user => {
             return user.attributes
         })
-        
+
         //How to tell which user has logged in? Right now, hard coded
         var params = {
             TableName: "user-info",
@@ -174,15 +151,13 @@ export default {
                 "email": userEmail,
             },
         }
-            
-        dynamodb.get(params).promise().then(function(data) 
-        {
-        //    this.userSubmission.userName = data.Item.displayName;
-        //    this.userSubmission.userPassword = data.Item.password;
-        //    this.userSubmission.userEmail = data.Item.email;
-        console.log(data.Item)
-        }).catch(function(err)
-        {
+
+        dynamodb.get(params).promise().then(function (data) {
+            //    this.userSubmission.userName = data.Item.displayName;
+            //    this.userSubmission.userPassword = data.Item.password;
+            //    this.userSubmission.userEmail = data.Item.email;
+            console.log(data.Item)
+        }).catch(function (err) {
             console.log(err);
         });
     },

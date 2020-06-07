@@ -38,8 +38,8 @@
         <v-row class="px-4 mt-5" align="center">
             <h2>Meet the Team</h2>
         </v-row>
-        <v-row>
-            <v-col class="ma-3" md="1" v-for="(member, index) in teamMembers" :key="index">
+        <v-row class="ml-1" align="center">
+            <v-col class="ma-4 mr-8" md="1" v-for="(member, index) in teamMembers" :key="index">
                 <v-row justify="center">
                     <router-link :to="{name: 'Profile', params: {username: member.displayName.S}, query: {email: member.email.S} }">
                     <v-avatar size="60">
@@ -48,7 +48,7 @@
                     </router-link>
                 </v-row>
                 <v-row justify="center">
-                    <p class="pa-2">{{ member.displayName.S }}</p>
+                    <p class="pa-3">{{ member.displayName.S }}</p>
                 </v-row>
             </v-col>
         </v-row>
@@ -56,14 +56,14 @@
     
     <!-- Project logs -->
     <v-container class="px-12">
-        <v-row class="px-4 mt-5" align="center">
-            <h2 class="px-5">Project Log</h2>
+        <v-row class="mt-5" align="center">
+            <h2 class="ml-5">Project Log</h2>
             <v-spacer></v-spacer>
             <v-btn outlined dark color="#4DB848" to="/logsubmission" class="body-1 font-weight-medium mr-5">
                 Add Log
             </v-btn>
         </v-row>
-        <v-row class="px-4 mt-1">
+        <v-row class="mt-1">
             <v-col class="pa-5" cols="12" sm="6" lg="4" v-for="(log, index) in game.logs.L" :key="index">
                 <v-card outlined height="100%">
                     <v-card-title class="pb-0 px-6">{{ log.M.title.S }}</v-card-title>
