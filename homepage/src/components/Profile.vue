@@ -18,7 +18,7 @@
                         <!-- Social Media -->
                         <v-card-actions class="justify-center">
                             <!-- LinkedIn -->
-                            <v-btn v-if="this.user.linkedin !== 'none'" icon class="ma-4">
+                            <v-btn v-if="this.user.linkedin !== ''" icon class="ma-4">
                                 <a :href="this.user.linkedin" target="_blank">
                                     <i class="fab fa-linkedin-in fa-2x"></i>
                                 </a>
@@ -27,7 +27,7 @@
                                 <i class="fab fa-linkedin-in fa-2x icon-blank"></i>
                             </div>
                             <!-- Github -->
-                            <v-btn v-if="this.user.github !== 'none'" icon class="ma-4">
+                            <v-btn v-if="this.user.github !== ''" icon class="ma-4">
                                 <a :href="this.user.github" target="_blank">
                                     <i class="fab fa-github fa-2x"></i>
                                 </a>
@@ -36,7 +36,7 @@
                                 <i class="fab fa-github fa-2x icon-blank"></i>
                             </div>
                             <!-- Twitter -->
-                            <v-btn v-if="this.user.twitter !== 'none'" icon class="ma-4">
+                            <v-btn v-if="this.user.twitter !== ''" icon class="ma-4">
                                 <a :href="this.user.twitter" target="_blank">
                                     <i class="fab fa-twitter fa-2x"></i>
                                 </a>
