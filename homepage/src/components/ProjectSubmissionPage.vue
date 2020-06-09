@@ -517,6 +517,15 @@ export default {
             logs: []
           }
         }
+
+        dynamodb.put(params).promise().then().catch(err => {
+          if(err) {
+            console.log(err)
+          }
+          else {
+            console.log('success')
+          }
+        })
         
       }
       
