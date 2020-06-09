@@ -115,14 +115,26 @@
                 </v-list>
             </v-menu>
         </div>
+        <v-snackbar top v-model="snackbar" :timeout="timeout">
+            You have logged out.
+            <v-btn color="green" text @click="snackbar = false">
+                Close
+            </v-btn>
+        </v-snackbar>
     </v-app-bar>
 </div>
 </template>
 
 <script>
-import { Auth } from "aws-amplify";
-import { AmplifyEventBus } from "aws-amplify-vue";
-import { DynamoDB } from 'aws-sdk';
+import {
+    Auth
+} from "aws-amplify";
+import {
+    AmplifyEventBus
+} from "aws-amplify-vue";
+import {
+    DynamoDB
+} from 'aws-sdk';
 
 export default {
     data() {
@@ -131,6 +143,8 @@ export default {
             loggedInUserEmail: '',
             loggedIn: false,
             sideNav: false,
+            snackbar: false,
+            timeout: 1500,
             dropdown_items: [{
                 text: 'Profile',
                 link: {
@@ -144,7 +158,7 @@ export default {
                 },
                 icon: 'far fa-user'
             }, {
-                text: 'Settings', 
+                text: 'Settings',
                 link: {
                     name: 'Settings',
                     params: {
@@ -174,8 +188,8 @@ export default {
 
         await this.isUserSignedIn();
 
-        AmplifyEventBus.$on('authState', info =>{
-            if(info === 'signedIn'){
+        AmplifyEventBus.$on('authState', info => {
+            if (info === 'signedIn') {
                 this.isUserSignedIn();
             } else {
                 this.loggedIn = false;
@@ -191,14 +205,14 @@ export default {
 
             // get user Object
             this.loggedInUser = await this.getUserInfoFromDatabase(this.loggedInUserEmail);
-            
+
             // change profile and settings link to match user
             this.dropdown_items[0].link.params.username = this.loggedInUser.displayName
             this.dropdown_items[0].link.query.email = this.loggedInUserEmail
             this.dropdown_items[1].link.params.username = this.loggedInUser.displayName
 
         }
-        
+
     },
 
     methods: {
@@ -207,16 +221,22 @@ export default {
                 const userObj = await Auth.currentAuthenticatedUser();
                 this.loggedIn = true;
                 //console.log(userObj);
-            }catch(err){
+            } catch (err) {
                 this.loggedIn = false;
                 console.log(err);
             }
         },
 
-        logout(){
-            alert('You have successfully signed out')
+        logout() {
             Auth.signOut()
-                .then(data => console.log(data))
+                .then(data => {
+                    console.log(data)
+                    this.$router.push({
+                        path: '/homepage'
+                    })
+                    this.loggedIn = false;
+                    this.snackbar = true;
+                })
                 .catch(err => console.log(err));
         },
 
@@ -241,8 +261,6 @@ export default {
                 return user.Item
             })
 
-
-        
         },
 
     }
