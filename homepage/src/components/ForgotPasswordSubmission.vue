@@ -21,30 +21,55 @@
             <v-flex xs1 class="mb-10">
                 <h1>Forgot Your Password?</h1>
                 <br>
-                <p>Type in your email, and we'll send you a code<br>to reset your password with.</p>
+                <p>Enter in the code and your new password to reset.</p>
             </v-flex>
             
-            <!--This is the input box for the user email-->
+            <!--This is the box for displaying the user's email-->
             <v-flex xs1>
                 <v-text-field 
                     prepend-inner-icon="far fa-envelope"
                     text-center class="center-block input-width" 
-                    label="email"
-                    v-model="email" 
-                    placeholder="E-mail" 
-                    solo>
+                    :label="email" 
+                    placeholder="" 
+                    solo
+                    disabled>
                 </v-text-field>
+            </v-flex>
+            <!--This is the input box for the forgot password verification code-->
+            <v-flex xs1>
+                <v-text-field text-center class="center-block input-width"
+                    prepend-inner-icon="far fa-envelope fa-xs"
+                    v-model="code"
+                    id="code"
+                    name="code"
+                    label="Code"
+                    solo
+                ></v-text-field>
+            </v-flex>
+            <!--This is the input box for the new requested password-->
+            <v-flex xs1>
+                <v-text-field 
+                    :type="'password'"
+                    prepend-inner-icon="fas fa-lock"
+                    v-model="password"
+                    id="password"
+                    name="password"
+                    class="center-block input-width"
+                    label="password"
+                    placeholder="Password"
+                    solo
+                ></v-text-field>
             </v-flex>
             <v-flex xs1></v-flex>
             <v-flex xs2>
                 <v-flex  d-none d-md-block>
-                    <!--This is the send code button-->
-                    <v-btn height="3.5em" width="10em" color="#4DB848" class="white--text body-1" @click="sendCode">Send</v-btn>
+                    <!--This is the reset password button-->
+                    <v-btn height="3.5em" width="10em" color="#4DB848" class="white--text body-1" @click="submitNewPassword">Reset</v-btn>
                 </v-flex>
                 <!--Center Button for smaller screens-->
                 <v-container d-flex d-md-none>
                     <br>
-                    <v-btn height="3em" width="7em" color="#4DB848" class="center-block white--text body-1" @click="sendCode">Send</v-btn>
+                    <v-btn height="3em" width="7em" color="#4DB848" class="center-block white--text body-1" @click="submitNewPassword">Reset</v-btn>
                 </v-container>
                 <!--Eventually, add a link to take the user to the login page when they click the span-->
                 <p class="mt-6">Don't have an account yet? <router-link to="/signup"><span class="underlined">Sign up!</span></router-link></p>
@@ -65,16 +90,19 @@ export default {
         Navbar,
         Footer
     },
-    data() {
+    data(){
         return {
-            email: ''
+            email: this.$route.query.email,
+            code: '',
+            password: ''
         };
     },
     methods: {
-        async sendCode() {
-            Auth.forgotPassword(this.email)
+        async submitNewPassword() {
+            Auth.forgotPasswordSubmit(this.email, this.code, this.password)
             .then(user => {
-                this.$router.push({ path: '/forgotpasswordsubmission', query: { email: this.email } })
+                alert("Your password has been reset.")
+                this.$router.push({ path: '/login', query: { email: this.email } })
             })
             .catch(err => {
                 console.log(err)

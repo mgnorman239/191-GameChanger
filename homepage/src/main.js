@@ -14,6 +14,7 @@ import ProjectLog from './components/ProjectLog';
 import Project from './components/ProjectPage';
 import ProjectSubmissionPage from './components/ProjectSubmissionPage';
 import ForgotPassword from './components/ForgotPassword';
+import ForgotPasswordSubmission from './components/ForgotPasswordSubmission';
 import Profile from './components/Profile';
 import ThankYou from './components/ThankYou';
 import LogSubmission from './components/LogSubmission';
@@ -42,6 +43,7 @@ const routes = [
   {path: '/project/:title', name: 'Project', component: Project},
   {path: '/projectsubmissionpage', component: ProjectSubmissionPage},
   {path: '/forgotpassword', component: ForgotPassword},
+  {path: '/forgotpasswordsubmission', component: ForgotPasswordSubmission},
   {path: '/profile/:username', component: Profile, name: 'Profile'},
   {path: '/success/', component: ThankYou, name: 'Success'},
   {path: '/logsubmission', component: LogSubmission},
